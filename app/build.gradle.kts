@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.mobdeve.s13.kok.james.gueryandroid"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.mobdeve.s13.kok.james.gueryandroid"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
