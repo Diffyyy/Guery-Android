@@ -1,6 +1,8 @@
 package com.mobdeve.s13.kok.james.gueryandroid;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,14 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
     @Override
     public PostItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         PostItemHolder postItemHolder = new PostItemHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+        postItemHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(parent.getContext(), PostDetailsActivity.class);
+                intent.putExtra(PostDetailsActivity.POST_KEY,postItemHolder.post );
+                parent.getContext().startActivity(intent);
+            }
+        });
         return postItemHolder;
 
     }

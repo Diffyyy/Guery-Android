@@ -31,6 +31,11 @@ public class PostsGenerator {
                     "I'm on the lookout for fellow adventurers to join me in the epic battles of \"Realm Warriors.\" Let's team up, strategize, and conquer the challenging quests together! Whether you're a seasoned warrior or a newcomer looking to make your mark, let's unite our strengths and achieve victory as a team. Drop your gamertags below or shoot me a message. Let's forge our legacy in the realm!\n" +
                     "\n" +
                     "See you on the battlefield!");
+
+    static{
+        POST_1.comments.add(CommentGenerator.POST_1_COMMENT_1);
+        POST_1.comments.add(CommentGenerator.POST_1_COMMENT_2);
+    }
     public static ArrayList<Post> generatePosts(){
         ArrayList<Post> ret = new ArrayList<>();
         ret.add(POST_1);

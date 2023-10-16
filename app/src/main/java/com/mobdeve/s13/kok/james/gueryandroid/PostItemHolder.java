@@ -1,6 +1,5 @@
 package com.mobdeve.s13.kok.james.gueryandroid;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +19,7 @@ public class PostItemHolder extends RecyclerView.ViewHolder {
     private TextView numUpvotes;
 
 
-    private Post post;
+    protected Post post;
     public PostItemHolder(@NonNull View itemView) {
         super(itemView);
         PostItemBinding binding = PostItemBinding.bind(itemView);
@@ -29,7 +28,7 @@ public class PostItemHolder extends RecyclerView.ViewHolder {
         time = binding.timeTv;
         title = binding.titleTv;
         body = binding.bodyTv;
-        numUpvotes = binding.upvoteTv;
+        numUpvotes = binding.postEngagementBar.upvoteTv;
         username = binding.usernameTv;
     }
     public void bind(Post post){
@@ -37,7 +36,7 @@ public class PostItemHolder extends RecyclerView.ViewHolder {
         this.post = post;
         pfp.setImageResource(post.profile.pfp);
         community.setText(post.community);
-        time.setText(post.createdAt.toString());
+        time.setText(DateHelper.formatDate(post.createdAt));
         title.setText(post.title);
         body.setText(post.body);
         numUpvotes.setText(String.valueOf(post.upvotes));
