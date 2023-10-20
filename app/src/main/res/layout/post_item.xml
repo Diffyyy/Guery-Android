@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="League of Legends"
-            android:textColor="@color/material_dynamic_neutral40"
+            android:textColor="@color/gray"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textColor="@color/material_dynamic_neutral40"
+            android:textColor="@color/gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/community_tv" />
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="."
-            android:textColor="@color/material_dynamic_neutral40"
+            android:textColor="@color/gray"
             app:layout_constraintStart_toEndOf="@+id/username_tv"
             app:layout_constraintTop_toBottomOf="@+id/community_tv" />
 
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="TextView"
-            android:textColor="@color/material_dynamic_neutral40"
+            android:textColor="@color/gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/dot_tv"
             app:layout_constraintTop_toBottomOf="@+id/community_tv" />
