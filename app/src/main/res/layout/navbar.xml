@@ -25,40 +25,55 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@android:drawable/btn_star"
-                android:contentDescription="Home"/>
+                android:backgroundTint="#00FFFFFF"
+                android:contentDescription="Home"
+                android:scaleType="fitCenter"
+                android:src="@drawable/home_button"
+                android:tint="#B94C4C" />
 
             <ImageButton
                 android:id="@+id/imageButton2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@android:drawable/btn_star"
-                android:contentDescription="Communities"/>
+                android:backgroundTint="#00FFFFFF"
+                android:contentDescription="Communities"
+                android:scaleType="fitCenter"
+                android:src="@drawable/group"
+                android:tint="#B94C4C" />
 
             <ImageButton
                 android:id="@+id/imageButton3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@android:drawable/btn_star"
-                android:contentDescription="Create"/>
+                android:backgroundTint="#00FFFFFF"
+                android:contentDescription="Create"
+                android:scaleType="fitCenter"
+                android:src="@drawable/add"
+                android:tint="#B94C4C" />
 
             <ImageButton
                 android:id="@+id/imageButton4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@android:drawable/btn_star"
-                android:contentDescription="Notifications"/>
+                android:backgroundTint="#00FFFFFF"
+                android:contentDescription="Notifications"
+                android:scaleType="fitCenter"
+                android:src="@drawable/profile"
+                android:tint="#B94C4C" />
 
             <ImageButton
                 android:id="@+id/imageButton5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@android:drawable/btn_star"
-                android:contentDescription="Profile"/>
+                android:backgroundTint="#00FFFFFF"
+                android:contentDescription="Profile"
+                android:scaleType="fitCenter"
+                android:src="@drawable/bell"
+                android:tint="#B94C4C" />
         </LinearLayout>
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.constraintlayout.widget.ConstraintLayout>
