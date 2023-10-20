@@ -59,7 +59,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="League of legends is toxic. Don't play this game for fuck's sake."
+                android:text="League of legends is toxic. Don't play this game for your sake."
                 android:textSize="15sp" />
 
             <Button
