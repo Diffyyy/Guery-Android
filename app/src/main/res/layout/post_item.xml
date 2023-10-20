@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/kirby" />
+        android:src="@drawable/kirby" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

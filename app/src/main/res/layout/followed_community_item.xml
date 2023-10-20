@@ -21,7 +21,7 @@
             android:layout_height="48dp"
             android:layout_weight="1"
 
-            android:src="@tools:sample/avatars" />
+            android:src="@drawable/kirby" />
 
         <TextView
             android:id="@+id/textView2"

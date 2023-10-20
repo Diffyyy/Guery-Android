@@ -29,7 +29,7 @@
             android:layout_height="200dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="64dp"
-            android:src="@tools:sample/avatars"
+            android:src="@drawable/kirby"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
