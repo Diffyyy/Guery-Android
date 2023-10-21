@@ -26,7 +26,5 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <!-- Include the navigation bar layout -->
-    <include
-        layout="@layout/navbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
