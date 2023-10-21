@@ -32,6 +32,27 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        viewBinding.tvLoginForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+        viewBinding.tvLoginForgotUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgotUsernameActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        viewBinding.ivLoginSteam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

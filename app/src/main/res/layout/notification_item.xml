@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/ll_notification_item"
@@ -54,8 +54,8 @@
                 android:adjustViewBounds="true"
                 android:maxWidth="10dp"
                 android:maxHeight="15dp"
-                tools:srcCompat="@tools:sample/avatars"
-                app:srcCompat="@android:drawable/ic_notification_overlay" />
+                app:srcCompat="@android:drawable/ic_notification_overlay"
+                tools:srcCompat="@tools:sample/avatars" />
         </LinearLayout>
 
         <TextView

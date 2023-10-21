@@ -1,19 +1,18 @@
 package com.mobdeve.s13.kok.james.gueryandroid;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 public class Notification {
 
-    private int imageId;
-    private String user;
+    private Profile profile;
     private String content;
     private String action;
-    private CustomDate receivedOn;
+    private LocalDateTime receivedOn;
     private int notificationId;
 
-    public Notification(int imageId, String user, String content, String action, CustomDate receivedOn, int notificationId){
-        this.imageId = imageId;
-        this.user = user;
+    public Notification(Profile profile, String content, String action, LocalDateTime receivedOn, int notificationId){
+        this.profile = profile;
         this.content = content;
         this.action = action;
         this.receivedOn = receivedOn;
@@ -21,7 +20,7 @@ public class Notification {
     }
 
     public int getImageId() {
-        return imageId;
+        return profile.pfp;
     }
 
     public int getNotificationId() {
@@ -37,10 +36,10 @@ public class Notification {
     }
 
     public String getUser() {
-        return user;
+        return profile.username;
     }
 
-    public CustomDate getReceivedOn() {
+    public LocalDateTime getReceivedOn() {
         return receivedOn;
     }
 }

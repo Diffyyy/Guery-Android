@@ -2,6 +2,7 @@ package com.mobdeve.s13.kok.james.gueryandroid;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 public class DateHelper {
@@ -20,5 +21,10 @@ public class DateHelper {
         }else{
             return dateTime.format(DateTimeFormatter.ofPattern("MMM d uuuu"));
         }
+    }
+
+    public static LocalDateTime generateRandomDate(){
+        return
+                LocalDateTime.of(2010 + (int)(Math.random()*13), Month.of(1+(int)(Math.random()*11)), 1+(int)(Math.random()*30), (int)(Math.random()*23), (int)(Math.random()*59), (int)(Math.random()*59 ));
     }
 }

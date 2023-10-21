@@ -1,5 +1,6 @@
 package com.mobdeve.s13.kok.james.gueryandroid;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,11 +19,20 @@ public class NotificationViewholder extends RecyclerView.ViewHolder{
     public NotificationViewholder(@NonNull View itemView) {
         super(itemView);
         image = itemView.findViewById(R.id.iv_notification_item_pfp);
+        Log.println(Log.ASSERT, "BURGER", String.valueOf(image==null));
         username = itemView.findViewById(R.id.tv_notification_item_user);
         content = itemView.findViewById(R.id.tv_notification_item_preview);
         action = itemView.findViewById(R.id.tv_notification_item_action);
         date = itemView.findViewById(R.id.tv_notification_item_time);
         isUnread = itemView.findViewById(R.id.iv_notification_item_unread);
+    }
+    public void bind(Notification notification){
+        image.setImageResource(notification.getImageId());
+        username.setText(notification.getUser());
+        content.setText(notification.getContent());
+        action.setText(notification.getAction());
+        date.setText(DateHelper.formatDate(notification.getReceivedOn()));
+
     }
 
     public TextView getDate() {

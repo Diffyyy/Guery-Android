@@ -15,7 +15,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityHomeBinding;
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener {
 
     HomeFragment home = new HomeFragment();
-    Fragment profile = new ProfileFragment();
+    Fragment profile = new ProfileFragment(this);
     Fragment notification = new NotificationFragment();
 
     Fragment createPost;
@@ -31,10 +31,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         // Initialize the default fragment
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, new HomeFragment())
-                    .commit();
+            replaceFragment(home);
         }
 
         bottomNavigationView = binding.navbar;

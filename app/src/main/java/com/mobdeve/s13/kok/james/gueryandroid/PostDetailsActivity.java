@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityPostDetailsBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
@@ -28,6 +29,13 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         binding.commentsRv.setLayoutManager(new LinearLayoutManager(this));
         binding.commentsRv.setAdapter(adapter);
+
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         setContentView(binding.getRoot());
 
