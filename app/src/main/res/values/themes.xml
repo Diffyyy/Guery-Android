@@ -3,6 +3,7 @@
     <style name="Base.Theme.GueryAndroid" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:background">@color/standard_background</item>
     </style>
 
     <style name="Theme.GueryAndroid" parent="Base.Theme.GueryAndroid" />
