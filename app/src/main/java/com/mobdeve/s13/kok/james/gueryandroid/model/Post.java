@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,10 +7,10 @@ import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Post implements Parcelable {
-    protected String community;
+    protected String id;
+    protected String game;
 
     protected Profile profile;
     protected LocalDateTime createdAt;
@@ -18,8 +18,8 @@ public class Post implements Parcelable {
     protected String body;
     protected int upvotes;
     protected ArrayList<Comment> comments;
-    public Post(String community, Profile profile, LocalDateTime createdAt, String title, String body){
-        this.community = community;
+    public Post(String game, Profile profile, LocalDateTime createdAt, String title, String body){
+        this.game = game;
         this.profile = profile;
         this.createdAt = createdAt;
         this.title = title;
@@ -29,7 +29,8 @@ public class Post implements Parcelable {
     }
 
     protected Post(Parcel in) {
-        community = in.readString();
+        id = in.readString();
+        game = in.readString();
         profile = in.readParcelable(Profile.class.getClassLoader());
         createdAt = LocalDateTime.parse(in.readString());
         title = in.readString();
@@ -59,12 +60,48 @@ public class Post implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(community);
+        dest.writeString(id);
+        dest.writeString(game);
         dest.writeParcelable(profile, flags);
         dest.writeString(createdAt.toString());
         dest.writeString(title);
         dest.writeString(body);
         dest.writeInt(upvotes);
         dest.writeTypedList(comments);
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+    public void reply(Comment comment){
+        comments.add(comment);
+    }
+
+    public String getGame() {
+        return game;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public int getUpvotes() {
+        return upvotes;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

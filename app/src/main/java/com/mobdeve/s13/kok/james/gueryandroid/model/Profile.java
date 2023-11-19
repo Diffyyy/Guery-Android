@@ -1,11 +1,14 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.mobdeve.s13.kok.james.gueryandroid.R;
+
 public class Profile implements Parcelable {
+    protected  String id;
     protected String username;
     protected int pfp;
 
@@ -20,6 +23,7 @@ public class Profile implements Parcelable {
     }
 
     protected Profile(Parcel in) {
+        id = in.readString();
         username = in.readString();
         pfp = in.readInt();
     }
@@ -44,8 +48,20 @@ public class Profile implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-
+        dest.writeString(id);
         dest.writeString(username);
         dest.writeInt(pfp);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public int getPfp() {
+        return pfp;
+    }
+
+    public String getId() {
+        return id;
     }
 }

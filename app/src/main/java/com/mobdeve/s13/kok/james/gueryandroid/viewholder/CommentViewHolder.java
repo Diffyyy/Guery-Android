@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.viewholder;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -8,7 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mobdeve.s13.kok.james.gueryandroid.adapter.CommentAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.CommentItemBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
 
 public class CommentViewHolder extends RecyclerView.ViewHolder {
     private TextView username;

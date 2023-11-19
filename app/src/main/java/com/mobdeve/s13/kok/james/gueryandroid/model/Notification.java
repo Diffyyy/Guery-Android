@@ -1,7 +1,6 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.model;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 public class Notification {
 

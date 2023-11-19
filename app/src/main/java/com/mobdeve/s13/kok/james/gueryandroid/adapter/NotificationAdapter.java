@@ -1,10 +1,12 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.adapter;
 
 import android.view.*;
 import java.util.*;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.NotificationItemBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Notification;
+import com.mobdeve.s13.kok.james.gueryandroid.viewholder.NotificationViewholder;
 
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewholder>{

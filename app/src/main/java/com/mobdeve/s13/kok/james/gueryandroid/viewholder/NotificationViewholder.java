@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.viewholder;
 
 import android.util.Log;
 import android.view.View;
@@ -7,6 +7,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.mobdeve.s13.kok.james.gueryandroid.R;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Notification;
 
 public class NotificationViewholder extends RecyclerView.ViewHolder{
     private ImageView image;

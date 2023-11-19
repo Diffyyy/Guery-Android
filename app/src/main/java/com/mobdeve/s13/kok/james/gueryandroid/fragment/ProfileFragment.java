@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
 import android.os.Bundle;
 
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mobdeve.s13.kok.james.gueryandroid.activity.HomeActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentProfileBinding;
 
 ///**

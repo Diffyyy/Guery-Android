@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
 import android.os.Bundle;
 
@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentHomeBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.adapter.NotificationAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentNotificationBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.NotificationsGenerator;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Notification;
 
 import java.util.ArrayList;
 

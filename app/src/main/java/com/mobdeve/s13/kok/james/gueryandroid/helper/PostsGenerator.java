@@ -1,4 +1,8 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.helper;
+
+import com.mobdeve.s13.kok.james.gueryandroid.helper.CommentGenerator;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,8 +37,8 @@ public class PostsGenerator {
                     "See you on the battlefield!");
 
     static{
-        POST_1.comments.add(CommentGenerator.POST_1_COMMENT_1);
-        POST_1.comments.add(CommentGenerator.POST_1_COMMENT_2);
+        POST_1.reply(CommentGenerator.POST_1_COMMENT_1);
+        POST_1.reply(CommentGenerator.POST_1_COMMENT_2);
     }
     public static ArrayList<Post> generatePosts(){
         ArrayList<Post> ret = new ArrayList<>();

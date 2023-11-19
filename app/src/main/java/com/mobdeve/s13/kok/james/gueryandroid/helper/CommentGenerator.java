@@ -1,4 +1,7 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.helper;
+
+import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
 import java.time.LocalDateTime;
 
@@ -20,8 +23,8 @@ public class CommentGenerator {
 
 
     static{
-        POST_1_COMMENT_1.replies.add(POST_1_COMMENT_1_REPLY_1);
-        POST_1_COMMENT_2.replies.add(Post_1_Comment_2_REPLY_1);
+        POST_1_COMMENT_1.reply(POST_1_COMMENT_1_REPLY_1);
+        POST_1_COMMENT_2.reply(Post_1_Comment_2_REPLY_1);
     }
 
 }

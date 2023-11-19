@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "53752643742",
+    "project_id": "guery-android",
+    "storage_bucket": "guery-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53752643742:android:59fe6f2075828c42913b8f",
+        "android_client_info": {
+          "package_name": "com.mobdeve.s13.kok.james.gueryandroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiO1KE7wMG8YOceW9Xt7TEBUloUH6q4Gg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

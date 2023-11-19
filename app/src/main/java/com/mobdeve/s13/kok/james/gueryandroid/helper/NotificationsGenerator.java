@@ -1,6 +1,8 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.helper;
 
-import java.time.LocalDateTime;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Notification;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
+
 import java.util.ArrayList;
 
 public class NotificationsGenerator {

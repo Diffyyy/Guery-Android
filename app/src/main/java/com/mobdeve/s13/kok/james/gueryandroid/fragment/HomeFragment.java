@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
 import android.os.Bundle;
 
@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityHomeBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.adapter.PostItemAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentHomeBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.PostsGenerator;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 
 import java.util.ArrayList;
 

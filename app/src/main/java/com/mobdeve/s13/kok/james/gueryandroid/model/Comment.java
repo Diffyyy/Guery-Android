@@ -1,17 +1,15 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 
 public class Comment implements Parcelable {
+    protected String id;
     protected LocalDateTime createdAt;
     protected String body;
     protected ArrayList<Comment> replies;
@@ -25,6 +23,7 @@ public class Comment implements Parcelable {
     }
     public Comment(Parcel parcel){
         replies = new ArrayList<>();
+        this.id = parcel.readString();
         this.profile = parcel.readParcelable(Profile.class.getClassLoader());
 
         this.body = parcel.readString();
@@ -54,11 +53,17 @@ public class Comment implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeParcelable(profile, 0);
         dest.writeString(body);
         dest.writeString(createdAt.toString());
         dest.writeTypedList(replies);
     }
+    public void reply(Comment comment){
+        replies.add(comment);
+    }
 
-
+    public void setId(String id) {
+        this.id = id;
+    }
 }

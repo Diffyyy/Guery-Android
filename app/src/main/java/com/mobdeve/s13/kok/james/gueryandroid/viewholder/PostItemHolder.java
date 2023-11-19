@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.viewholder;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 
 public class PostItemHolder extends RecyclerView.ViewHolder {
     private TextView username;
@@ -34,14 +36,18 @@ public class PostItemHolder extends RecyclerView.ViewHolder {
     public void bind(Post post){
 
         this.post = post;
-        pfp.setImageResource(post.profile.pfp);
-        community.setText(post.community);
-        time.setText(DateHelper.formatDate(post.createdAt));
-        title.setText(post.title);
-        body.setText(post.body);
-        numUpvotes.setText(String.valueOf(post.upvotes));
-        username.setText(post.profile.username);
+        pfp.setImageResource(post.getProfile().getPfp());
+        community.setText(post.getGame());
+        time.setText(DateHelper.formatDate(post.getCreatedAt()));
+        title.setText(post.getTitle());
+        body.setText(post.getBody());
+        numUpvotes.setText(String.valueOf(post.getUpvotes()));
+        username.setText(post.getProfile().getUsername());
 
 
+    }
+
+    public Post getPost() {
+        return post;
     }
 }

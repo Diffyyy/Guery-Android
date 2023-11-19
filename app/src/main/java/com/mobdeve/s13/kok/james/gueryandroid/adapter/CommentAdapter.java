@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.CommentItemBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
+import com.mobdeve.s13.kok.james.gueryandroid.viewholder.CommentViewHolder;
 
 import java.util.ArrayList;
 

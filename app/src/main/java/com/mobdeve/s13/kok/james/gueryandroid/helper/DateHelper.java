@@ -1,4 +1,4 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.helper;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

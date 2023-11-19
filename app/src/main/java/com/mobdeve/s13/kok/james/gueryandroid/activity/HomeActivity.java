@@ -1,16 +1,20 @@
-package com.mobdeve.s13.kok.james.gueryandroid;
+package com.mobdeve.s13.kok.james.gueryandroid.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
+import com.mobdeve.s13.kok.james.gueryandroid.fragment.CreatepostFragment;
+import com.mobdeve.s13.kok.james.gueryandroid.fragment.HomeFragment;
+import com.mobdeve.s13.kok.james.gueryandroid.fragment.NotificationFragment;
+import com.mobdeve.s13.kok.james.gueryandroid.fragment.ProfileFragment;
+import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityHomeBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener {
 
