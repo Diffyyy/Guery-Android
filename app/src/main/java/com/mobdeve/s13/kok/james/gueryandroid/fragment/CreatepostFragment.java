@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +28,12 @@ public class CreatepostFragment extends Fragment {
 
     public static final String NEW_TITLE_KEY = "NEW TITLE KEY";
     public static final String NEW_BODY_KEY = "NEW BODY KEY";
+    private Handler handler;
 
     public CreatepostFragment(BottomNavigationView view, HomeActivity home) {
         // Required empty public constructor
         this.home = home;
+        handler = new Handler();
     }
 
 
@@ -39,7 +42,7 @@ public class CreatepostFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         FragmentCreatepostBinding viewBinding = FragmentCreatepostBinding.inflate(inflater, container,false);
-        
+
 
         viewBinding.btnCreatePost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +62,16 @@ public class CreatepostFragment extends Fragment {
                     FirestoreHelper.getInstance().addPost(post, new Consumer<String>() {
                         @Override
                         public void accept(String s) {
-                            post.setId(s);
-                            home.addPost(post);
-                            //return back to home
-                            home.setItemSelected(R.id.nav_home);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    post.setId(s);
+                                    home.addPost(post);
+                                    //return back to home
+                                    home.setItemSelected(R.id.nav_home);
+                                }
+                            });
+
                         }
                     });
 

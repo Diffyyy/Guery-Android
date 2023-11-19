@@ -34,10 +34,10 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
     }
     public void bind(Comment comment){
         this.comment = comment;
-        username.setText(comment.profile.username);
-        pfp.setImageResource(comment.profile.pfp);
-        time.setText(DateHelper.formatDate(comment.createdAt));
-        body.setText(comment.body);
-        ((CommentAdapter)replies.getAdapter()).setReplies(comment.replies);
+        username.setText(comment.getProfile().getUsername());
+        pfp.setImageResource(comment.getProfile().getPfp());
+        time.setText(DateHelper.formatDate(comment.getCreatedAt()));
+        body.setText(comment.getBody());
+        ((CommentAdapter)replies.getAdapter()).setReplies(comment.getReplies());
     }
 }

@@ -31,7 +31,7 @@ public class Comment implements Parcelable {
         this.createdAt = LocalDateTime.parse(parcel.readString());
 
         parcel.readTypedList(replies, CREATOR);
-//        Log.println(Log.ASSERT, "BURGER", "MADE IT HERE" );
+//        Log.println(Log.ASSERT, "BURGER", "MADE IT HERE" );profile
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -65,5 +65,25 @@ public class Comment implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public ArrayList<Comment> getReplies() {
+        return replies;
     }
 }

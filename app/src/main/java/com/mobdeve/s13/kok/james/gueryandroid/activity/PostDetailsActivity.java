@@ -18,7 +18,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityPostDetailsBinding binding = ActivityPostDetailsBinding.inflate(getLayoutInflater());
+        ActivityPostDetailsBinding binding   = ActivityPostDetailsBinding.inflate(getLayoutInflater());
 
         Intent intent = getIntent();
         Post post = intent.getParcelableExtra(POST_KEY);
