@@ -17,6 +17,9 @@ public class Post implements Parcelable {
     protected String title;
     protected String body;
     protected int upvotes;
+    protected String type;
+    protected String image;
+    protected String video;
     protected ArrayList<Comment> comments;
     public Post(String game, Profile profile, LocalDateTime createdAt, String title, String body){
         this.game = game;
@@ -26,6 +29,28 @@ public class Post implements Parcelable {
         this.body = body;
         this.upvotes = 0;
         this.comments = new ArrayList<>();
+        this.video = null;
+        this.image = null;
+        this.type = "TEXT";
+    }
+
+    public Post(String game, Profile profile, LocalDateTime createdAt, String title, String body, String type, String attached){
+        this.game = game;
+        this.profile = profile;
+        this.createdAt = createdAt;
+        this.title = title;
+        this.body = body;
+        this.upvotes = 0;
+        this.comments = new ArrayList<>();
+        this.type = type;
+        if(type == "VIDEO") {
+            this.video = attached;
+            this.image = null;
+        }
+        else if (type == "IMAGE") {
+            this.video = null;
+            this.image = attached;
+        }
     }
 
     protected Post(Parcel in) {
@@ -103,5 +128,37 @@ public class Post implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getType(){
+        return type;
+    }
+
+    public void setType(String type, String attachment){
+        this.type = type;
+        if(type == "TEXT")
+        {
+            this.video = null;
+            this.image = null;
+        }
+        else if(type == "VIDEO")
+        {
+            this.video = attachment;
+            this.image = null;
+        }
+        else if(type == "IMAGE")
+        {
+            this.video = null;
+            this.image = attachment;
+        }
+    }
+
+    public String getAttached(){
+        if(this.type == "TEXT")
+            return null;
+        else if (this.type == "IMAGE")
+            return this.image;
+        else
+            return this.video;
     }
 }
