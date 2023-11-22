@@ -126,13 +126,7 @@ public class HomeFragment extends Fragment {
                 return true;
             }
         });
-
-
         if(getData().isEmpty())search();
-//        if(posts.isEmpty()){
-//            loadStart();
-//        }
-
         return binding.getRoot();
 
     }
@@ -172,6 +166,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void accept(Post post) {
+                Log.d("BURGER", "GOT POST: "+post);
                 if (!added) {
                     loadStop();
                 }

@@ -169,16 +169,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     }
 
     private void bind(PostItemBinding binding, Post post){
-        binding.bodyTv.setText(post.getBody());
-        binding.pfpIv.setImageResource(post.getProfile().getPfp());
-        binding.communityTv.setText(post.getGame());
-        binding.timeTv.setText(DateHelper.formatDate(post.getCreatedAt()));
-        binding.titleTv.setText(post.getTitle());
-        binding.postEngagementBar.upvoteTv.setText(String.valueOf(post.getUpvotes()));
-        binding.usernameTv.setText(post.getProfile().getUsername());
-
-        PostItemHolder.updateVoteBtns(post, binding.postEngagementBar.postUpvoteBtn, binding.postEngagementBar.postDownvoteBtn);
-
+        PostItemHolder.bind(post, binding, this);
 
     }
 

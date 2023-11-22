@@ -11,7 +11,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.databinding.LoginBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
 public class LoginActivity extends AppCompatActivity {
-    public static final Profile p = new Profile("kirby", "kirby",R.drawable.kirby);
+    public static final Profile p = new Profile("kirby", "kirby");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -186,6 +186,8 @@ public class Post extends Content implements Parcelable {
                 ", userVote=" + userVote +
                 ", upvotes=" + upvotes +
                 ", isVoting=" + isVoting +
+                ", postType=" +type+
+                ", attachment=" +attachment+
                 '}';
     }
 }

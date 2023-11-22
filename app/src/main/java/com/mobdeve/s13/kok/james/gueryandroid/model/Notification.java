@@ -1,5 +1,7 @@
 package com.mobdeve.s13.kok.james.gueryandroid.model;
 
+import com.mobdeve.s13.kok.james.gueryandroid.R;
+
 import java.time.LocalDateTime;
 
 public class Notification {
@@ -19,7 +21,8 @@ public class Notification {
     }
 
     public int getImageId() {
-        return profile.pfp;
+        //temporary for testing other features
+        return R.drawable.kirby;
     }
 
     public int getNotificationId() {

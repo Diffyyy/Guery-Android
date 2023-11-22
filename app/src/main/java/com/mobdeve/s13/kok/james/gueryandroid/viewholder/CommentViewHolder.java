@@ -1,5 +1,8 @@
 package com.mobdeve.s13.kok.james.gueryandroid.viewholder;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,16 +14,22 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.CommentAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.CommentItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.VoteListener;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Content;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Vote;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.util.function.Consumer;
 
 public class CommentViewHolder extends RecyclerView.ViewHolder implements ContentHolder{
     private TextView username;
@@ -72,8 +81,23 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
             time.setText("...");
             body.setText("Body...");
         }else{
+            CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(pfp.getContext());
+            circularProgressDrawable.setCenterRadius(30);
             username.setText(comment.getProfile().getUsername());
-            pfp.setImageResource(comment.getProfile().getPfp());
+            if(comment.getProfile().getPfp()==null) pfp.setImageResource(R.drawable.placeholder);
+            else {
+                StorageHelper.getInstance().retrieve(comment.getProfile().getPfp(), pfp.getContext(), new Consumer<Uri>() {
+                    @Override
+                    public void accept(Uri uri) {
+                        Picasso.get()
+                                .load(uri)
+                                .error(R.drawable.placeholder)
+                                .placeholder(circularProgressDrawable)
+                                .into(pfp);
+                    }
+                });
+
+            }
             time.setText(DateHelper.formatDate(comment.getCreatedAt()));
             body.setText(comment.getBody());
             upvotesTv.setText(String.valueOf(comment.getUpvotes()));

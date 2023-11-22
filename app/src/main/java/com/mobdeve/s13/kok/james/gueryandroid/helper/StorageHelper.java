@@ -2,17 +2,24 @@ package com.mobdeve.s13.kok.james.gueryandroid.helper;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mobdeve.s13.kok.james.gueryandroid.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.function.Consumer;
 
 public class StorageHelper {
@@ -33,21 +40,19 @@ public class StorageHelper {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef=  storage.getReference();
 
-    private void retrieve(String firebasePath, Context context, Consumer<File> callback ){
+    public void retrieve(String firebasePath, Context context, Consumer<Uri> callback ){
         StorageReference fileRef = storageRef.child(firebasePath);
-        File localFile = new File(context.getCacheDir(), firebasePath   );
-        fileRef.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+        fileRef.getDownloadUrl()
+                .addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        callback.accept(localFile.getAbsoluteFile());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                    public void onComplete(@NonNull Task<Uri> task) {
+//                        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(iv.getContext());
+//                        circularProgressDrawable.setCenterRadius(30);
+                        callback.accept(task.getResult());
 
                     }
                 });
+
     }
 
     private  void upload(String filename, String folder, String path, Consumer<String> callback){

@@ -338,9 +338,14 @@ public class FirestoreHelper {
     }
 
     public Profile convertMapToProfile(Map<String, Object> map){
+
         String id = (String) map.get(ID);
         String username = (String) map.get(PROFILE_NAME);
-        return new Profile(id, username);
+        Profile profile = new Profile(id, username);
+        String pfp = (String) map.get(PROFILE_PFP);
+        profile.setPfp(pfp);
+
+        return profile;
     }
 
 
@@ -363,7 +368,7 @@ public class FirestoreHelper {
         post.setId(id);
 
         String attachment = (String) map.get(POST_ATTACHED);
-        int type = (int) map.get(POST_TYPE);
+        int type = ((Long) map.get(POST_TYPE)).intValue();
         post.setType(type, attachment   );
 
 

@@ -14,10 +14,10 @@ import java.util.Objects;
 public class Profile implements Parcelable {
     protected  String id;
     protected String username;
-    protected int pfp;
+//    protected int pfp;
+    protected String pfp;
 
-
-    public Profile(String id, String username, int pfp){
+    public Profile(String id, String username, String pfp){
         this.id = id;
         this.username = username;
         this.pfp = pfp;
@@ -27,7 +27,7 @@ public class Profile implements Parcelable {
 
 
     public Profile(String username){
-        this("kirby", username, R.drawable.kirby);
+        this("kirby", username, null);
     }
 
     public Profile(String id, String username){
@@ -37,7 +37,7 @@ public class Profile implements Parcelable {
     protected Profile(Parcel in) {
         id = in.readString();
         username = in.readString();
-        pfp = in.readInt();
+        pfp = in.readString();
     }
 
 
@@ -62,14 +62,14 @@ public class Profile implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(username);
-        dest.writeInt(pfp);
+        dest.writeString(pfp);
     }
 
     public String getUsername() {
         return username;
     }
 
-    public int getPfp() {
+    public String getPfp() {
         return pfp;
     }
 
@@ -97,5 +97,9 @@ public class Profile implements Parcelable {
                 ", username='" + username + '\'' +
                 ", pfp=" + pfp +
                 '}';
+    }
+
+    public void setPfp(String pfp) {
+        this.pfp = pfp;
     }
 }
