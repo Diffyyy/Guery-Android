@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
@@ -19,21 +21,24 @@ import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostVideoHolder;
 
 import java.util.ArrayList;
 
-public class PostItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
     private static final int TYPE_TEXT = 1;
     private static final int TYPE_IMAGE = 2;
     private static final int TYPE_VIDEO = 3;
 
     private ArrayList<Post> posts;
 
+
+
+    private ActivityResultLauncher<Intent> launcher;
     public PostItemAdapter(ArrayList<Post> posts) {
         this.posts = posts;
     }
 
     @Override
+
     public int getItemViewType(int position){
         Post post = posts.get(position);
-
         if(post.getType() == "TEXT")
             return TYPE_TEXT;
         else if (post.getType() == "IMAGE")
@@ -43,6 +48,23 @@ public class PostItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         return super.getItemViewType(position);
     }
+    public PostItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        PostItemHolder postItemHolder = new PostItemHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+
+        postItemHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(postItemHolder.getPost().isVoting()) return;
+                Intent intent = new Intent(parent.getContext(), PostDetailsActivity.class);
+
+                intent.putExtra(PostDetailsActivity.POST_KEY,postItemHolder.getPost().getId() );
+                intent.putExtra(PostDetailsActivity.POST_INDEX, postItemHolder.getAbsoluteAdapterPosition());
+                launcher.launch(intent);
+            }
+        });
+
+
+        return postItemHolder;
 
     @NonNull
     @Override
@@ -105,5 +127,10 @@ public class PostItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+
+    public void setLauncher(ActivityResultLauncher<Intent> launcher) {
+        this.launcher = launcher;
     }
 }

@@ -20,6 +20,10 @@ public class ProfileFragment extends Fragment {
 
 ;
     private HomeActivity activity;
+
+    public ProfileFragment(){
+
+    }
     public ProfileFragment(HomeActivity activity) {
         this.activity = activity;
         // Required empty public constructor

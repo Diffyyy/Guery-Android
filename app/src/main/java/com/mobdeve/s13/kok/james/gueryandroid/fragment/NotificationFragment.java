@@ -35,4 +35,8 @@ public class NotificationFragment extends Fragment {
         return binding.getRoot();
 
     }
+
+    public NotificationFragment(){
+
+    }
 }

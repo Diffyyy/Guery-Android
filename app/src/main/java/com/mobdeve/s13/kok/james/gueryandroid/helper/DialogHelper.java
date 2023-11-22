@@ -1,0 +1,53 @@
+package com.mobdeve.s13.kok.james.gueryandroid.helper;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
+import android.widget.EditText;
+
+import com.mobdeve.s13.kok.james.gueryandroid.R;
+import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
+import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
+
+import java.time.LocalDateTime;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+public class DialogHelper {
+    public static AlertDialog.Builder getCommentDialog(Context context, String username, BiConsumer<DialogInterface, String> callback){
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.myDialog));
+        builder.setTitle("Reply to: " + username);
+
+        final EditText input = new EditText(context);
+        input.setSingleLine(false);  //add this
+        input.setLines(5);
+        input.setMaxLines(7);
+        input.setGravity(Gravity.LEFT | Gravity.TOP);
+        input.setHorizontalScrollBarEnabled(false); //this
+//                        input.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        input.setHint("Write your reply here...");
+
+
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String reply = input.getText().toString();
+                callback.accept(dialog, reply);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        return builder;
+    }
+}

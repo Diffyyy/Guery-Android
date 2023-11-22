@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.LoginBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
 public class LoginActivity extends AppCompatActivity {
-
+    public static final Profile p = new Profile("kirby", "kirby",R.drawable.kirby);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
