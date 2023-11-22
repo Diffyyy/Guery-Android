@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.VoteListener;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Content;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Vote;
+
+
 
 public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHolder {
     private TextView username;
@@ -28,10 +31,13 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
     private TextView upvotesTv;
     private ImageView upvoteBtn;
     private ImageView downvoteBtn;
+    protected TextView numUpvotes;
+
 
     protected Post post;
     public PostItemHolder(@NonNull View itemView) {
         super(itemView);
+
         PostItemBinding binding = PostItemBinding.bind(itemView);
         pfp = binding.pfpIv;
         community = binding.communityTv;
@@ -40,6 +46,7 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         body = binding.bodyTv;
         upvotesTv = binding.postEngagementBar.upvoteTv;
         username = binding.usernameTv;
+
 
         upvoteBtn = binding.postEngagementBar.postUpvoteBtn;
         downvoteBtn = binding.postEngagementBar.postDownvoteBtn;

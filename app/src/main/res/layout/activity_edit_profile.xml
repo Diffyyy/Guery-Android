@@ -69,10 +69,15 @@
             android:id="@+id/img_profile_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            android:adjustViewBounds="true"
+            android:maxWidth="100dp"
+            android:maxHeight="100dp"
+
             android:src="@drawable/kirby"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
+           />
 
         <Button
             android:id="@+id/btn_edit"

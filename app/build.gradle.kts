@@ -43,8 +43,9 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.5.3")
     implementation("androidx.navigation:navigation-ui:2.5.3")
     implementation("com.google.firebase:firebase-firestore:24.9.1")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("androidx.paging:paging-runtime:3.2.1");
-//    implementation("com.firebaseui:firebase-ui-firestore:4.3.2")
+//  implementation("com.firebaseui:firebase-ui-firestore:4.3.2")
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
