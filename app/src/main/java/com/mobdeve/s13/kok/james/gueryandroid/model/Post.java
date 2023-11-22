@@ -9,6 +9,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Post extends Content implements Parcelable {
+    public enum PostType{
+        TEXT(1), IMAGE(2), VIDEO(3);
+        PostType(int value){
+            this.value = value;
+        }
+        public int value;
+    }
+
     protected String game;
 
     protected Profile profile;
@@ -16,13 +24,15 @@ public class Post extends Content implements Parcelable {
     protected String title;
     protected String body;
 
-    protected String type;
-    protected String image;
-    protected String video;
+    protected int type = PostType.TEXT.value;
+    protected String attachment;
 
     protected ArrayList<Comment> comments;
 
     protected int edited = 0;
+
+
+
 
     public Post(String game, Profile profile, LocalDateTime createdAt, String title, String body){
         super(null);
@@ -34,12 +44,11 @@ public class Post extends Content implements Parcelable {
         this.upvotes = 0;
         this.comments = new ArrayList<>();
 
-        this.video = null;
-        this.image = null;
-        this.type = "IMAGE";
+
     }
 
-    public Post(String game, Profile profile, LocalDateTime createdAt, String title, String body, String type, String attached){
+    public Post(String game, Profile profile, LocalDateTime createdAt, String title, String body, int type, String attached){
+        super(null);
         this.game = game;
         this.profile = profile;
         this.createdAt = createdAt;
@@ -48,15 +57,8 @@ public class Post extends Content implements Parcelable {
         this.upvotes = 0;
         this.comments = new ArrayList<>();
         this.type = type;
-        if(type == "VIDEO") {
-            this.video = attached;
-            this.image = null;
-        }
-        else if (type == "IMAGE") {
-            this.video = null;
-            this.image = attached;
-        }
 //       this.id = "default";
+        this.attachment = attached;
         userVote = Vote.CANCEL;
     }
 
@@ -78,6 +80,8 @@ public class Post extends Content implements Parcelable {
         edited = in.readInt();
 
         userVote = Vote.valueOf(in.readString());
+        type = in.readInt();
+        attachment = in.readString();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -109,6 +113,8 @@ public class Post extends Content implements Parcelable {
         dest.writeTypedList(comments);
         dest.writeInt(edited);
         dest.writeString(userVote.name());
+        dest.writeInt(type);
+        dest.writeString(attachment);
     }
 
     public ArrayList<Comment> getComments() {
@@ -142,37 +148,18 @@ public class Post extends Content implements Parcelable {
         this.id = id;
     }
 
-    public String getType(){
+    public int getType(){
         return type;
     }
 
-    public void setType(String type, String attachment){
+    public void setType(int type, String attachment){
         this.type = type;
-        if(type == "TEXT")
-        {
-            this.video = null;
-            this.image = null;
-        }
-        else if(type == "VIDEO")
-        {
-            this.video = attachment;
-            this.image = null;
-        }
-        else if(type == "IMAGE")
-        {
-            this.video = null;
-            this.image = attachment;
-        }
+        this.attachment = attachment;
     }
 
-    public String getAttached(){
-        if(this.type == "TEXT")
-            return null;
-        else if (this.type == "IMAGE")
-            return this.image;
-        else
-            return this.video;
-
+    public String getAttached() {
+        return attachment;
+    }
     public void setProfile(Profile profile) {
         this.profile = profile;
     }

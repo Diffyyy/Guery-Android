@@ -46,6 +46,9 @@ public class FirestoreHelper {
     public static final String POST_UPVOTES = "upvotes";
     public static final String  POST_DATE = "date";
     public static final String POST_COMMENTS = "comments";
+    public static final String POST_ATTACHED = "attachment";
+    public static final String POST_TYPE = "postType";
+
 
     public static final String COMMENTS = "comments";
     public static final String COMMENT_CONTENT = "content";
@@ -298,7 +301,8 @@ public class FirestoreHelper {
         map.put(POST_UPVOTES, post.getUpvotes());
         map.put(POST_DATE, FieldValue.serverTimestamp());
         map.put(POST_COMMENTS, post.getComments().stream().map(comment -> comment.getId()).collect(Collectors.toList()));
-
+        map.put(POST_ATTACHED, post.getAttached());
+        map.put(POST_TYPE, post.getType());
         return map;
     }
 
@@ -357,6 +361,12 @@ public class FirestoreHelper {
         Profile profile =  new Profile(profileId, "Loading...");
         Post post = new Post(game, profile, createdAt, title, body, upvotes ,comments  );
         post.setId(id);
+
+        String attachment = (String) map.get(POST_ATTACHED);
+        int type = (int) map.get(POST_TYPE);
+        post.setType(type, attachment   );
+
+
         return post;
     }
 

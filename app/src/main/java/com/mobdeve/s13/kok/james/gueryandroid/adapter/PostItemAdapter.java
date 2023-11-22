@@ -22,10 +22,6 @@ import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostVideoHolder;
 import java.util.ArrayList;
 
 public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
-    private static final int TYPE_TEXT = 1;
-    private static final int TYPE_IMAGE = 2;
-    private static final int TYPE_VIDEO = 3;
-
     private ArrayList<Post> posts;
 
 
@@ -39,89 +35,45 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
 
     public int getItemViewType(int position){
         Post post = posts.get(position);
-        if(post.getType() == "TEXT")
-            return TYPE_TEXT;
-        else if (post.getType() == "IMAGE")
-            return TYPE_IMAGE;
-        else if (post.getType() == "VIDEO")
-            return TYPE_VIDEO;
-
-        return super.getItemViewType(position);
+        return post.getType();
     }
-    public PostItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        PostItemHolder postItemHolder = new PostItemHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
 
+    public PostItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        PostItemHolder postItemHolder;
+        if(viewType == Post.PostType.TEXT.value){
+            postItemHolder = new PostItemHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+        }else if(viewType == Post.PostType.IMAGE.value){
+            postItemHolder = new PostImageHolder(PostItemImgBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+        }else if(viewType == Post.PostType.VIDEO.value){
+            postItemHolder = new PostVideoHolder(PostItemVidBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+        }else{
+            postItemHolder = new PostItemHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+        }
+
+
+        PostItemHolder finalPostItemHolder = postItemHolder;
         postItemHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(postItemHolder.getPost().isVoting()) return;
+                if (finalPostItemHolder.getPost().isVoting()) return;
                 Intent intent = new Intent(parent.getContext(), PostDetailsActivity.class);
 
-                intent.putExtra(PostDetailsActivity.POST_KEY,postItemHolder.getPost().getId() );
-                intent.putExtra(PostDetailsActivity.POST_INDEX, postItemHolder.getAbsoluteAdapterPosition());
+                intent.putExtra(PostDetailsActivity.POST_KEY, finalPostItemHolder.getPost().getId());
+                intent.putExtra(PostDetailsActivity.POST_INDEX, finalPostItemHolder.getAdapterPosition());
                 launcher.launch(intent);
             }
         });
 
 
         return postItemHolder;
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch(viewType){
-            case TYPE_TEXT:
-                PostItemHolder postItemHolder = new PostItemHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
-                postItemHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(parent.getContext(), PostDetailsActivity.class);
-                        intent.putExtra(PostDetailsActivity.POST_KEY,postItemHolder.getPost() );
-                        parent.getContext().startActivity(intent);
-                    }
-                });
-                return postItemHolder;
-            case TYPE_IMAGE:
-                PostImageHolder postImageHolder = new PostImageHolder(PostItemImgBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
-                postImageHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(parent.getContext(), PostDetailsActivity.class);
-                        intent.putExtra(PostDetailsActivity.POST_KEY,postImageHolder.getPost() );
-                        parent.getContext().startActivity(intent);
-                    }
-                });
-                return postImageHolder;
-            case TYPE_VIDEO:
-                PostVideoHolder postVideoHolder = new PostVideoHolder(PostItemVidBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
-                postVideoHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(parent.getContext(), PostDetailsActivity.class);
-                        intent.putExtra(PostDetailsActivity.POST_KEY,postVideoHolder.getPost() );
-                        parent.getContext().startActivity(intent);
-                    }
-                });
-                return postVideoHolder;
-        }
-        return null;
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Post post = posts.get(position);
 
-        switch(holder.getItemViewType()){
-            case TYPE_TEXT:
-                ((PostItemHolder) holder).bind(post);
-                break;
-            case TYPE_IMAGE:
-                ((PostImageHolder) holder).bind(post);
-                break;
-            case TYPE_VIDEO:
-                ((PostVideoHolder) holder).bind(post);
-                break;
-        }
+    @Override
+    public void onBindViewHolder(@NonNull PostItemHolder holder, int position) {
+        Post post = posts.get(position);
+        holder.bind(post);
     }
 
     @Override
