@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemVidBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostImageHolder;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostItemHolder;
@@ -45,9 +47,6 @@ public class PostItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view;
-
         switch(viewType){
             case TYPE_TEXT:
                 PostItemHolder postItemHolder = new PostItemHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
@@ -61,7 +60,7 @@ public class PostItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
                 return postItemHolder;
             case TYPE_IMAGE:
-                PostImageHolder postImageHolder = new PostImageHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+                PostImageHolder postImageHolder = new PostImageHolder(PostItemImgBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
                 postImageHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -72,7 +71,7 @@ public class PostItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
                 return postImageHolder;
             case TYPE_VIDEO:
-                PostVideoHolder postVideoHolder = new PostVideoHolder(PostItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
+                PostVideoHolder postVideoHolder = new PostVideoHolder(PostItemVidBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot());
                 postVideoHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

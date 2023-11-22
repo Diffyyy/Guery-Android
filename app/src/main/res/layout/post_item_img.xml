@@ -25,7 +25,6 @@
         app:layout_constraintGuide_end="332dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:paddingLeft="8dp"

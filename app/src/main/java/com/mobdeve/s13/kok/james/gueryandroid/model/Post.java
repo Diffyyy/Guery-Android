@@ -31,7 +31,7 @@ public class Post implements Parcelable {
         this.comments = new ArrayList<>();
         this.video = null;
         this.image = null;
-        this.type = "TEXT";
+        this.type = "IMAGE";
     }
 
     public Post(String game, Profile profile, LocalDateTime createdAt, String title, String body, String type, String attached){
