@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:adjustViewBounds="true"
-            android:backgroundTint="#00A52525"
+            android:backgroundTint="#00B33030"
             android:maxHeight="25dp"
             android:padding="0dp"
             android:scaleType="centerInside"

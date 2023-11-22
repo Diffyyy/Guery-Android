@@ -49,6 +49,7 @@
         app:layout_constraintGuide_percent="0.05" />
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,10 +63,7 @@
 
             <include
                 android:id="@+id/post_binding"
-                layout="@layout/post_item"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                layout="@layout/post_item" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_rv"
@@ -77,6 +75,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_binding" />
+
+            <include
+                android:id="@+id/loading"
+                layout="@layout/loading_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:elevation="10dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/post_binding"
+                app:layout_constraintStart_toStartOf="@+id/post_binding"
+                app:layout_constraintTop_toTopOf="@+id/post_binding" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

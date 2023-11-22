@@ -65,7 +65,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/comment_engagement_bar_binding"
         layout="@layout/comment_engagement_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -91,5 +91,5 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        app:layout_constraintTop_toBottomOf="@+id/comment_engagement_bar_binding" />
 </androidx.constraintlayout.widget.ConstraintLayout>

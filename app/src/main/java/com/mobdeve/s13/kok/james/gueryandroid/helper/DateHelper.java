@@ -1,9 +1,13 @@
 package com.mobdeve.s13.kok.james.gueryandroid.helper;
 
+import com.google.firebase.Timestamp;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 public class DateHelper {
 
@@ -25,6 +29,16 @@ public class DateHelper {
 
     public static LocalDateTime generateRandomDate(){
         return
-                LocalDateTime.of(2010 + (int)(Math.random()*13), Month.of(1+(int)(Math.random()*11)), 1+(int)(Math.random()*30), (int)(Math.random()*23), (int)(Math.random()*59), (int)(Math.random()*59 ));
+                LocalDateTime.of(2010 + (int)(Math.random()*13), Month.of(1+(int)(Math.random()*11)), 1+(int)(Math.random()*25), (int)(Math.random()*23), (int)(Math.random()*59), (int)(Math.random()*59 ));
     }
+
+    public static LocalDateTime convertTimestamptoDate(Timestamp timestamp){
+
+
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(timestamp.toDate().toInstant(), ZoneId.systemDefault());
+        return localDateTime;
+
+    }
+
+
 }

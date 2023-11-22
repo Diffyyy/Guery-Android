@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GueryAndroid"
         tools:targetApi="31">
+
+
+
         <activity
             android:name=".activity.ForgotPasswordActivity"
             android:exported="false" />
@@ -28,6 +31,7 @@
             android:theme="@style/Theme.GueryAndroid" />
         <activity
             android:name=".activity.HomeActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
