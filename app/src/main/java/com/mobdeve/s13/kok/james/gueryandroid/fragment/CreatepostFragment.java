@@ -17,6 +17,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.HomeActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentCreatepostBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
@@ -36,11 +37,6 @@ public class CreatepostFragment extends Fragment {
 
     }
 
-    public CreatepostFragment(BottomNavigationView view, HomeActivity home) {
-        // Required empty public constructor
-        this.home = home;
-
-    }
 
 
     @Override
@@ -64,7 +60,7 @@ public class CreatepostFragment extends Fragment {
                 String postCommunity = viewBinding.etCreateCommunity.getText().toString();
                 LocalDateTime date = LocalDateTime.now();
                 if(!postTitle.isEmpty() && !postContent.isEmpty() && !postCommunity.isEmpty()){
-                    Post post = new Post(postCommunity, LoginActivity.p, date, postTitle, postContent);
+                    Post post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent);
                     viewBinding.etCreatePosttitle.setText(null);
                     viewBinding.etCreateContent.setText(null);
                     viewBinding.etCreateCommunity.setText(null);
@@ -75,8 +71,8 @@ public class CreatepostFragment extends Fragment {
                             post.setId(s);
 
                             //return back to home
-                            home.setItemSelected(R.id.nav_home);
-                            home.addPost(post);
+                            ((HomeActivity)getActivity()).setItemSelected(R.id.nav_home);
+                            ((HomeActivity)getActivity()).addPost(post);
 
                         }
                     });

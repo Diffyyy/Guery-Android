@@ -10,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
+import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.CommentItemBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DialogHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
@@ -36,6 +38,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
         commentViewHolder.setReplyListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!AuthHelper.getInstance().isSignedIn()){
+                    DialogHelper.getNotLoggedInDialog(v.getContext(), "Please log in to comment", null    ).show();
+                    return;
+                }
                 String commentId = commentViewHolder.getComment().getId();
                 Log.d("BURGER", "COMMENT FOR ID CLICKED: "+commentId);
                 //When reply of this comment is clicked
@@ -43,7 +49,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
                     @Override
                     public void accept(DialogInterface dialog, String s) {
                         if(!s.isBlank()){
-                            Comment comment = new Comment(LoginActivity.p, LocalDateTime.now(), s);
+                            Comment comment = new Comment(AuthHelper.getInstance().getProfile(), LocalDateTime.now(), s);
                             comment.setToPost(0);
 //                            Log.d("BURGER", "SETTING ADAPTER PARENT: "+this + " TO: "+comment.getId()    );
                             FirestoreHelper.getInstance().addComment(commentId, comment, new Consumer<String>() {
@@ -95,6 +101,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
                         Log.d("BURGER", "UNABLE TO LOAD COMMENT ID, MAY HAVE BEEN DELETED");
                         return;
                     }
+                    Log.d("BURGER", "UPDATED COMMENT: "+updatedComment  );
                     comment.set(updatedComment);
                     notifyItemChanged(finalI);
                 }

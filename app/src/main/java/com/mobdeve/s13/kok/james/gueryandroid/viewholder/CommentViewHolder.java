@@ -62,8 +62,8 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
         downvoteBtn = binding.commentEngagementBarBinding.postDownvoteBtn;
         upvotesTv = binding.commentEngagementBarBinding.upvoteTv;
 
-        upvoteBtn.setOnClickListener(new VoteListener(LoginActivity.p, this, downvoteBtn, Vote.UP, upvotesTv));
-        downvoteBtn.setOnClickListener(new VoteListener(LoginActivity.p, this, upvoteBtn, Vote.DOWN, upvotesTv));
+        upvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(), this, downvoteBtn, Vote.UP, upvotesTv));
+        downvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(), this, upvoteBtn, Vote.DOWN, upvotesTv));
 
 
         Log.d("BURGER","CREATED COMMENT VIEWHOLDER");

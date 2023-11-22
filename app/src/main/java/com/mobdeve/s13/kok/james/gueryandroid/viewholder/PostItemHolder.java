@@ -61,8 +61,9 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         upvoteBtn = binding.postEngagementBar.postUpvoteBtn;
         downvoteBtn = binding.postEngagementBar.postDownvoteBtn;
 
-        upvoteBtn.setOnClickListener(new VoteListener(LoginActivity.p, this, downvoteBtn, Vote.UP, upvotesTv));
-        downvoteBtn.setOnClickListener(new VoteListener(LoginActivity.p, this, upvoteBtn, Vote.DOWN, upvotesTv));
+
+        upvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(), this, downvoteBtn, Vote.UP, upvotesTv));
+        downvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(),  this, upvoteBtn, Vote.DOWN, upvotesTv));
     }
     public void bind(Post post){
 
@@ -110,7 +111,9 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
 
 
     }
-
+    public void setReplyListener(View.OnClickListener clickListener){
+        binding.postEngagementBar.postReplyBtn.setOnClickListener(clickListener);
+    }
 
     public Post getPost() {
         return post;

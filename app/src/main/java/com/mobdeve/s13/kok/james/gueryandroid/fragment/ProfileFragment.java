@@ -1,5 +1,6 @@
 package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mobdeve.s13.kok.james.gueryandroid.activity.HomeActivity;
+import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentProfileBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -18,15 +22,8 @@ import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentProfileBinding
 // */
 public class ProfileFragment extends Fragment {
 
-;
-    private HomeActivity activity;
-
     public ProfileFragment(){
 
-    }
-    public ProfileFragment(HomeActivity activity) {
-        this.activity = activity;
-        // Required empty public constructor
     }
 
 
@@ -38,7 +35,13 @@ public class ProfileFragment extends Fragment {
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.finish();
+                AuthHelper.getInstance().signOut();
+
+                getActivity().finish();
+
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+
             }
         });
         return binding.getRoot();

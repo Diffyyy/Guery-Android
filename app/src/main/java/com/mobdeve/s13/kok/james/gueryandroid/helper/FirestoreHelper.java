@@ -61,6 +61,7 @@ public class FirestoreHelper {
 
     public static final String PROFILE_NAME = "username";
     public static final String PROFILE_PFP = "pfp";
+    public static final String PROFILE_EMAIL = "email";
 
     public static final String POSTS = "posts";
     public static final String USERS = "users";
@@ -133,7 +134,7 @@ public class FirestoreHelper {
             @Override
             public void accept(Profile profile) {
                 post.setProfile(profile);
-                retrieveVote(LoginActivity.p, post, new Consumer<Vote>() {
+                retrieveVote(AuthHelper.getInstance().getProfile(), post, new Consumer<Vote>() {
                     @Override
                     public void accept(Vote vote) {
                         post.setUserVote(vote);
@@ -232,7 +233,7 @@ public class FirestoreHelper {
                             public void accept(Profile profile) {
 
                                 comment.setProfile(profile);
-                                retrieveVote(LoginActivity.p, comment, new Consumer<Vote>() {
+                                retrieveVote(AuthHelper.getInstance().getProfile(), comment, new Consumer<Vote>() {
                                     @Override
                                     public void accept(Vote vote) {
                                         comment.setUserVote(vote);
@@ -247,7 +248,10 @@ public class FirestoreHelper {
     }
 
     public void retrieveVote(Profile profile, Content content, Consumer<Vote> callback){
-
+        if(profile==null){
+            callback.accept(Vote.CANCEL);
+            return;
+        }
         db.collection(VOTES).whereEqualTo(VOTE_PROFILE, profile.getId())
                 .whereEqualTo(VOTE_CONTENT, content.getId())
                 .get()
@@ -345,9 +349,20 @@ public class FirestoreHelper {
         String pfp = (String) map.get(PROFILE_PFP);
         profile.setPfp(pfp);
 
+        String email = (String) map.get(PROFILE_EMAIL   );
+        profile.setEmail(email);
+        Log.d("BURGER", "SETTING EMAIL: "+email);
         return profile;
     }
 
+    public HashMap<String, Object> convertProfile(Profile profile){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(ID, profile.getId());
+        map.put(PROFILE_NAME, profile.getUsername() );
+        map.put(PROFILE_PFP, profile.getPfp());
+        map.put(PROFILE_EMAIL, profile.getEmail()   );
+        return map;
+    }
 
 
 
@@ -375,7 +390,8 @@ public class FirestoreHelper {
         return post;
     }
 
-    public void vote(Profile profile, Content content,Vote prevVote, Vote currVote, Consumer<Void> callback){
+    public void vote(Profile profile, Content content,Vote currVote, Consumer<Void> callback, Consumer<Exception> error){
+        callback.accept(null);
         String collection;
         String field;
         if(content instanceof Post){
@@ -385,63 +401,51 @@ public class FirestoreHelper {
             collection = COMMENTS;
             field = COMMENT_UPVOTES;
         }
-
-        DocumentReference contentReference = db.collection(collection).document(content.getId() );
-        db.runTransaction(new Transaction.Function<Void>() {
+        String voteId = profile.getId() + content.getId();
+        DocumentReference voteReference = db.collection(VOTES).document(voteId);
+        DocumentReference contentReference = db.collection(collection).document(content.getId());
+        db.runTransaction(new Transaction.Function<Vote>() {
             @Nullable
             @Override
-            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot = transaction.get(contentReference);
-                transaction.update(contentReference, field, snapshot.getLong(field) + (currVote.value-prevVote.value) );
-
-                return null;
-            }
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                if(prevVote.equals(Vote.CANCEL)){
-                    Log.d("BURGER", "ADDING VOTE");
-                    HashMap<String, Object> voteMap = new HashMap<>();
-                    voteMap.put(VOTE_PROFILE, profile.getId());
-                    voteMap.put(VOTE_CONTENT, content.getId());
-                    voteMap.put(VOTE_TYPE, currVote.name());
-                    db.collection(VOTES).add(voteMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        //add if haven't voted yet
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            callback.accept(null);
-                        }
-                    });
-                }else {
-                    db.collection(VOTES).whereEqualTo(VOTE_PROFILE, profile.getId())
-                            .whereEqualTo(VOTE_CONTENT, content.getId())
-                            .get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot snapshot) {
-                                    if(snapshot.isEmpty()) return;
-                                    DocumentReference voteRef = snapshot.getDocuments().get(0).getReference();
-                                    //delete if cancel vote
-                                    if(currVote.equals(Vote.CANCEL)) voteRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            callback.accept(null);
-                                        }
-                                    });
-                                    else {                          //edit otherwise
-                                        voteRef.update(VOTE_TYPE, currVote.name()  ).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                callback.accept(null);
-                                            }
-                                        });
-                                    }
-                                }
-                            });
+            public Vote apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                Vote prevVote  = Vote.CANCEL;
+                HashMap<String, Object> map = (HashMap<String, Object>) transaction.get(voteReference).getData();
+                if(map==null){
+                    map = new HashMap<>();
+                    map.put(VOTE_PROFILE, profile.getId());
+                    map.put(VOTE_CONTENT, content.getId()   );
+                    map.put(VOTE_TYPE, currVote.name());
+                }else{
+                    prevVote =  Vote.valueOf((String) map.get(VOTE_TYPE));
+                    map.put(VOTE_TYPE, currVote.name());
                 }
+                transaction.set(voteReference, map);
+
+
+                return prevVote;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Vote>() {
+            @Override
+            public void onSuccess(Vote prevVote) {
+                int diff = currVote.value - prevVote.value;
+                db.runTransaction(new Transaction.Function<Void>() {
+                    @Nullable
+                    @Override
+                    public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                        transaction.update(contentReference, field, FieldValue.increment(diff));
+                        return null;
+                    }
+                });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("BURGER", "VOTE EXCEPTION: "+e.getMessage());
+                error.accept(e);
             }
         });
-    };
+    }
     public void searchPosts(String keyword, Consumer<Post> callback, Consumer<Void> doneCallback ){
         CollectionReference postsRef = db.collection(POSTS);
         retrievePosts(new Consumer<Post>() {
@@ -460,8 +464,55 @@ public class FirestoreHelper {
             }
         });
     }
+    private void checkUser(String fieldName, String fieldValue, Consumer<Profile> callback){
+        db.collection(USERS).whereEqualTo(fieldName, fieldValue)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if(queryDocumentSnapshots.isEmpty()){
+                            callback.accept(null);
+                        }else{
+                            Map<String, Object> profileMap = queryDocumentSnapshots.getDocuments().get(0).getData();
+                            Log.d("BURGER", "SUCCESSFULLY GOT USER LOGIN: "+profileMap);
+                            Profile profile = convertMapToProfile(profileMap);
+                            Log.d("BURGER", "SUCCESSFULLY GOT USER LOGIN: "+profile);
+                            callback.accept(profile);
+
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("BURGER", "FAILED TO GET USER: "+fieldValue, e);
+                    }
+                });
+    }
 
 
+    public void checkUsername(String username, Consumer<Profile > callback ){
+        checkUser(PROFILE_NAME, username, callback);
+    }
+    public void checkEmail(String email, Consumer<Profile> callback){
+        checkUser(PROFILE_EMAIL, email, callback);
+    }
+
+    public void addUser(String username, String email, Consumer<Profile> callback){
+        DocumentReference newUser = db.collection(USERS).document();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(ID, newUser.getId());
+        map.put(PROFILE_NAME, username);
+        map.put(PROFILE_EMAIL, email);
+        newUser.set(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Profile profile = new Profile(newUser.getId(), email, username);
+
+                        callback.accept(profile);
+                    }
+                });
+    }
 
 }
 

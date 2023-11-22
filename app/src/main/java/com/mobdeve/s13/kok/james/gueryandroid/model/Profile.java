@@ -16,28 +16,26 @@ public class Profile implements Parcelable {
     protected String username;
 //    protected int pfp;
     protected String pfp;
-
-    public Profile(String id, String username, String pfp){
-        this.id = id;
-        this.username = username;
-        this.pfp = pfp;
-
-    }
-
-
+    protected String email;
 
     public Profile(String username){
-        this("kirby", username, null);
+        this.username = username;
+    }
+
+    public Profile(String id, String email, String username){
+        this(id, username);
+        this.email = email;
     }
 
     public Profile(String id, String username){
-        this(username);
         this.id = id;
+        this.username = username;
     }
     protected Profile(Parcel in) {
         id = in.readString();
         username = in.readString();
         pfp = in.readString();
+        email = in.readString();
     }
 
 
@@ -63,6 +61,7 @@ public class Profile implements Parcelable {
         dest.writeString(id);
         dest.writeString(username);
         dest.writeString(pfp);
+        dest.writeString(email);
     }
 
     public String getUsername() {
@@ -96,7 +95,16 @@ public class Profile implements Parcelable {
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", pfp=" + pfp +
+                ", email="+email+
                 '}';
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setPfp(String pfp) {

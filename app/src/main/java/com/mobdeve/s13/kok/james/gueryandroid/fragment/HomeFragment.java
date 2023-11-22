@@ -193,9 +193,5 @@ public class HomeFragment extends Fragment {
         loading.setVisibility(View.GONE);
     }
 
-    public void setHomeActivity(HomeActivity homeActivity) {
-        this.homeActivity = homeActivity;
-    }
-
 
 }

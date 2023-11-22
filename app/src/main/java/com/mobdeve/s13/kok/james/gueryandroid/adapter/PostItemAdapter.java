@@ -53,7 +53,8 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
 
 
         PostItemHolder finalPostItemHolder = postItemHolder;
-        postItemHolder.itemView.setOnClickListener(new View.OnClickListener() {
+
+        View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (finalPostItemHolder.getPost().isVoting()) return;
@@ -63,7 +64,9 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
                 intent.putExtra(PostDetailsActivity.POST_INDEX, finalPostItemHolder.getAdapterPosition());
                 launcher.launch(intent);
             }
-        });
+        };
+        postItemHolder.setReplyListener(clickListener);
+        postItemHolder.itemView.setOnClickListener(clickListener);
 
 
         return postItemHolder;

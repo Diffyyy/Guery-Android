@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 
 import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.CommentAdapter;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityPostDetailsBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
@@ -120,8 +121,8 @@ public class PostDetailsActivity extends AppCompatActivity {
 
                 prevVote = post.getUserVote();
 
-                postBinding.postEngagementBar.postUpvoteBtn.setOnClickListener(new VoteListener(LoginActivity.p, post,postBinding.postEngagementBar.postDownvoteBtn, Vote.UP,  postBinding.postEngagementBar.upvoteTv ));
-                postBinding.postEngagementBar.postDownvoteBtn.setOnClickListener(new VoteListener(LoginActivity.p, post,postBinding.postEngagementBar.postUpvoteBtn, Vote.DOWN,  postBinding.postEngagementBar.upvoteTv ));
+                postBinding.postEngagementBar.postUpvoteBtn.setOnClickListener(new VoteListener(PostDetailsActivity.this, post,postBinding.postEngagementBar.postDownvoteBtn, Vote.UP,  postBinding.postEngagementBar.upvoteTv ));
+                postBinding.postEngagementBar.postDownvoteBtn.setOnClickListener(new VoteListener(PostDetailsActivity.this, post,postBinding.postEngagementBar.postUpvoteBtn, Vote.DOWN,  postBinding.postEngagementBar.upvoteTv ));
                 CommentAdapter adapter = new CommentAdapter();
                 Log.d("BURGER", "ADAPTER: "+adapter);
                 adapter.setReplies(post.getComments());
@@ -141,13 +142,16 @@ public class PostDetailsActivity extends AppCompatActivity {
                 postBinding.postEngagementBar.postReplyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if(!AuthHelper.getInstance().isSignedIn()){
+                            DialogHelper.getNotLoggedInDialog(PostDetailsActivity.this, "Please log in to comment", null    ).show();
+                            return;
+                        }
                         DialogHelper.getCommentDialog(PostDetailsActivity.this, post.getProfile().getUsername(), new BiConsumer<DialogInterface, String>() {
 
                             @Override
                             public void accept(DialogInterface dialogInterface, String s) {
                                 if(!s.isBlank()){
-                                    Comment comment = new Comment(LoginActivity.p, LocalDateTime.now(), s);
+                                    Comment comment = new Comment(AuthHelper.getInstance().getProfile(), LocalDateTime.now(), s);
                                     comment.setToPost(1);
                                     FirestoreHelper.getInstance().addComment(postId, comment, new Consumer<String>() {
                                         @Override
