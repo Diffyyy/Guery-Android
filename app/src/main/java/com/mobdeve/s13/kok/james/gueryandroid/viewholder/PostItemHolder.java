@@ -77,10 +77,8 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         editBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                // Handle the click event, for example, redirect to an EditActivity
                 Context context = view.getContext();
-                Intent intent = new Intent(context, EditPostActivity.class); // Replace EditActivity with your actual activity class
-                // You may want to pass some data to the EditActivity using intent.putExtra if needed
+                Intent intent = new Intent(context, EditPostActivity.class);
                 context.startActivity(intent);
             }
         });
