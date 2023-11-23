@@ -1,15 +1,25 @@
 package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,6 +43,10 @@ public class CreatepostFragment extends Fragment {
     public static final String NEW_TITLE_KEY = "NEW TITLE KEY";
     public static final String NEW_BODY_KEY = "NEW BODY KEY";
 
+    private ActivityResultLauncher<String> mediaPickerLauncher;
+    private String attachment = null;
+
+
     public CreatepostFragment(){
 
     }
@@ -46,6 +60,23 @@ public class CreatepostFragment extends Fragment {
         FragmentCreatepostBinding viewBinding = FragmentCreatepostBinding.inflate(inflater, container,false);
 
 
+        mediaPickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        if (result != null) {
+                            attachment = result.toString();
+                            //We can set this to Filename
+                            viewBinding.tvMedia.setText(attachment);
+                        }
+                    }
+                });
+        viewBinding.ibAddImg.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mediaPickerLauncher.launch("*/*");
+            }
+        });
 
         viewBinding.btnCreatePost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +91,13 @@ public class CreatepostFragment extends Fragment {
                 String postCommunity = viewBinding.etCreateCommunity.getText().toString();
                 LocalDateTime date = LocalDateTime.now();
                 if(!postTitle.isEmpty() && !postContent.isEmpty() && !postCommunity.isEmpty()){
-                    Post post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent);
+                    Post post;
+                    if(attachment == null)
+                        post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent);
+                    else if(attachment.contains("image"))
+                        post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent, 2, attachment);
+                    else
+                        post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent, 3, attachment);
                     viewBinding.etCreatePosttitle.setText(null);
                     viewBinding.etCreateContent.setText(null);
                     viewBinding.etCreateCommunity.setText(null);
@@ -98,9 +135,5 @@ public class CreatepostFragment extends Fragment {
 
         return viewBinding.getRoot();
     }
-
-
-
-
 
 }
