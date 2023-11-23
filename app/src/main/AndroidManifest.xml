@@ -43,6 +43,7 @@
             android:name=".activity.LoginActivity"
             android:exported="false" />
         <activity android:name="com.mobdeve.s13.kok.james.gueryandroid.activity.EditProfileActivity" />
+        <activity android:name="com.mobdeve.s13.kok.james.gueryandroid.activity.EditPostActivity" />
     </application>
 
 </manifest>

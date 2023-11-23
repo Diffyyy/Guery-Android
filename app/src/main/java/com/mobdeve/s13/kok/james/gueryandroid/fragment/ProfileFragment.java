@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.mobdeve.s13.kok.james.gueryandroid.activity.EditProfileActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
@@ -64,8 +66,6 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             // Check if the data contains updated profile information
             if (data != null) {
@@ -85,6 +85,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
+
 
         binding.btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override

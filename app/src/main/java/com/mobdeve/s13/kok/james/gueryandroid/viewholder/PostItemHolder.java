@@ -1,37 +1,40 @@
 package com.mobdeve.s13.kok.james.gueryandroid.viewholder;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
+        import android.net.Uri;
+        import android.util.Log;
+        import android.view.View;
+        import android.widget.ImageButton;
+        import android.widget.ImageView;
+        import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
+        import androidx.annotation.NonNull;
+        import androidx.core.content.ContextCompat;
+        import androidx.core.graphics.drawable.DrawableCompat;
+        import androidx.recyclerview.widget.RecyclerView;
+        import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
-import com.mobdeve.s13.kok.james.gueryandroid.R;
-import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostEngagementBarBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostFooterLayoutBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostHeaderLayoutBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
-import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
-import com.mobdeve.s13.kok.james.gueryandroid.listener.VoteListener;
-import com.mobdeve.s13.kok.james.gueryandroid.model.Content;
-import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
-import com.mobdeve.s13.kok.james.gueryandroid.model.Vote;
-import com.squareup.picasso.Picasso;
+        import com.mobdeve.s13.kok.james.gueryandroid.R;
+        import com.mobdeve.s13.kok.james.gueryandroid.activity.EditPostActivity;
+        import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
+        import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostEngagementBarBinding;
+        import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostFooterLayoutBinding;
+        import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostHeaderLayoutBinding;
+        import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
+        import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
+        import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
+        import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
+        import com.mobdeve.s13.kok.james.gueryandroid.listener.VoteListener;
+        import com.mobdeve.s13.kok.james.gueryandroid.model.Content;
+        import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
+        import com.mobdeve.s13.kok.james.gueryandroid.model.Vote;
+        import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.util.function.Consumer;
+        import java.io.File;
+        import java.util.function.Consumer;
 
 
 public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHolder {
@@ -50,6 +53,9 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
     private PostFooterLayoutBinding footerBinding;
     private PostEngagementBarBinding engagementBarBinding;
 
+    private ImageButton editBtn;
+    private ImageButton deleteBtn;
+
     protected Post post;
     public PostItemHolder(@NonNull View itemView) {
         super(itemView);
@@ -67,10 +73,22 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         upvotesTv = engagementBarBinding.upvoteTv;
         username = headerBinding.usernameTv;
 
+        editBtn = headerBinding.btnEditPost;
+        editBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // Handle the click event, for example, redirect to an EditActivity
+                Context context = view.getContext();
+                Intent intent = new Intent(context, EditPostActivity.class); // Replace EditActivity with your actual activity class
+                // You may want to pass some data to the EditActivity using intent.putExtra if needed
+                context.startActivity(intent);
+            }
+        });
+
+        deleteBtn = headerBinding.btnDeletePost;
 
         upvoteBtn = engagementBarBinding.postUpvoteBtn;
         downvoteBtn = engagementBarBinding.postDownvoteBtn;
-
 
         upvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(), this, downvoteBtn, Vote.UP, upvotesTv));
         downvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(),  this, upvoteBtn, Vote.DOWN, upvotesTv));
@@ -103,8 +121,6 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         binding.postHeaderInclude.titleTv.setText(post.getTitle());
         binding.postFooterInclude.postEngagementBar.upvoteTv.setText(String.valueOf(post.getUpvotes()));
         binding.postHeaderInclude.usernameTv.setText(post.getProfile().getUsername());
-
-
         PostItemHolder.updateVoteBtns(post, binding.postFooterInclude.postEngagementBar.postUpvoteBtn, binding.postFooterInclude.postEngagementBar.postDownvoteBtn);
 
     }
