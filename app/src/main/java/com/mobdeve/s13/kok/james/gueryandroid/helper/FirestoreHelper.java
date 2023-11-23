@@ -549,7 +549,19 @@ public class FirestoreHelper {
             Log.e("FAIL: ", e.getMessage());
         });
 
+    }
 
+    public void editPost(Post post, String newTitle, String newBody){
+        Map<String, Object> updates = convertPost(post);
+        updates.put(FirestoreHelper.POST_TITLE, newTitle);
+        updates.put(FirestoreHelper.POST_BODY, newBody);
+
+        db.collection(POSTS).document(post.getId()).update(updates).addOnSuccessListener(aVoid ->{
+            Log.e("SUCCESS: ", "Profile Updated");
+        })
+        .addOnFailureListener(e -> {
+            Log.e("FAIL: ", e.getMessage());
+        });
     }
 
 }
