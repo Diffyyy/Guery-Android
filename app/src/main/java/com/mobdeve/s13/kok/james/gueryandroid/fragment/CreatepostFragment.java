@@ -66,8 +66,20 @@ public class CreatepostFragment extends Fragment {
                     public void onActivityResult(Uri result) {
                         if (result != null) {
                             attachment = result.toString();
+                            if(attachment.contains("image")) {
+                                viewBinding.vvPreview.setVisibility(View.INVISIBLE);
+                                viewBinding.ivPreview.setImageURI(result);
+                                viewBinding.ivPreview.setVisibility(View.VISIBLE);
+                            }
+                            else if(attachment.contains("video")) {
+                                viewBinding.ivPreview.setVisibility(View.INVISIBLE);
+                                viewBinding.vvPreview.setVideoURI(result);
+                                viewBinding.vvPreview.setVisibility(View.VISIBLE);
+                                viewBinding.vvPreview.start();
+                                Log.e("E","Im Called");
+                            }
                             //We can set this to Filename
-                            viewBinding.tvMedia.setText(attachment);
+                            //viewBinding.tvMedia.setText(attachment);
                         }
                     }
                 });
@@ -101,6 +113,8 @@ public class CreatepostFragment extends Fragment {
                     viewBinding.etCreatePosttitle.setText(null);
                     viewBinding.etCreateContent.setText(null);
                     viewBinding.etCreateCommunity.setText(null);
+                    viewBinding.ivPreview.setVisibility(View.INVISIBLE);
+                    viewBinding.vvPreview.setVisibility(View.INVISIBLE);
 
                     FirestoreHelper.getInstance().addPost(post, new Consumer<String>() {
                         @Override
