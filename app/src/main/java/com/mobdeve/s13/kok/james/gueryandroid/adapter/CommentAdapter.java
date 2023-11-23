@@ -15,6 +15,8 @@ import com.mobdeve.s13.kok.james.gueryandroid.databinding.CommentItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DialogHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.listener.ProfileClickListener;
+import com.mobdeve.s13.kok.james.gueryandroid.listener.ReplyListener;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.CommentViewHolder;
 
@@ -35,35 +37,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
         CommentItemBinding binding = CommentItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent,false);
         CommentViewHolder commentViewHolder = new CommentViewHolder(binding.getRoot());
 
-        commentViewHolder.setReplyListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!AuthHelper.getInstance().isSignedIn()){
-                    DialogHelper.getNotLoggedInDialog(v.getContext(), "Please log in to comment", null    ).show();
-                    return;
-                }
-                String commentId = commentViewHolder.getComment().getId();
-                Log.d("BURGER", "COMMENT FOR ID CLICKED: "+commentId);
-                //When reply of this comment is clicked
-                DialogHelper.getCommentDialog(parent.getContext(), commentViewHolder.getComment().getProfile().getUsername(), new BiConsumer<DialogInterface, String>() {
-                    @Override
-                    public void accept(DialogInterface dialog, String s) {
-                        if(!s.isBlank()){
-                            Comment comment = new Comment(AuthHelper.getInstance().getProfile(), LocalDateTime.now(), s);
-                            comment.setToPost(0);
-//                            Log.d("BURGER", "SETTING ADAPTER PARENT: "+this + " TO: "+comment.getId()    );
-                            FirestoreHelper.getInstance().addComment(commentId, comment, new Consumer<String>() {
-                                @Override
-                                public void accept(String s) {
-                                    commentViewHolder.addComment(comment);
-                                }
-                            });
-
-                        }else dialog.dismiss();
-                    }
-                }).show();
-            }
-        });
+        commentViewHolder.setReplyListener(new ReplyListener(commentViewHolder, this, 0     ));
+        commentViewHolder.setProfileClickListener(new ProfileClickListener(commentViewHolder));
         return commentViewHolder;
     }
 

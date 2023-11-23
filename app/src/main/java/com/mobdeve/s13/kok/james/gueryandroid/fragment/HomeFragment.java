@@ -1,43 +1,32 @@
 package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.SearchView;
 
-import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.HomeActivity;
-import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.PostItemAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentHomeBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.ResultLaunchers;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.SwipeUpListener;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.PostItemViewModel;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 
@@ -46,15 +35,16 @@ public class HomeFragment extends Fragment {
     private PostItemAdapter adapter;
 
     private FragmentHomeBinding binding;
-    private View loading;
+    private View loadingSpinner;
     private String query;
-    private HomeActivity homeActivity;
-
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private PostItemViewModel postModel;
+    private boolean isLoading = false;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         postModel = new ViewModelProvider(getActivity()).get(PostItemViewModel.class);
+
         if(!postModel.getFragmentData().isInitialized()){
             postModel.setFragmentData(new ArrayList<>());
             Log.d("BURGER", "HEY NOT INITAILZIED");
@@ -65,33 +55,10 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        Log.d("BURGER", "QUERY SAVED: "+query    );
         binding.searchView.setQuery(query, false);
-        Log.d("BURGER", "SAVED INSTANCE STATE: "+savedInstanceState);
-        ActivityResultLauncher<Intent> myLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
-            @Override
-            public void onActivityResult(ActivityResult o) {
-
-
-                if(o.getResultCode()==RESULT_OK){
-                    Intent intent = o.getData();
-                    int index = intent.getIntExtra(PostDetailsActivity.POST_INDEX, -10);
-                    Log.d("BURGER", "HEYYY: "+index);
-                    Post post = intent.getParcelableExtra("post");
-
-                    Log.d("BURGER", "GOT POST: "+post);
-                    if(index!=-10){
-                        getData().set(index, post);
-                        adapter.notifyItemChanged(index );
-                    }
-                    Log.d("BURGER", "POST INDEX: "+intent.getIntExtra(PostDetailsActivity.POST_INDEX, -10));
-                }else if(o.getResultCode()==RESULT_CANCELED){
-                    Log.d("BURGER", "POST NOT CHANGED");
-                }
-            }
-        });
+        Log.d("BURGER","CREATING VIEW");
         adapter = new PostItemAdapter(getData());
-        adapter.setLauncher(myLauncher);
+        adapter.setLauncher(ResultLaunchers.postClicked(this, adapter));
 
         binding.postsRv.setAdapter(adapter);
         binding.postsRv.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -100,11 +67,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void accept(Void unused) {
                 if(!binding.postsRv.canScrollVertically(-1)){
-                    search();
+                    if(!isLoading)initializeData();
                 }
             }
         }));
-        loading = binding.loading.getRoot();
+        loadingSpinner = binding.loading.getRoot();
 
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -112,7 +79,7 @@ public class HomeFragment extends Fragment {
 
                 Log.d("BURGER", "SEARCH CLICKED");
                 search();
-                homeActivity.hideFocus();
+                ((HomeActivity)getActivity()).hideFocus();
                 return true;
             }
             @Override
@@ -126,7 +93,7 @@ public class HomeFragment extends Fragment {
                 return true;
             }
         });
-        if(getData().isEmpty())search();
+        if(getData().isEmpty())initializeData();
         return binding.getRoot();
 
     }
@@ -134,13 +101,6 @@ public class HomeFragment extends Fragment {
     public HomeFragment(){
 
     }
-
-//    @Override
-//    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        Log.d("BURGER", "SAVED INSTANCE STATE CALLED");
-//        outState.putParcelableArrayList("posts", posts);
-//    }
 
     public void addPostLast(Post post){
         getData().add(post);
@@ -155,43 +115,120 @@ public class HomeFragment extends Fragment {
     private ArrayList<Post> getData(){
         return postModel.getFragmentData().getValue();
     }
-    public void search(){
+
+    public void initializeData(){
         getData().clear();
-        adapter.notifyDataSetChanged();
-
-        boolean added = false;
-
-        loadStart();
-        FirestoreHelper.getInstance().searchPosts(query, new Consumer<Post>() {
-
-            @Override
-            public void accept(Post post) {
-                Log.d("BURGER", "GOT POST: "+post);
-                if (!added) {
+        if(query==null || query.isEmpty()){
+            adapter.setPosts(getData());
+            adapter.notifyDataSetChanged();
+            loadStart();
+            FirestoreHelper.getInstance().retrievePosts( new Consumer<Post>() {
+                boolean added = false;
+                @Override
+                public void accept(Post post) {
+                    Log.d("BURGER", "GOT POST: "+post);
+                    if (!added) {
+                        loadStop();
+                        added = true;
+                    }
+                    addPostLast(post);
+                }
+            }, new Consumer<Integer>() {
+                @Override
+                public void accept(Integer unused) {
                     loadStop();
                 }
-                addPostLast(post);
-            }
-        }, new Consumer<Void>() {
-            @Override
-            public void accept(Void unused) {
-                loadStop();
-            }
-        });
+            });
+        }else{
+            adapter.setPosts(new ArrayList<>());
+            adapter.notifyDataSetChanged();
+            loadStart();
+            final Integer[] size = new Integer[1];
+            FirestoreHelper.getInstance().retrievePosts(new Consumer<Post>() {
+                @Override
+                public void accept(Post post) {
+                    getData().add(post);
+                    if(getData().size()==size[0])search();
+
+                }
+            }, new Consumer<Integer>() {
+                @Override
+                public void accept(Integer unused) {
+                    Log.d("BURGER", "SEARCHING NOW");
+                    size[0] = unused;
+                }
+            });
+        }
+
+
+    }
+    public void search(){
+        final boolean[] added = {false};
+        if(query!=null && !query.isEmpty()) {
+            adapter.setPosts(new ArrayList<>());
+            adapter.notifyDataSetChanged();
+            loadStart();
+            executor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    for(Post post: getData()) {
+                        if (post.getTitle().toLowerCase().contains(query.toLowerCase())
+                                || post.getBody().toLowerCase().contains(query.toLowerCase())
+                                || post.getGame().toLowerCase().contains(query.toLowerCase())) {
+                            if(!added[0]) {
+                                loadStop();
+                                added[0] = true;
+                            }
+
+                            added[0] = true;
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.getPosts().add(post);
+                                    adapter.notifyItemInserted(adapter.getPosts().size()-1);
+                                }
+                            });
+                        }
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadStop();
+                        }
+                    });
+                }
+            });
+        }else {
+            adapter.setPosts(getData());
+            adapter.notifyDataSetChanged();
+        }
+
+
+//        });
     }
     public void loadStart(){
-        loading.setVisibility(View.VISIBLE);
+        if(isLoading) return;
+        isLoading = true;
+
+        loadingSpinner.setVisibility(View.VISIBLE);
 //        int viewheight = loading.getHeight();
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(loading,"translationY", -20f, 20f);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(loadingSpinner,"translationY", -20f, 20f);
         animator.setDuration(100);
         animator.start();
     }
 
 
     public void loadStop(){
-        loading.setVisibility(View.GONE);
+        if(!isLoading) return;
+        isLoading = false;
+        loadingSpinner.setVisibility(View.GONE);
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("BURGER", "FRAGMENT HOME STARTED");
+    }
 }

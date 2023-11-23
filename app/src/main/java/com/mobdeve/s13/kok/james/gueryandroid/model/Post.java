@@ -19,7 +19,6 @@ public class Post extends Content implements Parcelable {
 
     protected String game;
 
-    protected Profile profile;
     protected LocalDateTime createdAt;
     protected String title;
     protected String body;
@@ -128,9 +127,6 @@ public class Post extends Content implements Parcelable {
         return game;
     }
 
-    public Profile getProfile() {
-        return profile;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -160,10 +156,6 @@ public class Post extends Content implements Parcelable {
     public String getAttached() {
         return attachment;
     }
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
     public String getId() {
         return id;
     }

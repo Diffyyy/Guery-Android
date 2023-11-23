@@ -14,6 +14,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemVidBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.listener.ProfileClickListener;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostImageHolder;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostItemHolder;
@@ -23,8 +24,6 @@ import java.util.ArrayList;
 
 public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
     private ArrayList<Post> posts;
-
-
 
     private ActivityResultLauncher<Intent> launcher;
     public PostItemAdapter(ArrayList<Post> posts) {
@@ -61,13 +60,15 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
                 Intent intent = new Intent(parent.getContext(), PostDetailsActivity.class);
 
                 intent.putExtra(PostDetailsActivity.POST_KEY, finalPostItemHolder.getPost().getId());
-                intent.putExtra(PostDetailsActivity.POST_INDEX, finalPostItemHolder.getAdapterPosition());
+                intent.putExtra(PostDetailsActivity.POST_INDEX, finalPostItemHolder.getAbsoluteAdapterPosition());
                 launcher.launch(intent);
             }
         };
         postItemHolder.setReplyListener(clickListener);
         postItemHolder.itemView.setOnClickListener(clickListener);
 
+        ProfileClickListener profileClickListener = new ProfileClickListener(postItemHolder);
+        postItemHolder.setProfileListener(profileClickListener);
 
         return postItemHolder;
     }
@@ -79,11 +80,18 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
         holder.bind(post);
     }
 
+    public ArrayList<Post> getPosts() {
+        return posts;
+    }
+
     @Override
     public int getItemCount() {
         return posts.size();
     }
 
+    public void setPosts(ArrayList<Post> posts) {
+        this.posts = posts;
+    }
 
     public void setLauncher(ActivityResultLauncher<Intent> launcher) {
         this.launcher = launcher;

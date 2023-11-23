@@ -118,6 +118,11 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
         replyBtn.setOnClickListener(onClickListener);
     }
 
+    public void setProfileClickListener(View.OnClickListener onClickListener){
+        username.setOnClickListener(onClickListener);
+        pfp.setOnClickListener(onClickListener);
+    }
+
     public void addComment(Comment comment){
         adapter.addComment(comment);
     }

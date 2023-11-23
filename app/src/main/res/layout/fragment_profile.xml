@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/Constraint1"
+        android:id="@+id/profile_banner_cl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,29 +19,22 @@
             android:layout_height="200dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="64dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/kirby"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/profile_awards_recycler"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="164dp"
-            app:layout_constraintStart_toEndOf="@+id/profile_display_image"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/Constraint2"
+        android:id="@+id/profile_info_cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Constraint1">
+        app:layout_constraintTop_toBottomOf="@+id/profile_banner_cl">
 
         <TextView
-            android:id="@+id/profile_displayname_text"
+            android:id="@+id/profile_username_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -70,7 +63,7 @@
             android:layout_marginStart="16dp"
             android:text="2 followers"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_displayname_text" />
+            app:layout_constraintTop_toBottomOf="@+id/profile_username_tv" />
 
         <TextView
             android:id="@+id/profile_karma_text"
@@ -94,7 +87,7 @@
             app:layout_constraintTop_toBottomOf="@+id/profile_userhandle_text" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/profile_about_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -111,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Constraint2" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_info_cl" />
 
     <Button
         android:id="@+id/sign_out_btn"

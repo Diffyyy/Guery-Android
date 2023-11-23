@@ -13,7 +13,6 @@ public class Comment extends Content implements Parcelable {
     protected LocalDateTime createdAt;
     protected String body;
     protected ArrayList<Comment> replies;
-    protected Profile profile;
     protected int toPost = 0;
 
     public Comment(Profile profile, LocalDateTime createdAt, String content){
@@ -88,10 +87,6 @@ public class Comment extends Content implements Parcelable {
         replies.add(comment);
     }
 
-    public Profile getProfile() {
-        return profile;
-    }
-
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -109,11 +104,6 @@ public class Comment extends Content implements Parcelable {
         if(toPost == 1) return true;
         return false;
     }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
     public int getToPost() {
         return toPost;
     }

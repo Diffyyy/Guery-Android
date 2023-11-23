@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -14,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.SignupBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
-import com.mobdeve.s13.kok.james.gueryandroid.helper.ExistingUsernameException;
+import com.mobdeve.s13.kok.james.gueryandroid.exception.ExistingUsernameException;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
 import java.util.function.Consumer;

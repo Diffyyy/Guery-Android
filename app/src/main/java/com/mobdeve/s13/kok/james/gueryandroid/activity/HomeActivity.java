@@ -58,7 +58,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnItemSelectedListener(HomeActivity.this);
         createPost = new CreatepostFragment();
         Log.d("BURGER", "HELLO HAS SIGNED IN: ?"+AuthHelper.getInstance().isSignedIn());
-
         AuthHelper.getInstance().updateProfile(new Consumer<Profile>() {
             @Override
             public void accept(Profile profile) {

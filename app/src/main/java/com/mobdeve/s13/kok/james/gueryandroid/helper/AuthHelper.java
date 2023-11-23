@@ -4,17 +4,17 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.mobdeve.s13.kok.james.gueryandroid.exception.ExistingUsernameException;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
 import java.util.function.Consumer;
-
-import javax.security.auth.callback.Callback;
 
 public class AuthHelper {
     private static  AuthHelper instance;
@@ -113,9 +113,37 @@ public class AuthHelper {
                 }
             }
         });
+    }
 
+    public void updatePassword(String oldPassword, String newPassword, Consumer<Void> callback, Consumer<Exception> wrongPassword ){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+// Reauthenticate the user
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPassword);
+        user.reauthenticate(credential)
+                .addOnCompleteListener(reauthTask -> {
+                    if (reauthTask.isSuccessful()) {
+                        // User has been successfully reauthenticated, now update the password
+                        user.updatePassword(newPassword)
+                                .addOnCompleteListener(updatePasswordTask -> {
+                                    if (updatePasswordTask.isSuccessful()) {
+                                        // Password update successful
+                                        // Show success message or perform any other necessary actions
+                                        callback.accept(null);
+                                    } else {
+                                        // If the password update fails, handle the error
+                                        Log.d("BURGER", "PASSWORD UPDATE FAILED");
+                                    }
+                                });
+                    } else {
+                        // Reauthentication failed, handle the error
+                        Exception exception = reauthTask.getException();
+                        wrongPassword.accept(exception);
+
+                    }
+                });
 
     }
+
 
     public void signOut(){
         profile = null;

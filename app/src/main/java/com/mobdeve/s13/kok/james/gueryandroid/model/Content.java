@@ -7,6 +7,7 @@ public class Content implements ContentHolder {
     protected Vote userVote = Vote.CANCEL;
     protected int upvotes;
     protected boolean isVoting = false;
+    protected Profile profile;
     public Content(String id) {
         this.id = id;
     }
@@ -53,5 +54,13 @@ public class Content implements ContentHolder {
 
     public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }

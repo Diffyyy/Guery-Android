@@ -17,6 +17,9 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
+import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostEngagementBarBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostFooterLayoutBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostHeaderLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
@@ -43,23 +46,30 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
     private ImageView downvoteBtn;
     protected TextView numUpvotes;
     private PostItemBinding binding;
+    private PostHeaderLayoutBinding headerBinding;
+    private PostFooterLayoutBinding footerBinding;
+    private PostEngagementBarBinding engagementBarBinding;
 
     protected Post post;
     public PostItemHolder(@NonNull View itemView) {
         super(itemView);
 
         binding = PostItemBinding.bind(itemView);
-        pfp = binding.pfpIv;
-        community = binding.communityTv;
-        time = binding.timeTv;
-        title = binding.titleTv;
-        body = binding.bodyTv;
-        upvotesTv = binding.postEngagementBar.upvoteTv;
-        username = binding.usernameTv;
+        headerBinding = binding.postHeaderInclude;
+        footerBinding = binding.postFooterInclude;
+        engagementBarBinding = footerBinding.postEngagementBar;
+
+        pfp = headerBinding.pfpIv;
+        community = headerBinding.communityTv;
+        time = headerBinding.timeTv;
+        title = headerBinding.titleTv;
+        body = footerBinding.bodyTv;
+        upvotesTv = engagementBarBinding.upvoteTv;
+        username = headerBinding.usernameTv;
 
 
-        upvoteBtn = binding.postEngagementBar.postUpvoteBtn;
-        downvoteBtn = binding.postEngagementBar.postDownvoteBtn;
+        upvoteBtn = engagementBarBinding.postUpvoteBtn;
+        downvoteBtn = engagementBarBinding.postDownvoteBtn;
 
 
         upvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(), this, downvoteBtn, Vote.UP, upvotesTv));
@@ -71,11 +81,11 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         bind(post, binding, pfp.getContext());
     }
     public static void bind(Post post, PostItemBinding binding, Context context){
-        binding.bodyTv.setText(post.getBody());
+        binding.postFooterInclude.bodyTv.setText(post.getBody());
         Log.d("BURGER", "BINDING POST: "+post);
-        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(binding.pfpIv.getContext());
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(binding.postHeaderInclude.pfpIv.getContext());
         circularProgressDrawable.setCenterRadius(30);
-        if(post.getProfile().getPfp()==null) binding.pfpIv.setImageResource(R.drawable.placeholder);
+        if(post.getProfile().getPfp()==null) binding.postHeaderInclude.pfpIv.setImageResource(R.drawable.placeholder);
         else {
             StorageHelper.getInstance().retrieve(post.getProfile().getPfp(), context, new Consumer<Uri>() {
                 @Override
@@ -83,18 +93,19 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
                     Picasso.get()
                             .load(uri)
                             .placeholder(circularProgressDrawable)
-                            .into(binding.pfpIv );
+                            .into(binding.postHeaderInclude.pfpIv );
                 }
             });
 
         }
-        binding.communityTv.setText(post.getGame());
-        binding.timeTv.setText(DateHelper.formatDate(post.getCreatedAt()));
-        binding.titleTv.setText(post.getTitle());
-        binding.postEngagementBar.upvoteTv.setText(String.valueOf(post.getUpvotes()));
-        binding.usernameTv.setText(post.getProfile().getUsername());
+        binding.postHeaderInclude.communityTv.setText(post.getGame());
+        binding.postHeaderInclude.timeTv.setText(DateHelper.formatDate(post.getCreatedAt()));
+        binding.postHeaderInclude.titleTv.setText(post.getTitle());
+        binding.postFooterInclude.postEngagementBar.upvoteTv.setText(String.valueOf(post.getUpvotes()));
+        binding.postHeaderInclude.usernameTv.setText(post.getProfile().getUsername());
 
-        PostItemHolder.updateVoteBtns(post, binding.postEngagementBar.postUpvoteBtn, binding.postEngagementBar.postDownvoteBtn);
+
+        PostItemHolder.updateVoteBtns(post, binding.postFooterInclude.postEngagementBar.postUpvoteBtn, binding.postFooterInclude.postEngagementBar.postDownvoteBtn);
 
     }
     public static void updateVoteBtns(Content content, ImageView upvoteBtn, ImageView downvoteBtn){
@@ -111,8 +122,13 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
 
 
     }
+    public void setProfileListener(View.OnClickListener clickListener){
+        headerBinding.pfpIv.setOnClickListener(clickListener);
+        headerBinding.usernameTv.setOnClickListener(clickListener);
+    }
+
     public void setReplyListener(View.OnClickListener clickListener){
-        binding.postEngagementBar.postReplyBtn.setOnClickListener(clickListener);
+        binding.postFooterInclude.postEngagementBar.postReplyBtn.setOnClickListener(clickListener);
     }
 
     public Post getPost() {

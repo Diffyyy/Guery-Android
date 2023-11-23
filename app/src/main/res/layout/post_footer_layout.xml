@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_height="wrap_content">
 
-    <include
-        android:id="@+id/post_header_include"
-        layout="@layout/post_header_layout"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/body_tv"
+        style="@style/Widget.AppCompat.TextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/post_footer_include"
-        layout="@layout/post_footer_layout"
+        android:id="@+id/post_engagement_bar"
+        layout="@layout/post_engagement_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/post_header_include" />
+        app:layout_constraintTop_toBottomOf="@+id/body_tv" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

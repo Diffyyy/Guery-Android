@@ -37,6 +37,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import javax.security.auth.callback.Callback;
+
 public class FirestoreHelper {
     public static final String POST_GAME = "game";
     public static final String POST_BODY = "body";
@@ -62,6 +64,8 @@ public class FirestoreHelper {
     public static final String PROFILE_NAME = "username";
     public static final String PROFILE_PFP = "pfp";
     public static final String PROFILE_EMAIL = "email";
+    public static final String PROFILE_NUMPOSTS= "numposts";
+    public static final String PROFILE_ABOUT = "about";
 
     public static final String POSTS = "posts";
     public static final String USERS = "users";
@@ -89,26 +93,6 @@ public class FirestoreHelper {
     }
 
 
-    public void updatePostComments(Post post, Consumer<Void> callback){
-
-        db.collection(POSTS)
-                .document(post.getId()+"."+POST_COMMENTS)
-                .update(POST_COMMENTS, post.getComments())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("BURGER", "COMMENT ADDED SUCCESSFULLY");
-                        callback.accept(unused);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-
-    }
     public  void addPost(Post post, Consumer<String> callback){
         Map<String, Object> map = convertPost(post);
         DocumentReference newPost = db.collection(POSTS).document();
@@ -117,7 +101,10 @@ public class FirestoreHelper {
         newPost.set(map).addOnSuccessListener(new OnSuccessListener<>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        db.collection(USERS).document(AuthHelper.getInstance().getProfile().getId())
+                                .update(PROFILE_NUMPOSTS, FieldValue.increment(1));
                         callback.accept(newPost.getId());
+
                     }
 
                 })
@@ -127,6 +114,7 @@ public class FirestoreHelper {
                         Log.d("BURGER", "Error adding post", e);
                     }
                 });
+
     }
     private void retrievePostDetails(DocumentSnapshot document, Consumer<Post> callback){
         Post post = document.getData()==null?null:convertMapToPost(document.getData());
@@ -146,21 +134,52 @@ public class FirestoreHelper {
         });
         else callback.accept(post);
     }
-    public void  retrievePosts(Consumer<Post > callback, Consumer<Void> doneCallback){
-        db.collection(POSTS)
-                .orderBy(POST_DATE, Query.Direction.DESCENDING)
+    private Query retrievePostsQuery(){
+        return db.collection(POSTS).orderBy(POST_DATE, Query.Direction.DESCENDING);
+    }
+
+
+    public void retrieveProfilePosts(Profile profile, Consumer<Post> callback, Consumer<Void> doneCallback)  {
+        retrievePostsQuery()
+                .whereEqualTo(POST_PROFILE, profile.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document: task.getResult()){
+                                retrievePostDetails(document, callback);
+                            }
+                        }
+                        doneCallback.accept(null);
+                    }
+                });
+    }
+    public void retrieveProfile(String id, Consumer<Profile> callback){
+        db.collection(USERS).document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        callback.accept(convertMapToProfile(documentSnapshot.getData()));
+                    }
+                });
+    }
+    public void  retrievePosts(Consumer<Post > callback, Consumer<Integer> doneCallback){
+        retrievePostsQuery()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            doneCallback.accept(task.getResult().size());
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 retrievePostDetails(document, callback);
                             }
+
                         } else {
 
                         }
-                        doneCallback.accept(null);
+
                     }
 
                 });
@@ -350,8 +369,12 @@ public class FirestoreHelper {
         profile.setPfp(pfp);
 
         String email = (String) map.get(PROFILE_EMAIL   );
+        int numPosts = ((Long) map.get(PROFILE_NUMPOSTS  )).intValue();
+        String about = (String) map.get(PROFILE_ABOUT);
+
         profile.setEmail(email);
-        Log.d("BURGER", "SETTING EMAIL: "+email);
+        profile.setNumPosts(numPosts);
+        profile.setAbout(about);
         return profile;
     }
 
@@ -361,6 +384,8 @@ public class FirestoreHelper {
         map.put(PROFILE_NAME, profile.getUsername() );
         map.put(PROFILE_PFP, profile.getPfp());
         map.put(PROFILE_EMAIL, profile.getEmail()   );
+        map.put(PROFILE_NUMPOSTS, profile.getNumPosts());
+        map.put(PROFILE_ABOUT, profile.getAbout());
         return map;
     }
 
@@ -446,24 +471,23 @@ public class FirestoreHelper {
             }
         });
     }
-    public void searchPosts(String keyword, Consumer<Post> callback, Consumer<Void> doneCallback ){
-        CollectionReference postsRef = db.collection(POSTS);
-        retrievePosts(new Consumer<Post>() {
-            @Override
-            public void accept(Post post) {
-                if (keyword==null || keyword.isEmpty() || post.getTitle().toLowerCase().contains(keyword.toLowerCase())
-                        || post.getBody().toLowerCase().contains(keyword.toLowerCase())
-                        || post.getGame().toLowerCase().contains(keyword.toLowerCase())) {
-                    callback.accept(post);
-                }
-            }
-        }, new Consumer<Void>() {
-            @Override
-            public void accept(Void unused) {
-                doneCallback.accept(unused);
-            }
-        });
-    }
+//    public void searchPosts(String keyword, Consumer<Post> callback, Consumer<Void> doneCallback ){
+//        retrievePosts(new Consumer<Post>() {
+//            @Override
+//            public void accept(Post post) {
+//                if (keyword==null || keyword.isEmpty() || post.getTitle().toLowerCase().contains(keyword.toLowerCase())
+//                        || post.getBody().toLowerCase().contains(keyword.toLowerCase())
+//                        || post.getGame().toLowerCase().contains(keyword.toLowerCase())) {
+//                    callback.accept(post);
+//                }
+//            }
+//        }, new Consumer<Void>() {
+//            @Override
+//            public void accept(Void unused) {
+//                doneCallback.accept(unused);
+//            }
+//        });
+//    }
     private void checkUser(String fieldName, String fieldValue, Consumer<Profile> callback){
         db.collection(USERS).whereEqualTo(fieldName, fieldValue)
                 .get()
@@ -499,16 +523,11 @@ public class FirestoreHelper {
 
     public void addUser(String username, String email, Consumer<Profile> callback){
         DocumentReference newUser = db.collection(USERS).document();
-        HashMap<String, Object> map = new HashMap<>();
-        map.put(ID, newUser.getId());
-        map.put(PROFILE_NAME, username);
-        map.put(PROFILE_EMAIL, email);
-        newUser.set(map)
+        Profile profile = new Profile(newUser.getId(), email, username);
+        newUser.set(convertProfile(profile))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Profile profile = new Profile(newUser.getId(), email, username);
-
                         callback.accept(profile);
                     }
                 });
