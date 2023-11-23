@@ -533,6 +533,31 @@ public class FirestoreHelper {
                 });
     }
 
+
+    public void editUser(Profile profile, String newUsername, String newAbout, Consumer<Boolean> callback){
+        Boolean updateSuccessful = false;
+        Map<String, Object> updates = convertProfile(profile);
+
+        updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
+        updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
+
+
+        db.collection(USERS).document(profile.getId()).update(updates).addOnSuccessListener(aVoid -> {
+            Log.e("SUCCESS: ", "Profile Updated");
+        })
+        .addOnFailureListener(e -> {
+            Log.e("FAIL: ", e.getMessage());
+        });
+
+        updateSuccessful = true;
+        if (updateSuccessful) {
+            callback.accept(true);
+        } else {
+            callback.accept(false);
+        }
+
+    }
+
 }
 
 

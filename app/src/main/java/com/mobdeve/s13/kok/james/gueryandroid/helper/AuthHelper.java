@@ -144,6 +144,10 @@ public class AuthHelper {
 
     }
 
+    public void updateProfile(Profile profile, String newUsername, String newAbout, Consumer<Boolean> consumer){
+        FirestoreHelper.getInstance().editUser(profile, newUsername, newAbout, consumer);
+
+    }
 
     public void signOut(){
         profile = null;

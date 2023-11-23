@@ -42,6 +42,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false" />
+        <activity android:name="com.mobdeve.s13.kok.james.gueryandroid.activity.EditProfileActivity" />
     </application>
 
 </manifest>
