@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -26,6 +27,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView tempImageV;
     private Uri imageUri;
+    private TextView usernameTv;
+    private TextView aboutTv;
 
     private ActivityResultLauncher<Intent> res = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -91,30 +94,20 @@ public class EditProfileActivity extends AppCompatActivity {
                 String newAbout = binding.txtAbout.getText().toString();
                 //String newImage;
                 Log.e("new about: ", newAbout);
-                AuthHelper.getInstance().updateProfile(user, newUsername, newAbout, new Consumer<Boolean>(){
-                    @Override
-                    public void accept(Boolean success) {
-                        if(success){
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("updatedProfile", AuthHelper.getInstance().getProfile());
-                            setResult(RESULT_OK, resultIntent);
-                            finish();
 
-                        }
-                        else{
-                            Log.e("FAILED: ", "gg lmao");
-                            finish();
-                        }
-                    }
-                });
+                //update the db
+                AuthHelper.getInstance().updateProfile(user, newUsername, newAbout);
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("newUsername", newUsername);
+                resultIntent.putExtra("newAbout", newAbout);
+                setResult(Activity.RESULT_OK, resultIntent);
 
                 finish();
             }
         });
 
-
         setContentView(binding.getRoot());
-
     }
 
 }

@@ -534,7 +534,7 @@ public class FirestoreHelper {
     }
 
 
-    public void editUser(Profile profile, String newUsername, String newAbout, Consumer<Boolean> callback){
+    public void editUser(Profile profile, String newUsername, String newAbout){
         Boolean updateSuccessful = false;
         Map<String, Object> updates = convertProfile(profile);
 
@@ -549,12 +549,6 @@ public class FirestoreHelper {
             Log.e("FAIL: ", e.getMessage());
         });
 
-        updateSuccessful = true;
-        if (updateSuccessful) {
-            callback.accept(true);
-        } else {
-            callback.accept(false);
-        }
 
     }
 
