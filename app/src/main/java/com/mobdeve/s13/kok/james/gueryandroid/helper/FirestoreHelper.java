@@ -92,11 +92,14 @@ public class FirestoreHelper {
         this.profiles = new HashMap<>();
     }
 
-
     public  void addPost(Post post, Consumer<String> callback){
-        Map<String, Object> map = convertPost(post);
         DocumentReference newPost = db.collection(POSTS).document();
-        map.put(ID, newPost.getId());
+        if(post.getType()!=Post.PostType.TEXT.value){
+            post.setAttachment(StorageHelper.POSTS_FOLDER+newPost.getId());
+        }
+        post.setId(newPost.getId());
+        Map<String, Object> map = convertPost(post);
+
         Log.d("BURGER", "ADDING POST");
         newPost.set(map).addOnSuccessListener(new OnSuccessListener<>() {
                     @Override
@@ -531,37 +534,6 @@ public class FirestoreHelper {
                         callback.accept(profile);
                     }
                 });
-    }
-
-
-    public void editUser(Profile profile, String newUsername, String newAbout){
-        Boolean updateSuccessful = false;
-        Map<String, Object> updates = convertProfile(profile);
-
-        updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
-        updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
-
-
-        db.collection(USERS).document(profile.getId()).update(updates).addOnSuccessListener(aVoid -> {
-            Log.e("SUCCESS: ", "Profile Updated");
-        })
-        .addOnFailureListener(e -> {
-            Log.e("FAIL: ", e.getMessage());
-        });
-
-    }
-
-    public void editPost(Post post, String newTitle, String newBody){
-        Map<String, Object> updates = convertPost(post);
-        updates.put(FirestoreHelper.POST_TITLE, newTitle);
-        updates.put(FirestoreHelper.POST_BODY, newBody);
-
-        db.collection(POSTS).document(post.getId()).update(updates).addOnSuccessListener(aVoid ->{
-            Log.e("SUCCESS: ", "Profile Updated");
-        })
-        .addOnFailureListener(e -> {
-            Log.e("FAIL: ", e.getMessage());
-        });
     }
 
 }

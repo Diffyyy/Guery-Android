@@ -3,6 +3,7 @@ package com.mobdeve.s13.kok.james.gueryandroid.activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.ObjectAnimator;
 import android.content.DialogInterface;
@@ -25,7 +26,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class ViewProfileActivity extends AppCompatActivity  {
+public class ViewProfileActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     public static final String PROFILE_ID = "ID"    ;
     private String profileId;
     private ActivityViewProfileBinding binding;
@@ -33,6 +34,7 @@ public class ViewProfileActivity extends AppCompatActivity  {
     private View loadingSpinner;
     private PostItemAdapter adapter;
     private ArrayList<Post> posts;
+    private SwipeRefreshLayout refreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,8 @@ public class ViewProfileActivity extends AppCompatActivity  {
         adapter.setLauncher(ResultLaunchers.postClicked(this,adapter ));
         binding.profilePostsInc.profilePostsRv.setAdapter(adapter);
         binding.profilePostsInc.profilePostsRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        refreshLayout = binding.profilePostsInc.refreshLayout;
+        refreshLayout.setOnRefreshListener(this);
         setContentView(binding.getRoot());
         retrieveProfile();
     }
@@ -100,15 +104,21 @@ public class ViewProfileActivity extends AppCompatActivity  {
     }
     public void loadStart(){
         binding.profilePostsInc.getRoot().setVisibility(View.INVISIBLE);
-        loadingSpinner.setVisibility(View.VISIBLE);
-
-        ObjectAnimator animator = ObjectAnimator.ofFloat(loadingSpinner,"translationY", -20f, 20f);
-        animator.setDuration(100);
-        animator.start();
+//        loadingSpinner.setVisibility(View.VISIBLE);
+//
+//        ObjectAnimator animator = ObjectAnimator.ofFloat(loadingSpinner,"translationY", -20f, 20f);
+//        animator.setDuration(100);
+//        animator.start();
     }
     public void loadStop(){
         loadingSpinner.setVisibility(View.GONE);
-        binding.profilePostsInc.getRoot().setVisibility(View.VISIBLE);
+
+//        binding.profilePostsInc.getRoot().setVisibility(View.VISIBLE);
+
     }
 
+    @Override
+    public void onRefresh() {
+        retrieveProfile();
+    }
 }

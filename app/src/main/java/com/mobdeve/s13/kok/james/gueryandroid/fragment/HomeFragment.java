@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,15 +31,16 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private PostItemAdapter adapter;
 
     private FragmentHomeBinding binding;
-    private View loadingSpinner;
+//    private View loadingSpinner;
     private String query;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private PostItemViewModel postModel;
+    private SwipeRefreshLayout refreshLayout;
     private boolean isLoading = false;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,22 +58,17 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         binding.searchView.setQuery(query, false);
+        refreshLayout = binding.refreshLayout;
+        refreshLayout.setDistanceToTriggerSync(200);
+        refreshLayout.setSlingshotDistance(100);
         Log.d("BURGER","CREATING VIEW");
         adapter = new PostItemAdapter(getData());
         adapter.setLauncher(ResultLaunchers.postClicked(this, adapter));
 
         binding.postsRv.setAdapter(adapter);
         binding.postsRv.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        binding.postsRv.setOnTouchListener(new SwipeUpListener(container.getContext(), binding.postsRv, new Consumer<Void>()  {
-            @Override
-            public void accept(Void unused) {
-                if(!binding.postsRv.canScrollVertically(-1)){
-                    if(!isLoading)initializeData();
-                }
-            }
-        }));
-        loadingSpinner = binding.loading.getRoot();
+        refreshLayout.setOnRefreshListener(this);
+//        loadingSpinner = binding.loading.getRoot();
 
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -117,18 +114,18 @@ public class HomeFragment extends Fragment {
     }
 
     public void initializeData(){
+        refreshLayout.setRefreshing(true);
         getData().clear();
         if(query==null || query.isEmpty()){
             adapter.setPosts(getData());
             adapter.notifyDataSetChanged();
-            loadStart();
             FirestoreHelper.getInstance().retrievePosts( new Consumer<Post>() {
                 boolean added = false;
                 @Override
                 public void accept(Post post) {
                     Log.d("BURGER", "GOT POST: "+post);
                     if (!added) {
-                        loadStop();
+                        refreshLayout.setRefreshing(false);
                         added = true;
                     }
                     addPostLast(post);
@@ -136,13 +133,12 @@ public class HomeFragment extends Fragment {
             }, new Consumer<Integer>() {
                 @Override
                 public void accept(Integer unused) {
-                    loadStop();
+                    refreshLayout.setRefreshing(false);
                 }
             });
         }else{
             adapter.setPosts(new ArrayList<>());
             adapter.notifyDataSetChanged();
-            loadStart();
             final Integer[] size = new Integer[1];
             FirestoreHelper.getInstance().retrievePosts(new Consumer<Post>() {
                 @Override
@@ -167,7 +163,7 @@ public class HomeFragment extends Fragment {
         if(query!=null && !query.isEmpty()) {
             adapter.setPosts(new ArrayList<>());
             adapter.notifyDataSetChanged();
-            loadStart();
+            refreshLayout.setRefreshing(true);
             executor.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -176,7 +172,7 @@ public class HomeFragment extends Fragment {
                                 || post.getBody().toLowerCase().contains(query.toLowerCase())
                                 || post.getGame().toLowerCase().contains(query.toLowerCase())) {
                             if(!added[0]) {
-                                loadStop();
+                                refreshLayout.setRefreshing(false);
                                 added[0] = true;
                             }
 
@@ -193,7 +189,7 @@ public class HomeFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            loadStop();
+                            refreshLayout.setRefreshing(false);
                         }
                     });
                 }
@@ -206,29 +202,37 @@ public class HomeFragment extends Fragment {
 
 //        });
     }
-    public void loadStart(){
-        if(isLoading) return;
-        isLoading = true;
+//    public void loadStart(){
+//        if(isLoading) return;
+//        isLoading = true;
+//
+////        loadingSpinner.setVisibility(View.VISIBLE);
+////        int viewheight = loading.getHeight();
+//
+//        ObjectAnimator animator = ObjectAnimator.ofFloat(loadingSpinner,"translationY", -20f, 20f);
+//        animator.setDuration(100);
+//        animator.start();
+//    }
 
-        loadingSpinner.setVisibility(View.VISIBLE);
-//        int viewheight = loading.getHeight();
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(loadingSpinner,"translationY", -20f, 20f);
-        animator.setDuration(100);
-        animator.start();
-    }
-
-
-    public void loadStop(){
-        if(!isLoading) return;
-        isLoading = false;
-        loadingSpinner.setVisibility(View.GONE);
-    }
+//    public void loadStop(){
+//        if(!isLoading) return;
+//        isLoading = false;
+//        loadingSpinner.setVisibility(View.GONE);
+//    }
 
 
     @Override
     public void onStart() {
         super.onStart();
         Log.d("BURGER", "FRAGMENT HOME STARTED");
+    }
+
+    @Override
+    public void onRefresh() {
+
+//        if(!binding.postsRv.canScrollVertically(-1)){
+            initializeData();
+
     }
 }

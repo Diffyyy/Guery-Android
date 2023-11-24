@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.function.Consumer;
 
 public class StorageHelper {
@@ -40,26 +41,36 @@ public class StorageHelper {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef=  storage.getReference();
 
-    public void retrieve(String firebasePath, Context context, Consumer<Uri> callback ){
+    public void retrieve(String firebasePath, Consumer<Uri> callback, Consumer<Exception> failed){
+        if(firebasePath==null || firebasePath.isEmpty()){
+            failed.accept(new NullPointerException("Firebase path is null"));
+            return;
+        }
+        Log.d("BURGER", "RETRIEVING ATTACHMENT: "+firebasePath);
         StorageReference fileRef = storageRef.child(firebasePath);
         fileRef.getDownloadUrl()
-                .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
+                    public void onSuccess(Uri result) {
 //                        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(iv.getContext());
 //                        circularProgressDrawable.setCenterRadius(30);
-                        callback.accept(task.getResult());
+                        callback.accept(result);
 
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        failed.accept(e);
                     }
                 });
 
     }
 
-    private  void upload(String filename, String folder, String path, Consumer<String> callback){
-        Uri file = Uri.fromFile(new File(path));
-        String uploadPath = folder + filename + "." +getExtension(path) ;
+    private  void upload(String filename, String folder, InputStream inputStream, Consumer<String> callback){
+//        Log.d("BURGER", "FILE EXISTS: "+f.exists());
+        String uploadPath = folder + filename ;
         StorageReference imageRef = storageRef.child(uploadPath);
-        imageRef.putFile(file)
+        imageRef.putStream(inputStream)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -71,15 +82,9 @@ public class StorageHelper {
                     }
                 });
     }
-    public void uploadPostAttachment(String filename, String path, Consumer<String> callback ){
-        upload(filename, POSTS_FOLDER, path, callback);
-    }
-    public void uploadPfp(String filename, String path, Consumer<String> callback){
-        upload(filename, PFP_FOLDER, path, callback);
+    public void uploadPostAttachment(String filename, InputStream inputStream,  Consumer<String> callback ){
+        if(inputStream!=null)upload(filename, POSTS_FOLDER, inputStream, callback);
+        else callback.accept(null);
     }
 
-    private String getExtension(String path){
-//        String last = path.getLastPathSegment();
-        return path.substring(path.indexOf('.')+1);
-    }
 }

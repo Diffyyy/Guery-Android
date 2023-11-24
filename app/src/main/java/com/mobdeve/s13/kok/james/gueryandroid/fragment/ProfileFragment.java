@@ -1,12 +1,9 @@
 package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCaller;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -18,10 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 
-import com.mobdeve.s13.kok.james.gueryandroid.activity.EditProfileActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.PostItemAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ProfileLayoutBinding;
@@ -61,40 +55,12 @@ public class ProfileFragment extends Fragment {
 
     }
 
-
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            // Check if the data contains updated profile information
-            if (data != null) {
-                String newUsername = data.getStringExtra("newUsername");
-                String newAbout = data.getStringExtra("newAbout");
-
-                Log.d("SUCCESS", "UI updated successfully");
-                // Update the UI with the new information
-                binding.profileUsernameTv.setText(newUsername);
-                binding.profileAboutTv.setText(newAbout);
-            }
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
-
-
-        binding.btnEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                startActivityForResult(intent, 1);
-            }
-        });
-
+        binding.refreshLayout.setEnabled(false);
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,8 +92,5 @@ public class ProfileFragment extends Fragment {
         binding.profileAboutTv.setText(profile.getAbout());
         binding.profileNumpostsTv.setText(String.valueOf(profile.getNumPosts()));
     }
-
-
-
 
 }

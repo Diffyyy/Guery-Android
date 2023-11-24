@@ -153,6 +153,14 @@ public class Post extends Content implements Parcelable {
         this.attachment = attachment;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public void setAttachment(String attachment){
+        this.attachment = attachment;
+    }
+
     public String getAttached() {
         return attachment;
     }

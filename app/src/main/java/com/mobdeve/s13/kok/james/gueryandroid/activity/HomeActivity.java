@@ -69,6 +69,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 //                Log.d("BURGER", "SUCCESFULLY LOGGED IN AS: "+profile.getUsername());
             }
         });
+//        View.
     }
 
     @Override

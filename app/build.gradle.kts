@@ -53,6 +53,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.8")
     implementation ("com.squareup.picasso:picasso:2.8")
-
-
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation ("androidx.media3:media3-exoplayer-dash:1.2.0")
+    implementation ("androidx.media3:media3-ui:1.2.0")
 }
