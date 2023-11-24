@@ -539,18 +539,25 @@ public class FirestoreHelper {
 
     public void editUser(Profile profile, String newUsername, String newAbout,InputStream inputStream,  Consumer<Void> callback){
         Boolean updateSuccessful = false;
-        Map<String, Object> updates = convertProfile(profile);
 
-        updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
-        updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
+        db.collection(USERS).whereEqualTo(PROFILE_NAME, newUsername).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if(queryDocumentSnapshots.isEmpty()){
+                            Map<String, Object> updates = convertProfile(profile);
+                            updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
+                            updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
 
-
-        db.collection(USERS).document(profile.getId()).update(updates).addOnSuccessListener(aVoid -> {
-            Log.e("SUCCESS: ", "Profile Updated");
-        })
-        .addOnFailureListener(e -> {
-            Log.e("FAIL: ", e.getMessage());
-        });
+                                db.collection(USERS).document(profile.getId()).update(updates).addOnSuccessListener(aVoid -> {
+                                Log.e("SUCCESS: ", "Profile Updated");
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("FAIL: ", e.getMessage());
+                                    });
+                        }
+                    }
+                });
 
     }
 

@@ -58,7 +58,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         this.tempImageV = binding.imgProfilePicture;
 
-        Profile user = AuthHelper.getInstance().getProfile();
+        Intent intent = getIntent();
+        Profile user = intent.getParcelableExtra("profile");
         String username = user.getUsername().toString();
         //String password = user.get;
         String about = user.getAbout().toString();
@@ -95,9 +96,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 //String newImage;
                 Log.e("new about: ", newAbout);
 
-                //update the db
-                AuthHelper.getInstance().updateProfile(user, newUsername, newAbout);
-
+                //check if username is changed
+                if(!newUsername.equals(user.getUsername())) {
+                    //update the db
+                    AuthHelper.getInstance().updateProfile(user, newUsername, newAbout);
+                }
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);

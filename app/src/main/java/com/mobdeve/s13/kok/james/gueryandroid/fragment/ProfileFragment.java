@@ -56,18 +56,16 @@ public class ProfileFragment extends Fragment {
             postModel.setFragmentData(new ArrayList<>());
             //show the edit post and delete post button
         }
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // Check if the data contains updated profile information
             if (data != null) {
-                String newUsername = data.getStringExtra("newUsername");
-                String newAbout = data.getStringExtra("newAbout");
-
+                Profile profile = data.getParcelableExtra("profile");
+                String newUsername = profile.getUsername();
+                String newAbout = profile.getAbout();
                 Log.d("SUCCESS", "UI updated successfully");
                 // Update the UI with the new information
                 binding.profileUsernameTv.setText(newUsername);
@@ -78,26 +76,29 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
         binding.refreshLayout.setEnabled(false);
+        Profile user = AuthHelper.getInstance().getProfile();
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AuthHelper.getInstance().signOut();
                 getActivity().finish();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-
+                //startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
         binding.btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                intent.putExtra("profile", user );
                 startActivity(intent);
             }
         });
