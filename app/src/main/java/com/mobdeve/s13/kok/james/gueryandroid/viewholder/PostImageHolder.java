@@ -1,6 +1,7 @@
 package com.mobdeve.s13.kok.james.gueryandroid.viewholder;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,7 +13,11 @@ import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
+
+import java.util.function.Consumer;
 
 public class PostImageHolder extends PostItemHolder {
 
@@ -20,14 +25,35 @@ public class PostImageHolder extends PostItemHolder {
     public PostImageHolder(@NonNull View itemView) {
         super(itemView);
         PostItemImgBinding binding = PostItemImgBinding.bind(itemView);
-        image = binding.imageIv ;
+        image = binding.postImageInclude.imageIv;
+    }
+
+    public static void bind(Post post, ImageView imageView){
+        //        image.setImageURI(Uri.parse(post.getAttached()));
+//        image.setImageURI(Uri.parse(post.getAttached()));
+        if(post.getAttached().contains("content")){
+            imageView.setImageURI(Uri.parse(post.getAttached()));
+            return;
+        }
+
+//        ImageLoaderHelper.placeHolderImage(image,1000);
+        StorageHelper.getInstance().retrieve(post.getAttached(), new Consumer<Uri>() {
+            @Override
+            public void accept(Uri uri) {
+                ImageLoaderHelper.loadImage(uri, imageView);
+            }
+        }, new Consumer<Exception>() {
+            @Override
+            public void accept(Exception e) {
+                Log.d("BURGER", "FAILED TO LOAD POST IMAGE: "+e.getMessage() + " FOR LOCATION: "+post.getAttached() );
+            }
+        });
 
     }
     public void bind(Post post){
         super.bind(post);
-//        image.setImageURI(Uri.parse(post.getAttached()));
-//        image.setImageURI(Uri.parse(post.getAttached()));
-        image.setImageResource(R.drawable.kirby);
+        bind(post, image);
+//        image.setImageResource(R.drawable.kirby);
     }
 
 }

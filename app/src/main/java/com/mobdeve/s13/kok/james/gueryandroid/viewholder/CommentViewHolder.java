@@ -77,7 +77,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
 
         if(comment.getBody()==null){
             username.setText("Loading");
-            pfp.setImageResource(R.drawable.loading);
+            pfp.setImageResource(R.drawable.progress);
             time.setText("...");
             body.setText("Body...");
         }else{
@@ -86,7 +86,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
             username.setText(comment.getProfile().getUsername());
             if(comment.getProfile().getPfp()==null) pfp.setImageResource(R.drawable.placeholder);
             else {
-                StorageHelper.getInstance().retrieve(comment.getProfile().getPfp(), pfp.getContext(), new Consumer<Uri>() {
+                StorageHelper.getInstance().retrieve(comment.getProfile().getPfp(), new Consumer<Uri>() {
                     @Override
                     public void accept(Uri uri) {
                         Picasso.get()
@@ -94,6 +94,11 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
                                 .error(R.drawable.placeholder)
                                 .placeholder(circularProgressDrawable)
                                 .into(pfp);
+                    }
+                }, new Consumer<Exception>() {
+                    @Override
+                    public void accept(Exception e) {
+                        Log.d("BURGER", "FAILED TO LOAD IMAGE: "+e.getMessage());
                     }
                 });
 

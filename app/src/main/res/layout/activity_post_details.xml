@@ -40,8 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="View Post"
-            android:textSize="16sp"
             android:textColor="@color/gray"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/back_btn"
             app:layout_constraintTop_toTopOf="parent" />
@@ -59,8 +59,8 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.05" />
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,37 +68,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline6">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp">
 
-            <include
-                android:id="@+id/post_binding"
-                layout="@layout/post_item" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/post_details_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/comments_rv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:nestedScrollingEnabled="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_binding" />
+                <include
+                    android:id="@+id/post_vid_binding"
+                    layout="@layout/post_item_vid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <include
-                android:id="@+id/loading"
-                layout="@layout/loading_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:elevation="10dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/post_binding"
-                app:layout_constraintStart_toStartOf="@+id/post_binding"
-                app:layout_constraintTop_toTopOf="@+id/post_binding" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                <include
+                    android:id="@+id/post_binding"
+                    layout="@layout/post_item"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <include
+                    android:id="@+id/post_img_binding"
+                    layout="@layout/post_item_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/comments_rv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/post_binding" />
+
+                <include
+                    android:id="@+id/loading"
+                    layout="@layout/loading_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:elevation="10dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/post_binding"
+                    app:layout_constraintStart_toStartOf="@+id/post_binding"
+                    app:layout_constraintTop_toTopOf="@+id/post_binding" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

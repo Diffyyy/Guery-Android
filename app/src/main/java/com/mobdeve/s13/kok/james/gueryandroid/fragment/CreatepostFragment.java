@@ -30,9 +30,12 @@ import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentCreatepostBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
@@ -45,7 +48,7 @@ public class CreatepostFragment extends Fragment {
     public static final String NEW_BODY_KEY = "NEW BODY KEY";
 
     private ActivityResultLauncher<String> mediaPickerLauncher;
-    private String attachment = null;
+    private Uri attachment = null;
 
     public CreatepostFragment(){
 
@@ -65,7 +68,9 @@ public class CreatepostFragment extends Fragment {
                     @Override
                     public void onActivityResult(Uri result) {
                         if (result != null) {
-                            attachment = result.toString();
+                            attachment = result;
+                            //We can set this to Filename
+                            viewBinding.tvMedia.setText(attachment.toString());
                             if(attachment.contains("image")) {
                                 viewBinding.vvPreview.setVisibility(View.INVISIBLE);
                                 viewBinding.ivPreview.setImageURI(result);
@@ -129,30 +134,49 @@ public class CreatepostFragment extends Fragment {
                 String postCommunity = viewBinding.etCreateCommunity.getText().toString();
                 LocalDateTime date = LocalDateTime.now();
                 if(!postTitle.isEmpty() && !postContent.isEmpty() && !postCommunity.isEmpty()){
-                    Post post;
-                    if(attachment == null)
-                        post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent);
-                    else if(attachment.contains("image"))
-                        post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent, 2, attachment);
-                    else
-                        post = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent, 3, attachment);
+                    Post post  = new Post(postCommunity, AuthHelper.getInstance().getProfile(), date, postTitle, postContent);;
+                    if(attachment==null) post.setType(Post.PostType.TEXT.value);
+                    else if(attachment.toString().contains("image")) {
+                        Log.d("BURGER", "IMAGE ATTACHED");
+                        post.setType(Post.PostType.IMAGE.value);
+                    }else if(attachment.toString().contains("video")){
+                        post.setType(Post.PostType.VIDEO.value);
+                        Log.d("BURGER", "VIDEO ATTACHED");
+                    }else{
+                        attachment = null;
+                        Toast.makeText(getContext(), "Only images and videos allowed", Toast.LENGTH_SHORT);
+                    }
                     viewBinding.etCreatePosttitle.setText(null);
                     viewBinding.etCreateContent.setText(null);
                     viewBinding.etCreateCommunity.setText(null);
-                    viewBinding.ivPreview.setVisibility(View.INVISIBLE);
-                    viewBinding.vvPreview.setVisibility(View.INVISIBLE);
+                    try {
+                        InputStream inputStream = attachment==null?null: getActivity().getContentResolver().openInputStream(attachment);
+//                        Log.d("BURGER", "ATTACHMENT: "+attachment.toString());
+                        FirestoreHelper.getInstance().addPost(post, new Consumer<String>() {
+                            @Override
+                            public void accept(String s) {
+                                post.setId(s);
+                                post.setAttachment(attachment.toString());
+                                StorageHelper.getInstance().uploadPostAttachment(s, inputStream, new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) {
+//                                        post.setAttachment(s);
+                                        ((HomeActivity)getActivity()).setItemSelected(R.id.nav_home);
+                                        ((HomeActivity)getActivity()).addPost(post);
+                                    }
+                                });
 
-                    FirestoreHelper.getInstance().addPost(post, new Consumer<String>() {
-                        @Override
-                        public void accept(String s) {
-                            post.setId(s);
 
-                            //return back to home
-                            ((HomeActivity)getActivity()).setItemSelected(R.id.nav_home);
-                            ((HomeActivity)getActivity()).addPost(post);
 
-                        }
-                    });
+                            }
+                        });
+
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+
 
 
                 }

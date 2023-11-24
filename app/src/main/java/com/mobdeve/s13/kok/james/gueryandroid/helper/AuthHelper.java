@@ -145,7 +145,7 @@ public class AuthHelper {
     }
 
     public void updateProfile(Profile profile, String newUsername, String newAbout){
-        FirestoreHelper.getInstance().editUser(profile, newUsername, newAbout);
+//        FirestoreHelper.getInstance().editUser(profile, newUsername, newAbout);
 
     }
 
