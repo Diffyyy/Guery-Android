@@ -76,7 +76,6 @@ public class CreatepostFragment extends Fragment {
                                 viewBinding.vvPreview.setVideoURI(result);
                                 viewBinding.vvPreview.setVisibility(View.VISIBLE);
                                 viewBinding.vvPreview.start();
-                                Log.e("E","Im Called");
                             }
                             //We can set this to Filename
                             //viewBinding.tvMedia.setText(attachment);
