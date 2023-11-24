@@ -23,6 +23,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.PostItemAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ProfileLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.ResultLaunchers;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.PostItemViewModel;
@@ -84,6 +85,7 @@ public class ProfileFragment extends Fragment {
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
         binding.refreshLayout.setEnabled(false);
         Profile user = AuthHelper.getInstance().getProfile();
+        ImageLoaderHelper.loadPfp(user.getPfp(), binding.profileDisplayImage);
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
