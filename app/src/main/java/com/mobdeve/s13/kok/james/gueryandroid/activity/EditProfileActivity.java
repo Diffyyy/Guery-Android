@@ -29,7 +29,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Uri imageUri;
     private TextView usernameTv;
     private TextView aboutTv;
-
+    private String pfpUri;
     private ActivityResultLauncher<Intent> res = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -102,7 +102,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
                 setResult(Activity.RESULT_OK, resultIntent);
-
+                
                 finish();
             }
         });

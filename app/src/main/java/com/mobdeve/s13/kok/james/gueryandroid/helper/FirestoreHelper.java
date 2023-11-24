@@ -537,7 +537,7 @@ public class FirestoreHelper {
     }
 
 
-    public void editUser(Profile profile, String newUsername, String newAbout){
+    public void editUser(Profile profile, String newUsername, String newAbout,InputStream inputStream,  Consumer<Void> callback){
         Boolean updateSuccessful = false;
         Map<String, Object> updates = convertProfile(profile);
 

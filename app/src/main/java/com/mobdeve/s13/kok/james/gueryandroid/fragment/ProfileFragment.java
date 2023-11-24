@@ -72,6 +72,9 @@ public class ProfileFragment extends Fragment {
                 // Update the UI with the new information
                 binding.profileUsernameTv.setText(newUsername);
                 binding.profileAboutTv.setText(newAbout);
+
+
+
             }
         }
     }
