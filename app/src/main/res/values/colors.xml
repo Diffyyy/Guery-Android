@@ -6,4 +6,5 @@
     <color name="voted">#87233a</color>
     <color name="edittext">#4D2196F3</color>
     <color name="standard_background">#FFEEE2DE</color>
+    <color name="transparent">#00FFFFFF </color>
 </resources>

@@ -111,9 +111,8 @@ public class ViewProfileActivity extends AppCompatActivity implements SwipeRefre
 //        animator.start();
     }
     public void loadStop(){
-        loadingSpinner.setVisibility(View.GONE);
-
-//        binding.profilePostsInc.getRoot().setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(false);
+        binding.profilePostsInc.getRoot().setVisibility(View.VISIBLE);
 
     }
 

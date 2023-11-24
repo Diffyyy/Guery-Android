@@ -1,9 +1,13 @@
 package com.mobdeve.s13.kok.james.gueryandroid.activity;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -26,6 +30,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostHeaderLayoutBindin
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemVidBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostVideoLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.ProfileClickListener;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.ReplyListener;
@@ -169,15 +174,23 @@ public class    PostDetailsActivity extends AppCompatActivity implements Content
             }
         });
     }
-    private void bind(PostItemBinding binding, Post post){
+    @OptIn(markerClass = UnstableApi.class) private void bind(PostItemBinding binding, Post post){
         PostItemHolder.bind(post, binding, this);
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        postBinding.placeholderCl.removeAllViews();
         if(post.getType() == Post.PostType.IMAGE.value){
             View view = getLayoutInflater().inflate(R.layout.post_image_layout, postBinding.getRoot(),false );
             postBinding.placeholderCl.addView(view,0, layoutParams );
             PostImageHolder.bind(post, view.findViewById(R.id.image_iv) );
         }else if(post.getType()==Post.PostType.VIDEO.value){
+
             View view = getLayoutInflater().inflate(R.layout.post_video_layout, postBinding.getRoot(),false );
+            PlayerView playerView = view.findViewById(R.id.video_vv);
+            ExoPlayer player = new ExoPlayer.Builder(playerView.getContext()).build();
+
+            playerView.setControllerShowTimeoutMs(1000);
+            playerView.setPlayer(player);
+            PostVideoHolder.bind(post, playerView, player );
             postBinding.placeholderCl.addView(view,0, layoutParams );
 //            PostVideoHolder.bind(post, view.findViewById(R.id.video_vv) );
         }
