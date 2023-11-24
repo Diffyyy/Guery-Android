@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.MediaController;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -83,9 +84,14 @@ public class CreatepostFragment extends Fragment {
                                 });
                             }
                             else if(attachment.contains("video")) {
+                                MediaController mediaController = new MediaController(requireContext());
                                 viewBinding.ivPreview.setVisibility(View.INVISIBLE);
                                 viewBinding.vvPreview.setVideoURI(result);
                                 viewBinding.vvPreview.setVisibility(View.VISIBLE);
+                                viewBinding.vvPreview.setMediaController(mediaController);
+
+                                mediaController.setAnchorView(viewBinding.vvPreview);
+
                                 viewBinding.btnRemoveAttach.setVisibility(View.VISIBLE);
                                 viewBinding.btnRemoveAttach.setOnClickListener(new View.OnClickListener() {
                                     @Override
