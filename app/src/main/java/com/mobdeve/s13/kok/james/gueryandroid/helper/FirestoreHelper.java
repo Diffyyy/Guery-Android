@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -20,24 +19,20 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
-import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Content;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Vote;
 
-import java.lang.reflect.Field;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import javax.security.auth.callback.Callback;
 
 public class FirestoreHelper {
     public static final String POST_GAME = "game";
@@ -537,29 +532,57 @@ public class FirestoreHelper {
     }
 
 
-    public void editUser(Profile profile, String newUsername, String newAbout,InputStream inputStream,  Consumer<Void> callback){
+    public void editUser(Profile profile, String newUsername, String newAbout, InputStream inputStream, Consumer<Void> callback){
         Boolean updateSuccessful = false;
+        String filename = profile.getId();
 
-        db.collection(USERS).whereEqualTo(PROFILE_NAME, newUsername).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if(queryDocumentSnapshots.isEmpty()){
-                            Map<String, Object> updates = convertProfile(profile);
-                            updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
-                            updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
-
-                                db.collection(USERS).document(profile.getId()).update(updates).addOnSuccessListener(aVoid -> {
-                                Log.e("SUCCESS: ", "Profile Updated");
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Log.e("FAIL: ", e.getMessage());
-                                    });
-                        }
-                    }
-                });
+        if (inputStream != null) {
+            Log.i("EDITUSER", "INPUTSTREAM NOT NULL");
+            StorageHelper.getInstance().upload(filename, StorageHelper.PFP_FOLDER, inputStream, new Consumer<String>() {
+                @Override
+                public void accept(String downloadUrl) {
+                    updateProfile(profile, newUsername, newAbout, downloadUrl, callback);
+                }
+            });
+        } else {
+            Log.i("EDITUSER", "INPUTSTREAM NULL");
+            // If inputStream is null, update without uploading picture
+            updateProfile(profile, newUsername, newAbout, null, callback);
+        }
 
     }
+
+    //updates the profile of the user
+    private void updateProfile(Profile profile, String newUsername, String newAbout, String downloadUrl, Consumer<Void> callback) {
+        Map<String, Object> updates = convertProfile(profile);
+        AtomicBoolean unique = new AtomicBoolean(false);
+
+        db.collection(USERS).whereEqualTo(PROFILE_NAME, newUsername).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        unique.set(true);
+                    }
+                }
+            );
+
+        if(unique.get()){
+            updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
+        }
+        if (downloadUrl != null) {
+            updates.put(FirestoreHelper.PROFILE_PFP, downloadUrl);
+        }
+        updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
+        db.collection(USERS).document(profile.getId()).update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("SUCCESS: ", "Profile Updated");
+                    callback.accept(null);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FAIL: ", e.getMessage());
+                });
+    }
+
+
 
     //updates the post
     public void editPost(String postId, String newTitle, String newBody){

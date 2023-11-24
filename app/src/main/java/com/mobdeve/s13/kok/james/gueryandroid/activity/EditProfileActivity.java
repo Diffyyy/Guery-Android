@@ -21,6 +21,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 import com.squareup.picasso.Picasso;
 
+import java.io.InputStream;
 import java.util.function.Consumer;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -93,14 +94,23 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newUsername = binding.txtUsername.getText().toString();
                 String newAbout = binding.txtAbout.getText().toString();
-                //String newImage;
-                Log.e("new about: ", newAbout);
+                InputStream inputStream = null;
+                // Check if the user selected a new image
+                if (imageUri != null) {
+                    try {
+                        inputStream = getContentResolver().openInputStream(imageUri);
+                        //DEBUG
+                        if(inputStream != null){
+                            Log.i("INPUT STREAM", "not null");
+                        }
 
-                //check if username is changed
-                if(!newUsername.equals(user.getUsername())) {
-                    //update the db
-                    AuthHelper.getInstance().updateProfile(user, newUsername, newAbout);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+
+
+                AuthHelper.getInstance().updateProfile(user, newUsername, newAbout, inputStream);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
