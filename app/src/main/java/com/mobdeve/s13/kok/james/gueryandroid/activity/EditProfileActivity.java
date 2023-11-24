@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityEditProfileBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 import com.squareup.picasso.Picasso;
 
@@ -59,11 +60,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         this.tempImageV = binding.imgProfilePicture;
 
+
         Intent intent = getIntent();
         Profile user = intent.getParcelableExtra("profile");
         String username = user.getUsername().toString();
-        //String password = user.get;
         String about = user.getAbout().toString();
+        ImageLoaderHelper.loadPfp(user.getPfp(), binding.imgProfilePicture);
 
         binding.txtUsername.setText(username);
         binding.txtAbout.setText(about);
@@ -109,8 +111,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                 }
 
-
                 AuthHelper.getInstance().updateProfile(user, newUsername, newAbout, inputStream);
+
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
