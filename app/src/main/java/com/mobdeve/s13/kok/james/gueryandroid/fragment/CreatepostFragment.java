@@ -30,6 +30,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.FragmentCreatepostBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
@@ -63,15 +64,17 @@ public class CreatepostFragment extends Fragment {
         FragmentCreatepostBinding viewBinding = FragmentCreatepostBinding.inflate(inflater, container,false);
 
 
+        ImageLoaderHelper.loadPfp(AuthHelper.getInstance().getProfile().getPfp(), viewBinding.ivCreatePfp);
         mediaPickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
                     @Override
                     public void onActivityResult(Uri result) {
+
                         if (result != null) {
                             attachment = result;
                             //We can set this to Filename
                             viewBinding.tvMedia.setText(attachment.toString());
-                            if(attachment.contains("image")) {
+                            if(attachment.toString().contains("image")) {
                                 viewBinding.vvPreview.setVisibility(View.INVISIBLE);
                                 viewBinding.ivPreview.setImageURI(result);
                                 viewBinding.ivPreview.setVisibility(View.VISIBLE);
@@ -88,7 +91,7 @@ public class CreatepostFragment extends Fragment {
                                     }
                                 });
                             }
-                            else if(attachment.contains("video")) {
+                            else if(attachment.toString().contains("video")) {
                                 MediaController mediaController = new MediaController(requireContext());
                                 viewBinding.ivPreview.setVisibility(View.INVISIBLE);
                                 viewBinding.vvPreview.setVideoURI(result);
@@ -156,7 +159,7 @@ public class CreatepostFragment extends Fragment {
                             @Override
                             public void accept(String s) {
                                 post.setId(s);
-                                post.setAttachment(attachment.toString());
+                                post.setAttachment(attachment==null?null:attachment.toString());
                                 StorageHelper.getInstance().uploadPostAttachment(s, inputStream, new Consumer<String>() {
                                     @Override
                                     public void accept(String s) {

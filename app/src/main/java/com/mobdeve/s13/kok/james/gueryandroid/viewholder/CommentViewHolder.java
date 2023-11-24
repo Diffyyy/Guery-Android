@@ -21,6 +21,7 @@ import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.CommentAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.CommentItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.VoteListener;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
@@ -81,28 +82,8 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
             time.setText("...");
             body.setText("Body...");
         }else{
-            CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(pfp.getContext());
-            circularProgressDrawable.setCenterRadius(30);
             username.setText(comment.getProfile().getUsername());
-            if(comment.getProfile().getPfp()==null) pfp.setImageResource(R.drawable.placeholder);
-            else {
-                StorageHelper.getInstance().retrieve(comment.getProfile().getPfp(), new Consumer<Uri>() {
-                    @Override
-                    public void accept(Uri uri) {
-                        Picasso.get()
-                                .load(uri)
-                                .error(R.drawable.placeholder)
-                                .placeholder(circularProgressDrawable)
-                                .into(pfp);
-                    }
-                }, new Consumer<Exception>() {
-                    @Override
-                    public void accept(Exception e) {
-                        Log.d("BURGER", "FAILED TO LOAD IMAGE: "+e.getMessage());
-                    }
-                });
-
-            }
+            ImageLoaderHelper.loadPfp(comment.getProfile().getPfp(), pfp);
             time.setText(DateHelper.formatDate(comment.getCreatedAt()));
             body.setText(comment.getBody());
             upvotesTv.setText(String.valueOf(comment.getUpvotes()));

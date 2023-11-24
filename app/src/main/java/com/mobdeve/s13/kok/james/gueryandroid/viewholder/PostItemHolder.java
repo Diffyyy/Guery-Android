@@ -1,11 +1,14 @@
 package com.mobdeve.s13.kok.james.gueryandroid.viewholder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.mobdeve.s13.kok.james.gueryandroid.R;
+import com.mobdeve.s13.kok.james.gueryandroid.activity.EditPostActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostEngagementBarBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostFooterLayoutBinding;
@@ -50,6 +54,8 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
     private PostHeaderLayoutBinding headerBinding;
     private PostFooterLayoutBinding footerBinding;
     private PostEngagementBarBinding engagementBarBinding;
+    private ImageButton editBtn;
+    private ImageButton deleteBtn;
 
     protected Post post;
     public PostItemHolder(@NonNull View itemView) {
@@ -94,24 +100,13 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         this.post = post;
         bind(post, binding, pfp.getContext());
     }
+
+
+
     public static void bind(Post post, PostItemBinding binding, Context context){
         binding.postFooterInclude.bodyTv.setText(post.getBody());
         Log.d("BURGER", "BINDING POST: "+post);
-        if(post.getProfile().getPfp()==null) binding.postHeaderInclude.pfpIv.setImageResource(R.drawable.placeholder);
-        else {
-            StorageHelper.getInstance().retrieve(post.getProfile().getPfp(), new Consumer<Uri>() {
-                @Override
-                public void accept(Uri uri) {
-                    ImageLoaderHelper.loadImage(uri, binding.postHeaderInclude.pfpIv);
-                }
-            }, new Consumer<Exception>() {
-                @Override
-                public void accept(Exception e) {
-                    Log.d("BURGER", "FAILED TO LOAD PROFILE IMAGE: "+e.getMessage());
-                }
-            });
-
-        }
+        ImageLoaderHelper.loadPfp(post.getProfile().getPfp(), binding.postHeaderInclude.pfpIv);
         binding.postHeaderInclude.communityTv.setText(post.getGame());
         binding.postHeaderInclude.timeTv.setText(DateHelper.formatDate(post.getCreatedAt()));
         binding.postHeaderInclude.titleTv.setText(post.getTitle());

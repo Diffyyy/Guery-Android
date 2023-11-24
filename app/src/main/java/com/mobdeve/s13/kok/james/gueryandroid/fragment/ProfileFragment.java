@@ -1,5 +1,7 @@
 package com.mobdeve.s13.kok.james.gueryandroid.fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -59,7 +61,7 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
             // Check if the data contains updated profile information
             if (data != null) {
                 String newUsername = data.getStringExtra("newUsername");
@@ -109,5 +111,4 @@ public class ProfileFragment extends Fragment {
         binding.profileAboutTv.setText(profile.getAbout());
         binding.profileNumpostsTv.setText(String.valueOf(profile.getNumPosts()));
     }
-
 }
