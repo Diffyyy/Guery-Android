@@ -143,4 +143,14 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.10259918" />
 
+    <ImageButton
+        android:id="@+id/btn_edit_profile"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
