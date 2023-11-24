@@ -536,6 +536,64 @@ public class FirestoreHelper {
                 });
     }
 
+
+    public void editUser(Profile profile, String newUsername, String newAbout){
+        Boolean updateSuccessful = false;
+        Map<String, Object> updates = convertProfile(profile);
+
+        updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
+        updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
+
+
+        db.collection(USERS).document(profile.getId()).update(updates).addOnSuccessListener(aVoid -> {
+            Log.e("SUCCESS: ", "Profile Updated");
+        })
+        .addOnFailureListener(e -> {
+            Log.e("FAIL: ", e.getMessage());
+        });
+
+    }
+
+    //updates the post
+    public void editPost(String postId, String newTitle, String newBody){
+        getPost(postId, post -> {
+            if (post != null) {
+                Map<String, Object> updates = new HashMap<>();
+                updates.put(POST_TITLE, newTitle);
+                updates.put(POST_BODY, newBody);
+
+                db.collection(POSTS).document(postId)
+                        .update(updates)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.e("SUCCESS: ", "Post Updated");
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("FAIL: ", e.getMessage());
+                        });
+            }
+        });
+    }
+
+    //gets the post item from postId
+    public void getPost(String postId, Consumer<Post> callback) {
+        db.collection(POSTS).document(postId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Post post = documentSnapshot.getData() == null ? null : convertMapToPost(documentSnapshot.getData());
+                    if (post != null) {
+                        getAndSaveProfile(post.getProfile().getId(), profile -> {
+                            post.setProfile(profile);
+                            retrieveVote(AuthHelper.getInstance().getProfile(), post, vote -> {
+                                post.setUserVote(vote);
+                                callback.accept(post);
+                            });
+                        });
+                    } else {
+                        callback.accept(null);
+                    }
+                });
+    }
+
 }
 
 

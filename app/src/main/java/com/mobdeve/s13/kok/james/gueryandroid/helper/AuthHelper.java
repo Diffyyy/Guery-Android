@@ -149,6 +149,8 @@ public class AuthHelper {
 
     }
 
+
+
     public void signOut(){
         profile = null;
         firebaseAuth.signOut();

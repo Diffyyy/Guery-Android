@@ -51,10 +51,27 @@ public class ProfileFragment extends Fragment {
         Log.d("BURGER", "POSTS IN PROFILE: "+String.valueOf(postModel.getFragmentData().getValue()));
         if(!postModel.getFragmentData().isInitialized()){
             postModel.setFragmentData(new ArrayList<>());
+            //show the edit post and delete post button
         }
 
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            // Check if the data contains updated profile information
+            if (data != null) {
+                String newUsername = data.getStringExtra("newUsername");
+                String newAbout = data.getStringExtra("newAbout");
+
+                Log.d("SUCCESS", "UI updated successfully");
+                // Update the UI with the new information
+                binding.profileUsernameTv.setText(newUsername);
+                binding.profileAboutTv.setText(newAbout);
+            }
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

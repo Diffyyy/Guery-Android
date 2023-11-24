@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.MediaController;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,7 +50,6 @@ public class CreatepostFragment extends Fragment {
     private ActivityResultLauncher<String> mediaPickerLauncher;
     private Uri attachment = null;
 
-
     public CreatepostFragment(){
 
     }
@@ -71,6 +71,46 @@ public class CreatepostFragment extends Fragment {
                             attachment = result;
                             //We can set this to Filename
                             viewBinding.tvMedia.setText(attachment.toString());
+                            if(attachment.contains("image")) {
+                                viewBinding.vvPreview.setVisibility(View.INVISIBLE);
+                                viewBinding.ivPreview.setImageURI(result);
+                                viewBinding.ivPreview.setVisibility(View.VISIBLE);
+                                viewBinding.btnRemoveAttach.setVisibility(View.VISIBLE);
+                                viewBinding.btnRemoveAttach.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        attachment = null;
+                                        viewBinding.ivPreview.setImageURI(null);
+                                        viewBinding.vvPreview.setVideoURI(null);
+                                        viewBinding.vvPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.ivPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.btnRemoveAttach.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                            }
+                            else if(attachment.contains("video")) {
+                                MediaController mediaController = new MediaController(requireContext());
+                                viewBinding.ivPreview.setVisibility(View.INVISIBLE);
+                                viewBinding.vvPreview.setVideoURI(result);
+                                viewBinding.vvPreview.setVisibility(View.VISIBLE);
+                                viewBinding.vvPreview.setMediaController(mediaController);
+
+                                mediaController.setAnchorView(viewBinding.vvPreview);
+
+                                viewBinding.btnRemoveAttach.setVisibility(View.VISIBLE);
+                                viewBinding.btnRemoveAttach.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        attachment = null;
+                                        viewBinding.ivPreview.setImageURI(null);
+                                        viewBinding.vvPreview.setVideoURI(null);
+                                        viewBinding.vvPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.ivPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.btnRemoveAttach.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                                viewBinding.vvPreview.start();
+                            }
                         }
                     }
                 });
