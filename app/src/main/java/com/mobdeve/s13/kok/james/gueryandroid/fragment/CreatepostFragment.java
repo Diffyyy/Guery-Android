@@ -46,7 +46,6 @@ public class CreatepostFragment extends Fragment {
     private ActivityResultLauncher<String> mediaPickerLauncher;
     private String attachment = null;
 
-
     public CreatepostFragment(){
 
     }
@@ -70,16 +69,37 @@ public class CreatepostFragment extends Fragment {
                                 viewBinding.vvPreview.setVisibility(View.INVISIBLE);
                                 viewBinding.ivPreview.setImageURI(result);
                                 viewBinding.ivPreview.setVisibility(View.VISIBLE);
+                                viewBinding.btnRemoveAttach.setVisibility(View.VISIBLE);
+                                viewBinding.btnRemoveAttach.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        attachment = null;
+                                        viewBinding.ivPreview.setImageURI(null);
+                                        viewBinding.vvPreview.setVideoURI(null);
+                                        viewBinding.vvPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.ivPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.btnRemoveAttach.setVisibility(View.INVISIBLE);
+                                    }
+                                });
                             }
                             else if(attachment.contains("video")) {
                                 viewBinding.ivPreview.setVisibility(View.INVISIBLE);
                                 viewBinding.vvPreview.setVideoURI(result);
                                 viewBinding.vvPreview.setVisibility(View.VISIBLE);
+                                viewBinding.btnRemoveAttach.setVisibility(View.VISIBLE);
+                                viewBinding.btnRemoveAttach.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        attachment = null;
+                                        viewBinding.ivPreview.setImageURI(null);
+                                        viewBinding.vvPreview.setVideoURI(null);
+                                        viewBinding.vvPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.ivPreview.setVisibility(View.INVISIBLE);
+                                        viewBinding.btnRemoveAttach.setVisibility(View.INVISIBLE);
+                                    }
+                                });
                                 viewBinding.vvPreview.start();
-                                Log.e("E","Im Called");
                             }
-                            //We can set this to Filename
-                            //viewBinding.tvMedia.setText(attachment);
                         }
                     }
                 });
