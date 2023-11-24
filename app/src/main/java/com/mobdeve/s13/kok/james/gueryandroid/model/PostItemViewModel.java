@@ -15,7 +15,6 @@ public class PostItemViewModel extends ViewModel {
     }
 
     public void setFragmentData(ArrayList<Post> fragmentData) {
-
         this.fragmentData.setValue(fragmentData);
     }
 }

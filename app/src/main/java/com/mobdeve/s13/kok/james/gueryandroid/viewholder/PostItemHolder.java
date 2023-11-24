@@ -74,16 +74,18 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         username = headerBinding.usernameTv;
 
         editBtn = headerBinding.btnEditPost;
+        deleteBtn = headerBinding.btnDeletePost;
         editBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, EditPostActivity.class);
+                intent.putExtra("POST_ID", post.getId());
                 context.startActivity(intent);
+
             }
         });
 
-        deleteBtn = headerBinding.btnDeletePost;
 
         upvoteBtn = engagementBarBinding.postUpvoteBtn;
         downvoteBtn = engagementBarBinding.postDownvoteBtn;

@@ -57,10 +57,10 @@ public class ProfileFragment extends Fragment {
         Log.d("BURGER", "POSTS IN PROFILE: "+String.valueOf(postModel.getFragmentData().getValue()));
         if(!postModel.getFragmentData().isInitialized()){
             postModel.setFragmentData(new ArrayList<>());
+            //show the edit post and delete post button
         }
 
     }
-
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
