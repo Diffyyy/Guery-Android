@@ -108,12 +108,17 @@ public class FirestoreHelper {
         Log.d("BURGER", "EDITING POST: "+post);
         DocumentReference previousPost = db.collection(POSTS).document(post.getId());
         String newAttachment = post.getType()==Post.PostType.TEXT.value?null:StorageHelper.POSTS_FOLDER+post.getId()    ;
+        Log.d("BURGER", "NEW ATTACHMENT: "+newAttachment);
+        Log.d("BURGER", "POST: "+post);
         Map<String, Object> map = convertPost(post);
         map.put(POST_ATTACHED, newAttachment);
-        previousPost.update(convertPost(post))
+
+        previousPost.update(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        Log.d("BURGER", "SUCCESFULLY UPDATED POST");
+                        Log.d("BURGER", (String) map.get(POST_ATTACHED));
                         callback.accept(unused);
                     }
                 });
