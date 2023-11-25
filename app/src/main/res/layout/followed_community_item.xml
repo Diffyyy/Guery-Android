@@ -21,7 +21,8 @@
             android:layout_height="48dp"
             android:layout_weight="1"
 
-            android:src="@drawable/kirby" />
+            android:src="@drawable/placeholder"
+            />
 
         <TextView
             android:id="@+id/textView2"

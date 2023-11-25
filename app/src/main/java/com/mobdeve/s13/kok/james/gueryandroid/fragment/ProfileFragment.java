@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("BURGER", "ACTIVITY RESULT RECEIVE DPROFILE FRAGMEBNT");
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // Check if the data contains updated profile information
             if (data != null) {
@@ -121,14 +122,15 @@ public class ProfileFragment extends Fragment {
         ArrayList<Post> profilePosts = new ArrayList<>();
         mapping = new HashMap<>();
         for(int i = 0; i < getData().size(); i++){
-            if(getData().get(i).getProfile().getId().equals(AuthHelper.getInstance().getProfile().getId())){
+            Post post = getData().get(i)    ;
+            if( post!=null && post.getProfile().getId().equals(AuthHelper.getInstance().getProfile().getId())){
                 mapping.put(profilePosts.size(), i      );
                 profilePosts.add(getData().get(i));
 
             }
         }
         bindProfile(AuthHelper.getInstance().getProfile(), binding);
-        PostItemAdapter adapter = new PostItemAdapter(profilePosts, true);
+        PostItemAdapter adapter = new PostItemAdapter(profilePosts, true, false);
         adapter.setLauncher(ResultLaunchers.postClicked(this, adapter, new BiConsumer<Integer, Post>() {
             @Override
             public void accept(Integer index, Post post) {
@@ -144,6 +146,7 @@ public class ProfileFragment extends Fragment {
                     public void accept(Void unused) {
                         adapter.getPosts().set(index,null);
                         adapter.notifyItemChanged(index);
+                        AuthHelper.getInstance().getProfile().decrementPosts();
                         getData().set(mapping.get(index), null );
                     }
                 });
@@ -161,6 +164,9 @@ public class ProfileFragment extends Fragment {
         binding.profileUsernameTv.setText(profile.getUsername());
         binding.profileAboutTv.setText(profile.getAbout());
         binding.profileNumpostsTv.setText(String.valueOf(profile.getNumPosts()));
+
+        ImageLoaderHelper.loadPfp(profile.getPfp(), binding.profileDisplayImage);
+
     }
     private ArrayList<Post> getData(){
         return postModel.getFragmentData().getValue();

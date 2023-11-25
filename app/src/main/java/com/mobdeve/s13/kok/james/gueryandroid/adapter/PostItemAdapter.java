@@ -31,11 +31,13 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
     private ArrayList<Post> posts;
 
     private ActivityResultLauncher<Intent> launcher;
-    private boolean canEdit = false;
+    private boolean canEdit;
+    private boolean canViewProfile;
     private BiConsumer<Integer, Post> deleteCallback;
-    public PostItemAdapter(ArrayList<Post> posts, boolean canEdit) {
+    public PostItemAdapter(ArrayList<Post> posts, boolean canEdit, boolean canViewProfile) {
         this.posts = posts;
         this.canEdit = canEdit;
+        this.canViewProfile = canViewProfile;
     }
 
     @Override
@@ -98,9 +100,10 @@ public class PostItemAdapter extends RecyclerView.Adapter<PostItemHolder> {
         postItemHolder.setReplyListener(clickListener);
         postItemHolder.itemView.setOnClickListener(clickListener);
 
-        ProfileClickListener profileClickListener = new ProfileClickListener(postItemHolder);
-        postItemHolder.setProfileListener(profileClickListener);
-
+        if(canViewProfile) {
+            ProfileClickListener profileClickListener = new ProfileClickListener(postItemHolder);
+            postItemHolder.setProfileListener(profileClickListener);
+        }
         return postItemHolder;
     }
 

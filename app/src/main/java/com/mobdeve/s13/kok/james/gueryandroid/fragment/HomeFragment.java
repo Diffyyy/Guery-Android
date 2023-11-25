@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         refreshLayout.setDistanceToTriggerSync(200);
         refreshLayout.setSlingshotDistance(100);
         Log.d("BURGER","CREATING VIEW");
-        adapter = new PostItemAdapter(getData(), false);
+        adapter = new PostItemAdapter(getData(), false, true);
         adapter.setLauncher(ResultLaunchers.postClicked(this, adapter, null));
 
         binding.postsRv.setAdapter(adapter);
