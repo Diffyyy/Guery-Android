@@ -125,7 +125,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
-                resultIntent.putExtra("newPfp", imageUri.toString());
+                resultIntent.putExtra("newPfp", imageUri==null?null:imageUri.toString());
                 Log.d("BURGER", "NEW PFP: "+imageUri);
                 setResult(Activity.RESULT_OK, resultIntent);
                 Log.d("OLD PASSWORD: ", oldPassword);
@@ -136,10 +136,11 @@ public class EditProfileActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Username already exists", Toast.LENGTH_SHORT).show();
                     }
                 };
-                if(newPassword.equals(emptyString) && oldPassword.equals(emptyString)){
+                if(newPassword.isEmpty()&& oldPassword.isEmpty()){
                     FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, inputStream, new Consumer<Void>() {
                         @Override
                         public void accept(Void unused) {
+                            Log.d("BURGER", "FINISHING EDIT PROFILE: "+AuthHelper.getInstance().getProfile());
                             finish();
                         }
                     }, usernameExisting);
