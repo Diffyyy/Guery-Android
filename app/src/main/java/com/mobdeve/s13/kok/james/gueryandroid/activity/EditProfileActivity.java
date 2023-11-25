@@ -3,6 +3,7 @@ package com.mobdeve.s13.kok.james.gueryandroid.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -47,11 +48,22 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     if (result.getResultCode() == Activity.RESULT_OK){
                         try {
-                            if(result.getData() != null) {
-                                // Get the path of the image
-                                imageUri = result.getData().getData();
-                                // Load the image into the tempImageIv using the path
-                                Picasso.get().load(imageUri).into(tempImageV);
+                            Intent data =result.getData();
+                            if (data.getData() != null) {
+                                if (Build.VERSION.SDK_INT < 19) {
+                                    imageUri = data.getData();
+                                    //We can set this to Filename
+
+                                } else {
+                                    imageUri = data.getData();
+                                    try {
+                                        getContentResolver().takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    } catch (SecurityException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                ImageLoaderHelper.loadPfp(imageUri.toString(), tempImageV);
+
                             }
                         } catch(Exception exception){
                             Log.d("TAG",""+exception.getLocalizedMessage());
