@@ -98,6 +98,10 @@ public class    PostDetailsActivity extends AppCompatActivity implements Content
 //                if(post.isVoting()) return;
 
                 Intent intent = getIntent();
+                if(post==null){
+                    finish();
+                    return;
+                }
                 post.getComments().clear();
                 if(post.getUserVote().equals(prevVote)){
                     setResult(RESULT_CANCELED);
