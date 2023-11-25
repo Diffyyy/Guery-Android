@@ -23,7 +23,6 @@ public class EditPostActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityEditPostBinding binding = ActivityEditPostBinding.inflate(getLayoutInflater());
-        Intent intent = getIntent() ;
         Post post = getIntent().getParcelableExtra(CreatepostFragment.POST);
         editFragment = new CreatepostFragment();
         Bundle bundle = new Bundle();
