@@ -87,6 +87,7 @@ public class CreatepostFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        attachment = null;
         viewBinding = FragmentCreatepostBinding.inflate(inflater, container,false);
 
         imageView = viewBinding.ivPreview;
