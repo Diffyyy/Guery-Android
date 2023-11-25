@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.mobdeve.s13.kok.james.gueryandroid.exception.ExistingUsernameException;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
+import java.io.InputStream;
 import java.util.function.Consumer;
 
 public class AuthHelper {
@@ -144,8 +145,13 @@ public class AuthHelper {
 
     }
 
-    public void updateProfile(Profile profile, String newUsername, String newAbout){
-        FirestoreHelper.getInstance().editUser(profile, newUsername, newAbout);
+    public void updateProfile(Profile profile, String newUsername, String newAbout, InputStream inputStream){
+        FirestoreHelper.getInstance().editUser(profile, newUsername, newAbout, inputStream, new Consumer<Void>() {
+            @Override
+            public void accept(Void aVoid) {
+                Log.d("Profile Update", "Profile updated successfully");
+            }
+        });
 
     }
 

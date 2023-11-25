@@ -24,7 +24,11 @@ import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.PostItemAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ProfileLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
+
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
+
+import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
+
 import com.mobdeve.s13.kok.james.gueryandroid.helper.ResultLaunchers;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.PostItemViewModel;
@@ -49,6 +53,7 @@ public class ProfileFragment extends Fragment {
     private PostItemViewModel postModel;
     private ProfileLayoutBinding binding;
     private HashMap<Integer, Integer> mapping;
+    Profile user;
     public ProfileFragment(){
 
     }
@@ -73,16 +78,15 @@ public class ProfileFragment extends Fragment {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // Check if the data contains updated profile information
             if (data != null) {
-                Profile profile = data.getParcelableExtra("profile");
-                String newUsername = profile.getUsername();
-                String newAbout = profile.getAbout();
+                String newUsername = data.getStringExtra("newUsername");
+                String newAbout = data.getStringExtra("newAbout");
+
                 Log.d("SUCCESS", "UI updated successfully");
                 // Update the UI with the new information
                 binding.profileUsernameTv.setText(newUsername);
                 binding.profileAboutTv.setText(newAbout);
-
-
-
+                user.setAbout(newAbout);
+                user.setUsername(newUsername);
             }
         }
     }
@@ -93,7 +97,9 @@ public class ProfileFragment extends Fragment {
 
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
         binding.refreshLayout.setEnabled(false);
-        Profile user = AuthHelper.getInstance().getProfile();
+        user = AuthHelper.getInstance().getProfile();
+        ImageLoaderHelper.loadPfp(user.getPfp(), binding.profileDisplayImage);
+
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +107,6 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
-//                startActivityForResult(intent, 1);
             }
         });
         binding.btnEditProfile.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +114,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 intent.putExtra("profile", user );
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -160,4 +165,5 @@ public class ProfileFragment extends Fragment {
     private ArrayList<Post> getData(){
         return postModel.getFragmentData().getValue();
     }
+
 }

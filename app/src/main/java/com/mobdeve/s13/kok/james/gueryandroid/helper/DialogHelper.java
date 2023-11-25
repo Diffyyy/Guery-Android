@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.mobdeve.s13.kok.james.gueryandroid.R;
@@ -74,6 +76,8 @@ public class DialogHelper {
 //                        input.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         input.setHint("Write your reply here...");
 
+        input.setTextColor(Color.WHITE);
+        input.setHintTextColor(Color.WHITE);
 
         builder.setView(input);
 

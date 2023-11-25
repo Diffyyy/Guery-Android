@@ -66,7 +66,7 @@ public class StorageHelper {
 
     }
 
-    private  void upload(String filename, String folder, InputStream inputStream, Consumer<String> callback){
+    public void upload(String filename, String folder, InputStream inputStream, Consumer<String> callback){
 //        Log.d("BURGER", "FILE EXISTS: "+f.exists());
         String uploadPath = folder + filename ;
         StorageReference imageRef = storageRef.child(uploadPath);
@@ -86,5 +86,7 @@ public class StorageHelper {
         if(inputStream!=null)upload(filename, POSTS_FOLDER, inputStream, callback);
         else callback.accept(null);
     }
+
+
 
 }
