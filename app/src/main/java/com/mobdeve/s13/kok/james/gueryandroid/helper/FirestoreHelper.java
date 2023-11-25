@@ -569,7 +569,7 @@ public class FirestoreHelper {
         Consumer<Void> editCallback = new Consumer<Void>() {
             @Override
             public void accept(Void unused) {
-                Map<String, Object> updates = convertProfile(profile);
+                Map<String, Object> updates = new HashMap<>();
                 updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
                 updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
                 if(inputStream!=null) StorageHelper.getInstance().upload(filename, StorageHelper.PFP_FOLDER, inputStream, new Consumer<String>() {
