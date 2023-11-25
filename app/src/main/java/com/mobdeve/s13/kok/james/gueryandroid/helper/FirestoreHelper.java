@@ -93,6 +93,8 @@ public class FirestoreHelper {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        db.collection(USERS).document(post.getProfile().getId())
+                                .update(PROFILE_NUMPOSTS, FieldValue.increment(-1));
                         callback.accept(unused);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -129,7 +131,7 @@ public class FirestoreHelper {
         newPost.set(map).addOnSuccessListener(new OnSuccessListener<>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        db.collection(USERS).document(AuthHelper.getInstance().getProfile().getId())
+                        db.collection(USERS).document(post.getProfile().getId())
                                 .update(PROFILE_NUMPOSTS, FieldValue.increment(1));
                         callback.accept(newPost.getId());
 

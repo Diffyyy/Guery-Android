@@ -140,4 +140,8 @@ public class Profile implements Parcelable {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public void decrementPosts(){
+        this.numPosts--;
+    }
 }

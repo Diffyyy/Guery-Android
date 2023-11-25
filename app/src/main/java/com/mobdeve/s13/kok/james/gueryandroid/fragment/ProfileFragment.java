@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("BURGER", "ACTIVITY RESULT RECEIVE DPROFILE FRAGMEBNT");
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // Check if the data contains updated profile information
             if (data != null) {
@@ -129,7 +130,7 @@ public class ProfileFragment extends Fragment {
             }
         }
         bindProfile(AuthHelper.getInstance().getProfile(), binding);
-        PostItemAdapter adapter = new PostItemAdapter(profilePosts, true);
+        PostItemAdapter adapter = new PostItemAdapter(profilePosts, true, false);
         adapter.setLauncher(ResultLaunchers.postClicked(this, adapter, new BiConsumer<Integer, Post>() {
             @Override
             public void accept(Integer index, Post post) {
@@ -145,6 +146,7 @@ public class ProfileFragment extends Fragment {
                     public void accept(Void unused) {
                         adapter.getPosts().set(index,null);
                         adapter.notifyItemChanged(index);
+                        AuthHelper.getInstance().getProfile().decrementPosts();
                         getData().set(mapping.get(index), null );
                     }
                 });

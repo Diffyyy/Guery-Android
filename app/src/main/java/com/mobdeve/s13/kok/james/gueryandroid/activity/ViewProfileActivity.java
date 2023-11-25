@@ -45,10 +45,11 @@ public class ViewProfileActivity extends AppCompatActivity implements SwipeRefre
         profileId = intent.getStringExtra(PROFILE_ID );
         loadingSpinner = binding.loading.getRoot();
         posts=  new ArrayList<>();
-        adapter = new PostItemAdapter(posts, false );
+        adapter = new PostItemAdapter(posts, false, true );
         adapter.setLauncher(ResultLaunchers.postClicked(this,adapter, null ));
         binding.profilePostsInc.profilePostsRv.setAdapter(adapter);
         binding.profilePostsInc.profilePostsRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.profilePostsInc.btnEditProfile.setVisibility(View.GONE);
         refreshLayout = binding.profilePostsInc.refreshLayout;
         refreshLayout.setOnRefreshListener(this);
         setContentView(binding.getRoot());
