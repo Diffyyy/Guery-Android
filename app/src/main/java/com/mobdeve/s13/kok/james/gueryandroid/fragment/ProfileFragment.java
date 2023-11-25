@@ -53,6 +53,7 @@ public class ProfileFragment extends Fragment {
     private PostItemViewModel postModel;
     private ProfileLayoutBinding binding;
     private HashMap<Integer, Integer> mapping;
+    private PostItemAdapter adapter;
     public ProfileFragment(){
 
     }
@@ -91,6 +92,26 @@ public class ProfileFragment extends Fragment {
 
 
                 ImageLoaderHelper.loadPfp(pfp, binding.profileDisplayImage);
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i = 0; i < adapter.getPosts().size(); i++){
+                            Post post = adapter.getPosts().get(i);
+                            post.getProfile().setPfp(pfp);
+                            post.getProfile().setUsername(newUsername);
+                            int finalI = i;
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyItemChanged(finalI);
+                                }
+                            });
+                        }
+                    }
+                });
+                thread.start();
+
 
                 AuthHelper.getInstance().getProfile().setAbout(newAbout);
                 AuthHelper.getInstance().getProfile().setUsername(newUsername);
@@ -135,7 +156,7 @@ public class ProfileFragment extends Fragment {
         }
 
         bindProfile(AuthHelper.getInstance().getProfile(), binding);
-        PostItemAdapter adapter = new PostItemAdapter(profilePosts, true, false);
+        adapter = new PostItemAdapter(profilePosts, true, false);
         adapter.setLauncher(ResultLaunchers.postClicked(this, adapter, new BiConsumer<Integer, Post>() {
             @Override
             public void accept(Integer index, Post post) {
@@ -152,6 +173,7 @@ public class ProfileFragment extends Fragment {
                         adapter.getPosts().set(index,null);
                         adapter.notifyItemChanged(index);
                         AuthHelper.getInstance().getProfile().decrementPosts();
+                        binding.profileNumpostsTv.setText(AuthHelper.getInstance().getProfile().getNumPosts());
                         getData().set(mapping.get(index), null );
                     }
                 });

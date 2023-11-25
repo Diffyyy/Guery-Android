@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void accept(Exception e) {
                         if(e instanceof FirebaseAuthInvalidCredentialsException) Toast.makeText(getApplicationContext(), "Please check email and password",Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();;
                     }
                 });
 
@@ -67,27 +68,27 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        viewBinding.tvLoginForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                startActivity(intent);
-            }
-        });
-        viewBinding.tvLoginForgotEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ForgotUsernameActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        viewBinding.ivLoginSteam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+//        viewBinding.tvLoginForgotPassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
 //                startActivity(intent);
-            }
-        });
+//            }
+//        });
+//        viewBinding.tvLoginForgotEmail.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LoginActivity.this, ForgotUsernameActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+//        viewBinding.ivLoginSteam.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+////                startActivity(intent);
+//            }
+//        });
     }
 }

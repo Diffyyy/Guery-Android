@@ -157,27 +157,37 @@ public class EditProfileActivity extends AppCompatActivity {
                     AuthHelper.getInstance().reauthenticate(oldPassword, new Consumer<Void>() {
                         @Override
                         public void accept(Void unused) {
-                            FirestoreHelper.getInstance().checkUsername(newUsername, new Consumer<Profile>() {
+                            Consumer<Void> updatePasswordCallback = new Consumer<Void>() {
                                 @Override
-                                public void accept(Profile profile) {
-                                    if(profile==null){
-                                        AuthHelper.getInstance().updatePassword(newPassword, new Consumer<Void>() {
-                                            @Override
-                                            public void accept(Void unused) {
-                                                FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, finalInputStream, finish, usernameExisting, false);
-                                            }
-                                        }, new Consumer<Exception>() {
-                                            @Override
-                                            public void accept(Exception e) {
-                                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }else{
-                                        Toast.makeText(getApplicationContext(),"Username already exists", Toast.LENGTH_SHORT).show();
-                                    }
-
+                                public void accept(Void unused) {
+                                    AuthHelper.getInstance().updatePassword(newPassword, new Consumer<Void>() {
+                                        @Override
+                                        public void accept(Void unused) {
+                                            FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, finalInputStream, finish, usernameExisting, false);
+                                        }
+                                    }, new Consumer<Exception>() {
+                                        @Override
+                                        public void accept(Exception e) {
+                                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
-                            });
+                            };
+                            if(!user.getUsername().equals(newUsername)){
+
+                                FirestoreHelper.getInstance().checkUsername(newUsername, new Consumer<Profile>() {
+                                    @Override
+                                    public void accept(Profile profile) {
+                                        if(profile==null){
+                                            updatePasswordCallback.accept(null);
+                                        }else{
+                                            Toast.makeText(getApplicationContext(),"Username already exists", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                });
+                            }else updatePasswordCallback.accept(null);
+
 
                         }
                     }, new Consumer<Exception>() {

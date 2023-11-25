@@ -46,7 +46,7 @@
         android:id="@+id/et_login_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rounded_edittext"
         android:backgroundTint="#4D2196F3"
         android:ems="10"
@@ -70,6 +70,7 @@
         android:text="Forgot Email?"
         android:textColor="#188BF4"
         android:textSize="16sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/et_login_email"
         app:layout_constraintTop_toBottomOf="@+id/et_login_email" />
 
@@ -81,6 +82,7 @@
         android:text="Forgot Password?"
         android:textColor="#188BF4"
         android:textSize="16sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/et_login_password"
         app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
 
@@ -92,20 +94,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="#E91E63"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_login_or" />
-
-    <View
-        android:id="@+id/view_login_divider2"
-        android:layout_width="2dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="40dp"
-        android:background="#E91E63"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/view_login_divider"
-        app:layout_constraintStart_toStartOf="@+id/view_login_divider"
-        app:layout_constraintTop_toBottomOf="@+id/view_login_divider" />
 
     <Button
         android:id="@+id/btn_login_signin"
@@ -121,22 +113,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_login_forgotPassword" />
-
-    <ImageButton
-        android:id="@+id/iv_login_steam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:background="#00FFFFFF"
-        android:maxWidth="75dp"
-        android:maxHeight="75dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/steam"
-        app:layout_constraintBottom_toBottomOf="@+id/view_login_divider2"
-        app:layout_constraintEnd_toStartOf="@+id/view_login_divider2"
-        app:layout_constraintStart_toStartOf="@+id/view_login_divider"
-        app:layout_constraintTop_toTopOf="@+id/view_login_divider"
-        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/tv_login_or"
@@ -154,11 +130,14 @@
         android:id="@+id/btn_login_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        android:paddingTop="12dp"
+        android:paddingRight="40dp"
+        android:paddingBottom="12dp"
         android:text="Sign Up"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/view_login_divider2"
         app:layout_constraintEnd_toEndOf="@+id/view_login_divider"
-        app:layout_constraintStart_toEndOf="@+id/view_login_divider2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view_login_divider" />
 
     <ImageView
