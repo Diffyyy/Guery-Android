@@ -72,9 +72,9 @@
 
         <ImageView
             android:id="@+id/img_profile_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:maxWidth="100dp"
             android:maxHeight="100dp"
@@ -89,9 +89,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src= "@drawable/edit"
-            android:background="@color/white"
+            android:background="@color/lesswhite"
             app:layout_constraintBottom_toBottomOf="@+id/img_profile_picture"
-            app:layout_constraintEnd_toEndOf="@+id/img_profile_picture" />
+            app:layout_constraintEnd_toEndOf="@+id/img_profile_picture"
+            app:tint="@color/gray" />
 
         <EditText
             android:id="@+id/txt_username"
