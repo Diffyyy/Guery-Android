@@ -125,8 +125,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
-                resultIntent.putExtra("newPfp", imageUri);
-
+                resultIntent.putExtra("newPfp", imageUri.toString());
+                Log.d("BURGER", "NEW PFP: "+imageUri);
                 setResult(Activity.RESULT_OK, resultIntent);
                 Log.d("OLD PASSWORD: ", oldPassword);
                 Log.d("NEW PASSWORD: ", newPassword);
@@ -143,7 +143,6 @@ public class EditProfileActivity extends AppCompatActivity {
                             finish();
                         }
                     }, usernameExisting);
-
                 } else if(!newPassword.isEmpty() && !oldPassword.isEmpty() ){
                     //if both password values are not null or new password is not null
                         // Check if the old password matches the user's current password
@@ -157,7 +156,6 @@ public class EditProfileActivity extends AppCompatActivity {
                                         finish();
                                     }
                                 }, usernameExisting);
-
                             },
                             error -> {
                                 // Password update failed, show a toast and stay on the same activity

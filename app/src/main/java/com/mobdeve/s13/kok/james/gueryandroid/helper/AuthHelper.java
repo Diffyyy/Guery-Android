@@ -26,7 +26,7 @@ public class AuthHelper {
         }
         return instance;
     }
-    private Profile profile ;
+    private static Profile profile ;
 
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();

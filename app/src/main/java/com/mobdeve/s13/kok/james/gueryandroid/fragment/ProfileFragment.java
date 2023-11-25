@@ -75,17 +75,21 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("BURGER", "ACTIVITY RESULT RECEIVE DPROFILE FRAGMEBNT");
+
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // Check if the data contains updated profile information
             if (data != null) {
                 String newUsername = data.getStringExtra("newUsername");
                 String newAbout = data.getStringExtra("newAbout");
                 String pfp = data.getStringExtra("newPfp");
-
+                Log.d("BURGER", "NEW PFP RECEIVED: "+pfp);
                 Log.d("SUCCESS", "UI updated successfully");
                 // Update the UI with the new information
                 binding.profileUsernameTv.setText(newUsername);
                 binding.profileAboutTv.setText(newAbout);
+                Log.d("BURGER", "PROFILE: "+AuthHelper.getInstance().getProfile());
+
+
                 ImageLoaderHelper.loadPfp(pfp, binding.profileDisplayImage);
 
                 AuthHelper.getInstance().getProfile().setAbout(newAbout);
@@ -98,7 +102,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Log.d("BURGER", "PRFOIEL FRAGMENT CREATED: "+AuthHelper.getInstance().getProfile());
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
         binding.refreshLayout.setEnabled(false);
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +133,7 @@ public class ProfileFragment extends Fragment {
 
             }
         }
+
         bindProfile(AuthHelper.getInstance().getProfile(), binding);
         PostItemAdapter adapter = new PostItemAdapter(profilePosts, true, false);
         adapter.setLauncher(ResultLaunchers.postClicked(this, adapter, new BiConsumer<Integer, Post>() {
