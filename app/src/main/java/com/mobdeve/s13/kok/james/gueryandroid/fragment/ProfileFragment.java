@@ -173,7 +173,7 @@ public class ProfileFragment extends Fragment {
                         adapter.getPosts().set(index,null);
                         adapter.notifyItemChanged(index);
                         AuthHelper.getInstance().getProfile().decrementPosts();
-                        binding.profileNumpostsTv.setText(AuthHelper.getInstance().getProfile().getNumPosts());
+                        binding.profileNumpostsTv.setText(String.valueOf(AuthHelper.getInstance().getProfile().getNumPosts()));
                         getData().set(mapping.get(index), null );
                     }
                 });
