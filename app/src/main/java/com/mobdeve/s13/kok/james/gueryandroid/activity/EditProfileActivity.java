@@ -123,7 +123,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 String oldPassword = binding.txtOldPassword.getText().toString();
                 String newPassword = binding.txtNewPassword.getText().toString();
                 String emptyString = "";
-
+                if(newUsername.isEmpty() || newAbout.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Make sure username and about are not empty", Toast.LENGTH_SHORT).show();;
+                    return;
+                }
                 InputStream inputStream = null;
                 // Check if the user selected a new image
                 if (imageUri != null) {
