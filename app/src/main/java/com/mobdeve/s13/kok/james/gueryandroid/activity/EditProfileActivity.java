@@ -169,11 +169,11 @@ public class EditProfileActivity extends AppCompatActivity {
                                         }, new Consumer<Exception>() {
                                             @Override
                                             public void accept(Exception e) {
-                                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
+                                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }else{
-                                        Toast.makeText(getApplicationContext(),"Username already exists", Toast.LENGTH_SHORT);
+                                        Toast.makeText(getApplicationContext(),"Username already exists", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
@@ -183,7 +183,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     }, new Consumer<Exception>() {
                         @Override
                         public void accept(Exception e) {
-                            Toast.makeText(getApplicationContext(), "Wrong old password", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), "Wrong old password", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }else{

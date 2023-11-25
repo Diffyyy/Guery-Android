@@ -581,7 +581,7 @@ public class FirestoreHelper {
                 });else editUser(profile, updates, callback);
             }
         };
-        if(checkUsername) checkUsername(newUsername, new Consumer<Profile>() {
+        if(checkUsername && !profile.getUsername().equals(newUsername)) checkUsername(newUsername, new Consumer<Profile>() {
             @Override
             public void accept(Profile profile) {
                 if(profile==null){
