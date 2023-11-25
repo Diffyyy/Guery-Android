@@ -125,14 +125,15 @@ public class AuthHelper {
                     if (reauthTask.isSuccessful()) {
                         // User has been successfully reauthenticated, now update the password
                         user.updatePassword(newPassword)
-                                .addOnCompleteListener(updatePasswordTask -> {
-                                    if (updatePasswordTask.isSuccessful()) {
-                                        // Password update successful
-                                        // Show success message or perform any other necessary actions
-                                        callback.accept(null);
-                                    } else {
-                                        // If the password update fails, handle the error
-                                        Log.d("BURGER", "PASSWORD UPDATE FAILED");
+                                .addOnSuccessListener(unused -> {
+                                    // Password update successful
+                                    // Show success message or perform any other necessary actions
+                                    callback.accept(null);
+
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        wrongPassword.accept(e);
                                     }
                                 });
                     } else {
@@ -142,16 +143,6 @@ public class AuthHelper {
 
                     }
                 });
-
-    }
-
-    public void updateProfile(Profile profile, String newUsername, String newAbout, InputStream inputStream){
-        FirestoreHelper.getInstance().editUser(profile, newUsername, newAbout, inputStream, new Consumer<Void>() {
-            @Override
-            public void accept(Void aVoid) {
-                Log.d("Profile Update", "Profile updated successfully");
-            }
-        });
 
     }
 

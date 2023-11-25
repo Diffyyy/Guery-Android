@@ -19,9 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityEditProfileBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 import com.squareup.picasso.Picasso;
+
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.InputStream;
 import java.util.function.Consumer;
@@ -118,38 +121,51 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                 }
 
-                AuthHelper.getInstance().updateProfile(user, newUsername, newAbout, inputStream);
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
+                resultIntent.putExtra("newPfp", imageUri);
+
                 setResult(Activity.RESULT_OK, resultIntent);
                 Log.d("OLD PASSWORD: ", oldPassword);
                 Log.d("NEW PASSWORD: ", newPassword);
-
-                if(newPassword.equals(emptyString) && oldPassword.equals(emptyString)){
-                    finish();
-                }
-                else{
-                    //if both password values are not null or new password is not null
-                    if (newPassword != null && oldPassword != null) {
-                        if(newPassword.length() >= 6){
-                            // Check if the old password matches the user's current password
-                            AuthHelper.getInstance().updatePassword(oldPassword, newPassword,
-                                    success -> {
-                                        //finish the current activity
-                                        finish();
-                                    },
-                                    error -> {
-                                        // Password update failed, show a toast and stay on the same activity
-                                        Toast.makeText(EditProfileActivity.this, "Old passwords do not match", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                        else{
-                            Toast.makeText(EditProfileActivity.this, "Password must be at lest 6 characters", Toast.LENGTH_SHORT).show();
-                        }
-
+                Consumer<Void> usernameExisting = new Consumer<Void>() {
+                    @Override
+                    public void accept(Void unused) {
+                        Toast.makeText(getApplicationContext(), "Username already exists", Toast.LENGTH_SHORT).show();
                     }
+                };
+                if(newPassword.equals(emptyString) && oldPassword.equals(emptyString)){
+                    FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, inputStream, new Consumer<Void>() {
+                        @Override
+                        public void accept(Void unused) {
+                            finish();
+                        }
+                    }, usernameExisting);
+
+                } else if(!newPassword.isEmpty() && !oldPassword.isEmpty() ){
+                    //if both password values are not null or new password is not null
+                        // Check if the old password matches the user's current password
+                    InputStream finalInputStream = inputStream;
+                    AuthHelper.getInstance().updatePassword(oldPassword, newPassword,
+                            success -> {
+                                //finish the current activity
+                                FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, finalInputStream, new Consumer<Void>() {
+                                    @Override
+                                    public void accept(Void unused) {
+                                        finish();
+                                    }
+                                }, usernameExisting);
+
+                            },
+                            error -> {
+                                // Password update failed, show a toast and stay on the same activity
+                                Toast.makeText(EditProfileActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+
+                }else{
+                    Toast.makeText(EditProfileActivity.this, "One password field is empty", Toast.LENGTH_SHORT).show();
                 }
 
             }

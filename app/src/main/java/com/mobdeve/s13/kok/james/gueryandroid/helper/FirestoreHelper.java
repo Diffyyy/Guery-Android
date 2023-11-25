@@ -564,46 +564,26 @@ public class FirestoreHelper {
     }
 
 
-    public void editUser(Profile profile, String newUsername, String newAbout, InputStream inputStream, Consumer<Void> callback){
-        Boolean updateSuccessful = false;
+    public void editUser(Profile profile, String newUsername, String newAbout, InputStream inputStream, Consumer<Void> callback, Consumer<Void> usernameNotUnqiue){
         String filename = profile.getId();
 
         if (inputStream != null) {
+
             Log.i("EDITUSER", "INPUTSTREAM NOT NULL");
             StorageHelper.getInstance().upload(filename, StorageHelper.PFP_FOLDER, inputStream, new Consumer<String>() {
                 @Override
                 public void accept(String downloadUrl) {
-                    updateProfile(profile, newUsername, newAbout, downloadUrl, callback);
+                    updateProfile(profile, newUsername, newAbout, downloadUrl, callback, usernameNotUnqiue);
                 }
             });
         } else {
             Log.i("EDITUSER", "INPUTSTREAM NULL");
             // If inputStream is null, update without uploading picture
-            updateProfile(profile, newUsername, newAbout, null, callback);
+            updateProfile(profile, newUsername, newAbout, null, callback, usernameNotUnqiue);
         }
 
     }
-
-    //updates the profile of the user
-    private void updateProfile(Profile profile, String newUsername, String newAbout, String downloadUrl, Consumer<Void> callback) {
-        Map<String, Object> updates = convertProfile(profile);
-        AtomicBoolean unique = new AtomicBoolean(false);
-
-        db.collection(USERS).whereEqualTo(PROFILE_NAME, newUsername).get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (queryDocumentSnapshots.isEmpty()) {
-                        unique.set(true);
-                    }
-                }
-            );
-
-        if(unique.get()){
-            updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
-        }
-        if (downloadUrl != null) {
-            updates.put(FirestoreHelper.PROFILE_PFP, downloadUrl);
-        }
-        updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
+    private void editProfile(Profile profile, Map<String, Object> updates, Consumer<Void> callback){
         db.collection(USERS).document(profile.getId()).update(updates)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("SUCCESS: ", "Profile Updated");
@@ -612,6 +592,30 @@ public class FirestoreHelper {
                 .addOnFailureListener(e -> {
                     Log.e("FAIL: ", e.getMessage());
                 });
+    }
+    //updates the profile of the user
+    private void updateProfile(Profile profile, String newUsername, String newAbout, String downloadUrl, Consumer<Void> callback, Consumer<Void> usernameNotUnique) {
+        Map<String, Object> updates = convertProfile(profile);
+        updates.put(FirestoreHelper.PROFILE_NAME, newUsername);
+        updates.put(FirestoreHelper.PROFILE_PFP, downloadUrl);
+        updates.put(FirestoreHelper.PROFILE_ABOUT, newAbout);
+        if(profile.getUsername().equals(newUsername)){
+            editProfile(profile, updates, callback);
+        }else{
+            db.collection(USERS).whereEqualTo(PROFILE_NAME, newUsername).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        editProfile(profile,updates,callback);
+                    }else{
+                        //username is not unique
+                        usernameNotUnique.accept(null);
+                    }
+                }
+                );
+
+        }
+
+
     }
 
 

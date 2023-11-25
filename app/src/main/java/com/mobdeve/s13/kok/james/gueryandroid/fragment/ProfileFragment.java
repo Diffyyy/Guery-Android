@@ -53,7 +53,6 @@ public class ProfileFragment extends Fragment {
     private PostItemViewModel postModel;
     private ProfileLayoutBinding binding;
     private HashMap<Integer, Integer> mapping;
-    Profile user;
     public ProfileFragment(){
 
     }
@@ -81,13 +80,17 @@ public class ProfileFragment extends Fragment {
             if (data != null) {
                 String newUsername = data.getStringExtra("newUsername");
                 String newAbout = data.getStringExtra("newAbout");
+                String pfp = data.getStringExtra("newPfp");
 
                 Log.d("SUCCESS", "UI updated successfully");
                 // Update the UI with the new information
                 binding.profileUsernameTv.setText(newUsername);
                 binding.profileAboutTv.setText(newAbout);
-                user.setAbout(newAbout);
-                user.setUsername(newUsername);
+                ImageLoaderHelper.loadPfp(pfp, binding.profileDisplayImage);
+
+                AuthHelper.getInstance().getProfile().setAbout(newAbout);
+                AuthHelper.getInstance().getProfile().setUsername(newUsername);
+                AuthHelper.getInstance().getProfile().setPfp(pfp);
             }
         }
     }
@@ -98,9 +101,6 @@ public class ProfileFragment extends Fragment {
 
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
         binding.refreshLayout.setEnabled(false);
-        user = AuthHelper.getInstance().getProfile();
-        ImageLoaderHelper.loadPfp(user.getPfp(), binding.profileDisplayImage);
-
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +114,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                intent.putExtra("profile", user );
+                intent.putExtra("profile", AuthHelper.getInstance().getProfile() );
                 startActivityForResult(intent, 1);
             }
         });
