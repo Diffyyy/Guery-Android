@@ -186,7 +186,6 @@ public class EditProfileActivity extends AppCompatActivity {
                                 }
                             };
                             if(!user.getUsername().equals(newUsername)){
-
                                 FirestoreHelper.getInstance().checkUsername(newUsername, new Consumer<Profile>() {
                                     @Override
                                     public void accept(Profile profile) {

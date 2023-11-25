@@ -98,6 +98,7 @@ public class ProfileFragment extends Fragment {
                     public void run() {
                         for(int i = 0; i < adapter.getPosts().size(); i++){
                             Post post = adapter.getPosts().get(i);
+                            if(post==null)continue;
                             post.getProfile().setPfp(pfp);
                             post.getProfile().setUsername(newUsername);
                             int finalI = i;
