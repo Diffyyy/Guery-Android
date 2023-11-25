@@ -61,16 +61,16 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         createPostBundle.putBoolean(CreatepostFragment.IS_ADD, true);
         createPost.setArguments(createPostBundle);
 
-        Log.d("BURGER", "HELLO HAS SIGNED IN: ?"+AuthHelper.getInstance().isSignedIn());
+//        //Log.d("BURGER", "HELLO HAS SIGNED IN: ?"+AuthHelper.getInstance().isSignedIn());
         AuthHelper.getInstance().updateProfile(new Consumer<Profile>() {
             @Override
             public void accept(Profile profile) {
-                Log.d("BURGER", "GOT USER LOGIN PROFILE: "+profile);
+//                //Log.d("BURGER", "GOT USER LOGIN PROFILE: "+profile);
                 // Initialize the default fragment
                 replace(home);
-                Log.d("BURGER", "SAVED INSTANCE STATE IS NOT NULL");
+//                //Log.d("BURGER", "SAVED INSTANCE STATE IS NOT NULL");
                 if(profile!=null)Toast.makeText(getApplicationContext(), "Welcome back "+profile.getUsername() +"!", Toast.LENGTH_SHORT  ).show();
-//                Log.d("BURGER", "SUCCESFULLY LOGGED IN AS: "+profile.getUsername());
+                //Log.d("BURGER", "SUCCESFULLY LOGGED IN AS: "+profile.getUsername());
             }
         });
 //        View.
@@ -135,7 +135,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     public void addPost(Post post){
-        Log.d("BURGER", "ADDED POST TO HOME: "+post);
+//        //Log.d("BURGER", "ADDED POST TO HOME: "+post);
         home.addPostFirst(post);
     }
     public void hideFocus(){

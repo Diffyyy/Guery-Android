@@ -67,14 +67,14 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
         downvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(), this, upvoteBtn, Vote.DOWN, upvotesTv));
 
 
-        Log.d("BURGER","CREATED COMMENT VIEWHOLDER");
+        //Log.d("BURGER","CREATED COMMENT VIEWHOLDER");
     }
     public void bind(Comment comment){
         this.comment = comment;
-        Log.d("BURGER", "BINDING COMMENT: "+comment.isVoting());
-//        Log.d("BURGER", "Setting COMMENT ID: "+comment.getId());
-//        Log.d("BURGER", "BINDING COMMENT: "+comment.getId());
-//        Log.d("BURGER", "COMMENT ADAPTER: "+adapter);
+        //Log.d("BURGER", "BINDING COMMENT: "+comment.isVoting());
+//        //Log.d("BURGER", "Setting COMMENT ID: "+comment.getId());
+//        //Log.d("BURGER", "BINDING COMMENT: "+comment.getId());
+//        //Log.d("BURGER", "COMMENT ADAPTER: "+adapter);
 
         if(comment.getBody()==null){
             username.setText("Loading");

@@ -55,7 +55,7 @@ public class PostVideoHolder extends PostItemHolder {
         MediaItem mediaItem;
         if(attached == null){
 //            initializePlayer(player, MediaItem.EMPTY);
-            Log.d("BURGER", "ERRO ATTACHMENT VIDEO NOT FOUND");
+            //Log.d("BURGER", "ERRO ATTACHMENT VIDEO NOT FOUND");
             return;
         }
         if(attached.contains("content")){
@@ -66,15 +66,15 @@ public class PostVideoHolder extends PostItemHolder {
         StorageHelper.getInstance().retrieve(attached, new Consumer<Uri>() {
             @Override
             public void accept(Uri uri) {
-                Log.d("BURGER", "GOT VIDEO URI: "+uri.toString());
+                //Log.d("BURGER", "GOT VIDEO URI: "+uri.toString());
                 MediaItem item = MediaItem.fromUri(uri);
-                Log.d("BURGER", "MEDIA ITEM: "+item.mediaMetadata.mediaType);
+                //Log.d("BURGER", "MEDIA ITEM: "+item.mediaMetadata.mediaType);
                 initializePlayer(player,item);
             }
         }, new Consumer<Exception>() {
             @Override
             public void accept(Exception e) {
-                Log.d("BURGER", "FAILED TO RETRIEVE VIDEO FRMOM FIREBASE");
+                //Log.d("BURGER", "FAILED TO RETRIEVE VIDEO FRMOM FIREBASE");
             }
         });
     }

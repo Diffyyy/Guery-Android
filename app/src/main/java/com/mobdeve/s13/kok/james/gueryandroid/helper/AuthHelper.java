@@ -41,12 +41,12 @@ public class AuthHelper {
                 @Override
                 public void accept(Profile profile) {
                     AuthHelper.this.profile = profile;
-                    Log.d("BURGER", "UPDATING AUTHHELPER PROFILE");
+                    //Log.d("BURGER", "UPDATING AUTHHELPER PROFILE");
                     callback.accept(profile);
                 }
             });
         }else if(!isSignedIn()){
-            Log.d("BURGER", "CALLBACK CALLED WITH NULL");
+            //Log.d("BURGER", "CALLBACK CALLED WITH NULL");
             callback.accept(null);
         }else   {
             callback.accept(profile);
@@ -70,7 +70,7 @@ public class AuthHelper {
                                     AuthHelper.this.profile = profile;
                                     callback.accept(profile);;
                                 }else{
-                                    Log.d("BURGER", "COULD NOT RETRIEVE USER?");
+                                    //Log.d("BURGER", "COULD NOT RETRIEVE USER?");
                                 }
                             }
                         });

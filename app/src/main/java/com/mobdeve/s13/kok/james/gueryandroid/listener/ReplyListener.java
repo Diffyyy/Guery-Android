@@ -32,7 +32,7 @@ public class ReplyListener implements View.OnClickListener   {
             DialogHelper.getNotLoggedInDialog(v.getContext(), "Please log in to comment", null    ).show();
             return;
         }
-        Log.d("BURGER", "COMMENT FOR ID CLICKED: "+ contentHolder.getContent().getId());
+        //Log.d("BURGER", "COMMENT FOR ID CLICKED: "+ contentHolder.getContent().getId());
         //When reply of this comment is clicked
         DialogHelper.getCommentDialog(v.getContext(), contentHolder.getContent().getProfile().getUsername(), new BiConsumer<DialogInterface, String>() {
             @Override
@@ -40,7 +40,7 @@ public class ReplyListener implements View.OnClickListener   {
                 if(!s.isBlank()){
                     Comment comment = new Comment(AuthHelper.getInstance().getProfile(), LocalDateTime.now(), s);
                     comment.setToPost(toPost);
-//                            Log.d("BURGER", "SETTING ADAPTER PARENT: "+this + " TO: "+comment.getId()    );
+//                            //Log.d("BURGER", "SETTING ADAPTER PARENT: "+this + " TO: "+comment.getId()    );
                     FirestoreHelper.getInstance().addComment(contentHolder.getContent().getId(), comment, new Consumer<String>() {
                         @Override
                         public void accept(String s) {

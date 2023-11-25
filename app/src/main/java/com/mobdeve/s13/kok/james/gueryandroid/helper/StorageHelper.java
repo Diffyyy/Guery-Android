@@ -46,7 +46,7 @@ public class StorageHelper {
             failed.accept(new NullPointerException("Firebase path is null"));
             return;
         }
-        Log.d("BURGER", "RETRIEVING ATTACHMENT: "+firebasePath);
+        //Log.d("BURGER", "RETRIEVING ATTACHMENT: "+firebasePath);
         StorageReference fileRef = storageRef.child(firebasePath);
         fileRef.getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -67,7 +67,7 @@ public class StorageHelper {
     }
 
     public void upload(String filename, String folder, InputStream inputStream, Consumer<String> callback){
-//        Log.d("BURGER", "FILE EXISTS: "+f.exists());
+//        //Log.d("BURGER", "FILE EXISTS: "+f.exists());
         String uploadPath = folder + filename ;
         StorageReference imageRef = storageRef.child(uploadPath);
         imageRef.putStream(inputStream)

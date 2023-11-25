@@ -34,10 +34,10 @@ public class SwipeUpListener implements View.OnTouchListener {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 // Check if it's a swipe-up gesture
-                Log.d("BURGER", "e2 PRESSURE: "+e2.getPressure());
+                //Log.d("BURGER", "e2 PRESSURE: "+e2.getPressure());
 
                 if (velocityY >5) {
-                    Log.d("BURGER", "SWIPED UP: "+velocityY);
+                    //Log.d("BURGER", "SWIPED UP: "+velocityY);
                     callback.accept(null);
                 }
                 return false;

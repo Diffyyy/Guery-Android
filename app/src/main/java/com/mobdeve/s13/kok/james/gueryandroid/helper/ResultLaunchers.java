@@ -33,24 +33,24 @@ public class ResultLaunchers {
             @Override
             public void onActivityResult(ActivityResult o) {
 
-                Log.d("BURGER", "");
+                //Log.d("BURGER", "");
                 if(o.getResultCode()==RESULT_OK){
                     Intent intent = o.getData();
                     int index = intent.getIntExtra(PostDetailsActivity.POST_INDEX, -10);
 
-                    Log.d("BURGER", "HEYYY: "+index);
+                    //Log.d("BURGER", "HEYYY: "+index);
                     Post post = intent.getParcelableExtra(CreatepostFragment.POST);
                     if(post==null) return;
-                    Log.d("BURGER", "GOT POST: "+post);
+                    //Log.d("BURGER", "GOT POST: "+post);
                     if(index!=-10){
-                        Log.d("BURGER", "UPDATING ADAPTER INDEX: "+index);
+                        //Log.d("BURGER", "UPDATING ADAPTER INDEX: "+index);
                         adapter.getPosts().set(index, post);
                         adapter.notifyItemChanged(index );
                         if(callback!=null)callback.accept(index, post);
                     }
-                    Log.d("BURGER", "POST INDEX: "+intent.getIntExtra(PostDetailsActivity.POST_INDEX, -10));
+                    //Log.d("BURGER", "POST INDEX: "+intent.getIntExtra(PostDetailsActivity.POST_INDEX, -10));
                 }else if(o.getResultCode()==RESULT_CANCELED){
-                    Log.d("BURGER", "POST NOT CHANGED");
+                    //Log.d("BURGER", "POST NOT CHANGED");
                 }
             }
         });

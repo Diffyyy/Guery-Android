@@ -103,7 +103,7 @@ public class CreatepostFragment extends Fragment {
                 hideImageView();
                 hideVideoView();
                 viewBinding.btnRemoveAttach.setVisibility(View.INVISIBLE);
-                Log.d("BURGER", "ATTACHMENT SET TO NULL ON CLICK");
+                //Log.d("BURGER", "ATTACHMENT SET TO NULL ON CLICK");
             }
         });
 
@@ -120,11 +120,11 @@ public class CreatepostFragment extends Fragment {
             if(post.getType()==Post.PostType.VIDEO.value){
                 toggleVideoView(post.getAttached());
                 attachment = ATTACHMENT_PLACEHOLDER;
-                Log.d("BURGER", "ATTACHMENT IS PLACEHOLDER");
+                //Log.d("BURGER", "ATTACHMENT IS PLACEHOLDER");
             }else if(post.getType()==Post.PostType.IMAGE.value){
                 toggleImageView(post.getAttached());
                 attachment = ATTACHMENT_PLACEHOLDER;
-                Log.d("BURGER", "ATTACHMENT IS PLACEHOLDER");
+                //Log.d("BURGER", "ATTACHMENT IS PLACEHOLDER");
             }
         }
         mediaPickerLauncher = registerForActivityResult(
@@ -163,7 +163,7 @@ public class CreatepostFragment extends Fragment {
 
                                 }
                             } catch(Exception exception){
-                                Log.d("TAG",""+exception.getLocalizedMessage());
+                                //Log.d("TAG",""+exception.getLocalizedMessage());
                             }
                         }
                     }
@@ -189,7 +189,7 @@ public class CreatepostFragment extends Fragment {
                 String postCommunity = viewBinding.etCreateCommunity.getText().toString();
                 if(!postTitle.isEmpty() && !postContent.isEmpty() && !postCommunity.isEmpty()){
                     Post post;
-                    Log.d("BURGER", "MADE IT HERE?");
+                    //Log.d("BURGER", "MADE IT HERE?");
                     if(isAdd()){
                         post  = new Post(postCommunity, AuthHelper.getInstance().getProfile(), LocalDateTime.now(), postTitle, postContent);;
                     }else{
@@ -202,11 +202,11 @@ public class CreatepostFragment extends Fragment {
 
                     if(attachment==null) post.setType(Post.PostType.TEXT.value);
                     else if(attachment.toString().contains("image")) {
-                        Log.d("BURGER", "IMAGE ATTACHED");
+                        //Log.d("BURGER", "IMAGE ATTACHED");
                         post.setType(Post.PostType.IMAGE.value);
                     }else if(attachment.toString().contains("video")){
                         post.setType(Post.PostType.VIDEO.value);
-                        Log.d("BURGER", "VIDEO ATTACHED");
+                        //Log.d("BURGER", "VIDEO ATTACHED");
                     }else if(!attachment.equals(ATTACHMENT_PLACEHOLDER)){
                         viewBinding.btnRemoveAttach.callOnClick();
                         Toast.makeText(getContext(), "Only images and videos allowed", Toast.LENGTH_SHORT);
@@ -219,7 +219,7 @@ public class CreatepostFragment extends Fragment {
                         @Override
                         public void accept(String s) {
                             AuthHelper.getInstance().getProfile().incrementPosts();
-                            Log.d("BURGER", "AM I IN HERE?");
+                            //Log.d("BURGER", "AM I IN HERE?");
                             post.setId(s);
                             post.setAttachment(attachment);
                             InputStream inputStream = null;
@@ -239,23 +239,23 @@ public class CreatepostFragment extends Fragment {
                         }
                     });
                     else{
-                        Log.d("BURGER", "ATTACHMENT: "+attachment);
+                        //Log.d("BURGER", "ATTACHMENT: "+attachment);
                         boolean changed = !Objects.equals(attachment, ATTACHMENT_PLACEHOLDER);
                         FirestoreHelper.getInstance().editPost(post, new Consumer<Void>() {
                             @Override
                             public void accept(Void unused) {
-                                Log.d("BURGER", "WHAT IS WRONG HERE");
+                                //Log.d("BURGER", "WHAT IS WRONG HERE");
 
                                 if(changed){
 
                                     post.setAttachment(attachment);
-                                    Log.d("BURGER", "POST ATTACHMENT CHANGED: "+attachment);
+                                    //Log.d("BURGER", "POST ATTACHMENT CHANGED: "+attachment);
                                 }
                                 Consumer<String> callback = new Consumer<String>() {
                                     @Override
                                     public void accept(String s) {
                                         Bundle bundle = new Bundle();
-                                        Log.d("BURGER", "SENDING RESULTS BACK: "+post);
+                                        //Log.d("BURGER", "SENDING RESULTS BACK: "+post);
                                         bundle.putParcelable(POST, post);
                                         setArguments(bundle);
                                         ((EditPostActivity)getActivity()).finishEdit();

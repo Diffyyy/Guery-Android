@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         postModel = new ViewModelProvider(getActivity()).get(PostItemViewModel.class);
 
-        Log.d("BURGER", "POSTS IN PROFILE: "+String.valueOf(postModel.getFragmentData().getValue()));
+        //Log.d("BURGER", "POSTS IN PROFILE: "+String.valueOf(postModel.getFragmentData().getValue()));
         if(!postModel.getFragmentData().isInitialized()){
             postModel.setFragmentData(new ArrayList<>());
             //show the edit post and delete post button
@@ -75,7 +75,7 @@ public class ProfileFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("BURGER", "ACTIVITY RESULT RECEIVE DPROFILE FRAGMEBNT");
+        //Log.d("BURGER", "ACTIVITY RESULT RECEIVE DPROFILE FRAGMEBNT");
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
             // Check if the data contains updated profile information
@@ -83,12 +83,12 @@ public class ProfileFragment extends Fragment {
                 String newUsername = data.getStringExtra("newUsername");
                 String newAbout = data.getStringExtra("newAbout");
                 String pfp = data.getStringExtra("newPfp");
-                Log.d("BURGER", "NEW PFP RECEIVED: "+pfp);
-                Log.d("SUCCESS", "UI updated successfully");
+                //Log.d("BURGER", "NEW PFP RECEIVED: "+pfp);
+                //Log.d("SUCCESS", "UI updated successfully");
                 // Update the UI with the new information
                 binding.profileUsernameTv.setText(newUsername);
                 binding.profileAboutTv.setText(newAbout);
-                Log.d("BURGER", "PROFILE: "+AuthHelper.getInstance().getProfile());
+                //Log.d("BURGER", "PROFILE: "+AuthHelper.getInstance().getProfile());
 
 
                 ImageLoaderHelper.loadPfp(pfp, binding.profileDisplayImage);
@@ -124,7 +124,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("BURGER", "PRFOIEL FRAGMENT CREATED: "+AuthHelper.getInstance().getProfile());
+        //Log.d("BURGER", "PRFOIEL FRAGMENT CREATED: "+AuthHelper.getInstance().getProfile());
         binding =  ProfileLayoutBinding.inflate(inflater, container, false);
         binding.refreshLayout.setEnabled(false);
         binding.signOutBtn.setOnClickListener(new View.OnClickListener() {

@@ -75,7 +75,7 @@ public class ViewProfileActivity extends AppCompatActivity implements SwipeRefre
                     dialog.show();
                     return;
                 }
-                Log.d("BURGER", "VIEWING PROFILE: "+profile);
+//                //Log.d("BURGER", "VIEWING PROFILE: "+profile);
                 ProfileFragment.bindProfile(profile, profileBinding);
                 loadStop();
 

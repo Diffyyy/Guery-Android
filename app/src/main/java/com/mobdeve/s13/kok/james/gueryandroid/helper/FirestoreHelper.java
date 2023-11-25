@@ -100,16 +100,16 @@ public class FirestoreHelper {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("BURGER", "FAILED TO DELETE POST: "+e.getMessage());
+                        //Log.d("BURGER", "FAILED TO DELETE POST: "+e.getMessage());
                     }
                 });
     }
     public void editPost(Post post, Consumer<Void> callback){
-        Log.d("BURGER", "EDITING POST: "+post);
+        //Log.d("BURGER", "EDITING POST: "+post);
         DocumentReference previousPost = db.collection(POSTS).document(post.getId());
         String newAttachment = post.getType()==Post.PostType.TEXT.value?null:StorageHelper.POSTS_FOLDER+post.getId()    ;
-        Log.d("BURGER", "NEW ATTACHMENT: "+newAttachment);
-        Log.d("BURGER", "POST: "+post);
+        //Log.d("BURGER", "NEW ATTACHMENT: "+newAttachment);
+        //Log.d("BURGER", "POST: "+post);
         Map<String, Object> map = convertPost(post);
         map.put(POST_ATTACHED, newAttachment);
 
@@ -131,7 +131,7 @@ public class FirestoreHelper {
         post.setId(newPost.getId());
         Map<String, Object> map = convertPost(post);
 
-        Log.d("BURGER", "ADDING POST");
+        //Log.d("BURGER", "ADDING POST");
         newPost.set(map).addOnSuccessListener(new OnSuccessListener<>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -145,7 +145,7 @@ public class FirestoreHelper {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("BURGER", "Error adding post", e);
+                        //Log.d("BURGER", "Error adding post", e);
                     }
                 });
 
@@ -242,12 +242,12 @@ public class FirestoreHelper {
         .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d("BURGER", "COMMENT SUCCESSFULLY ADDEDD TO ID: "+parentId);
+                        //Log.d("BURGER", "COMMENT SUCCESSFULLY ADDEDD TO ID: "+parentId);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("BURGER", "COMMENT FAILED TO ADD", e);
+                        //Log.d("BURGER", "COMMENT FAILED TO ADD", e);
                     }
                 });
 
@@ -268,7 +268,7 @@ public class FirestoreHelper {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("BURGER", "Error adding comment", e);
+                        //Log.d("BURGER", "Error adding comment", e);
                     }
                 });
     }
@@ -280,7 +280,7 @@ public class FirestoreHelper {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Comment comment = documentSnapshot.getData()==null?null:convertMapToComment(documentSnapshot.getData());
-                        Log.d("BURGER", "RETRIEVING COMMENT: "+comment);
+                        //Log.d("BURGER", "RETRIEVING COMMENT: "+comment);
                         if(comment!=null)getAndSaveProfile(comment.getProfile().getId(), new Consumer<Profile>() {
                             @Override
                             public void accept(Profile profile) {
@@ -290,7 +290,7 @@ public class FirestoreHelper {
                                     @Override
                                     public void accept(Vote vote) {
                                         comment.setUserVote(vote);
-                                        Log.d("BURGER", "SUCCESSFULLY RETRIEVED COMMENT");
+                                        //Log.d("BURGER", "SUCCESSFULLY RETRIEVED COMMENT");
                                         callback.accept(comment);
                                     }
                                 });
@@ -312,10 +312,10 @@ public class FirestoreHelper {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if(!queryDocumentSnapshots.isEmpty()){
-                            Log.d("BURGER","RETRIEVED VOTE FOR PROFILE ID: "+profile.getId() + " AND CONTENT: "+content.getId());
+                            //Log.d("BURGER","RETRIEVED VOTE FOR PROFILE ID: "+profile.getId() + " AND CONTENT: "+content.getId());
                             HashMap<String, Object> data = (HashMap<String, Object>) queryDocumentSnapshots.getDocuments().get(0).getData();
                             Vote vote = Vote.valueOf((String) data.get(VOTE_TYPE));
-                            Log.d("BURGER", "RETRIEVING VOTE: "+vote.name());
+                            //Log.d("BURGER", "RETRIEVING VOTE: "+vote.name());
                             callback.accept(vote);
                         }else callback.accept(Vote.CANCEL);
 
@@ -333,13 +333,13 @@ public class FirestoreHelper {
                 });
     }
     public void getAndSaveProfile(String id, Consumer<Profile> callback)  {
-        Log.d("BURGER", "GETTING PROFILE ID: "+id);
+        //Log.d("BURGER", "GETTING PROFILE ID: "+id);
         db.collection(USERS).document(id).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Profile converted = convertMapToProfile(documentSnapshot.getData());
-                        Log.d("BURGER", "GOT PROFILE: "+converted);
+                        //Log.d("BURGER", "GOT PROFILE: "+converted);
                         if(!profiles.containsKey(id))profiles.put(id, converted);
                         callback.accept(converted);
                     }
@@ -347,7 +347,7 @@ public class FirestoreHelper {
 
     }
     public  Map<String, Object> convertPost(Post post){
-        Log.d("BURGER", "Converting Post: "+post.getProfile().getId()   );
+        //Log.d("BURGER", "Converting Post: "+post.getProfile().getId()   );
         Map<String, Object> map = new HashMap<>();
 
         map.put(ID, post.getId());
@@ -500,7 +500,7 @@ public class FirestoreHelper {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("BURGER", "VOTE EXCEPTION: "+e.getMessage());
+                //Log.d("BURGER", "VOTE EXCEPTION: "+e.getMessage());
                 error.accept(e);
             }
         });
@@ -532,9 +532,9 @@ public class FirestoreHelper {
                             callback.accept(null);
                         }else{
                             Map<String, Object> profileMap = queryDocumentSnapshots.getDocuments().get(0).getData();
-                            Log.d("BURGER", "SUCCESSFULLY GOT USER LOGIN: "+profileMap);
+                            //Log.d("BURGER", "SUCCESSFULLY GOT USER LOGIN: "+profileMap);
                             Profile profile = convertMapToProfile(profileMap);
-                            Log.d("BURGER", "SUCCESSFULLY GOT USER LOGIN: "+profile);
+                            //Log.d("BURGER", "SUCCESSFULLY GOT USER LOGIN: "+profile);
                             callback.accept(profile);
 
                         }
@@ -542,7 +542,7 @@ public class FirestoreHelper {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("BURGER", "FAILED TO GET USER: "+fieldValue, e);
+                        //Log.d("BURGER", "FAILED TO GET USER: "+fieldValue, e);
                     }
                 });
     }
@@ -597,7 +597,7 @@ public class FirestoreHelper {
     public void editUser(Profile profile, Map<String, Object> updates, Consumer<Void> callback){
         db.collection(USERS).document(profile.getId()).update(updates)
                 .addOnSuccessListener(aVoid -> {
-                    Log.d("SUCCESS: ", "Profile Updated");
+                    //Log.d("SUCCESS: ", "Profile Updated");
                     callback.accept(null);
                 })
                 .addOnFailureListener(e -> {

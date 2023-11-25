@@ -59,14 +59,14 @@ public class VoteListener implements View.OnClickListener {
             DialogHelper.getNotLoggedInDialog(context, "Please log in to vote", null    ).show();
             return;
         }
-        if(contentHolder.getContent().isVoting())Log.d("BURGER", "OMG");
+//        if(contentHolder.getContent().isVoting())//Log.d("BURGER", "OMG");
 
         Content content = contentHolder.getContent();
         if(content.isVoting()){
             //still updating
 //            return;
         }
-        Log.d("BURGER", "MADE IT HERE");
+        //Log.d("BURGER", "MADE IT HERE");
         ImageView view = (ImageView)v;
         Vote currVote = vote;
         if(vote.equals(content.getUserVote())) currVote = Vote.CANCEL;

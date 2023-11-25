@@ -49,7 +49,7 @@ public class Comment extends Content implements Parcelable {
         toPost = parcel.readInt();
         upvotes = parcel.readInt();
         userVote = Vote.valueOf(parcel.readString());
-        if(isVoting)Log.d("BURGER", "OMG");
+//        if(isVoting)//Log.d("BURGER", "OMG");
 //        Log.println(Log.ASSERT, "BURGER", "MADE IT HERE" );profile
     }
 
@@ -72,7 +72,7 @@ public class Comment extends Content implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        Log.d("Burger","WRITING TO PARCEL: "+this);
+        //Log.d("Burger","WRITING TO PARCEL: "+this);
         dest.writeString(id);
         dest.writeParcelable(profile, 0);
 
@@ -82,7 +82,7 @@ public class Comment extends Content implements Parcelable {
         dest.writeInt(toPost);
         dest.writeInt(upvotes);
         dest.writeString(userVote.name());
-        if(isVoting)Log.d("BURGER", "OMG");
+        //if(isVoting)//Log.d("BURGER", "OMG");
     }
     public void reply(Comment comment){
         replies.add(comment);
@@ -114,7 +114,7 @@ public class Comment extends Content implements Parcelable {
     }
 
     public void set(Comment comment){
-        if(comment.isVoting)Log.d("BURGER", "OMG");
+        if(comment.isVoting)//Log.d("BURGER", "OMG");
         if(this.id.equals(comment.getId())){
             this.createdAt = comment.getCreatedAt();
             this.body = comment.getBody();
@@ -124,9 +124,9 @@ public class Comment extends Content implements Parcelable {
             this.isVoting = comment.isVoting;
             this.upvotes = comment.upvotes;
             this.setUserVote(comment.getUserVote());
-//            Log.d("BURGER","SETTING COMMENT IVOTING: "+comment.isVoting);
+//            //Log.d("BURGER","SETTING COMMENT IVOTING: "+comment.isVoting);
         }else{
-            Log.d("BURGER", "TRIED TO CHANGE COMMENT WITH DIFFERITN ID");
+            //Log.d("BURGER", "TRIED TO CHANGE COMMENT WITH DIFFERITN ID");
         }
     }
 

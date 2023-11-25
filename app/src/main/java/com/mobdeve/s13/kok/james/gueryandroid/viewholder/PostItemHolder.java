@@ -106,7 +106,7 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         binding.getRoot().setVisibility(View.VISIBLE);
         binding.getRoot().setMaxHeight(10000);
         binding.postFooterInclude.bodyTv.setText(post.getBody());
-        Log.d("BURGER", "BINDING POST: "+post);
+        //Log.d("BURGER", "BINDING POST: "+post);
         ImageLoaderHelper.loadPfp(post.getProfile().getPfp(), binding.postHeaderInclude.pfpIv);
         binding.postHeaderInclude.communityTv.setText(post.getGame());
         binding.postHeaderInclude.timeTv.setText(DateHelper.formatDate(post.getCreatedAt()));

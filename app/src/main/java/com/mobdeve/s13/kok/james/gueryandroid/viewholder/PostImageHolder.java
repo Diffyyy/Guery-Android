@@ -31,7 +31,7 @@ public class PostImageHolder extends PostItemHolder {
     public static void bind(String attached, ImageView imageView){
         if(attached==null){
             imageView.setImageResource(R.drawable.error_image);
-            Log.d("BURGER", "ERROR IMAGE ATTACHMENT NOT FOUND");
+            //Log.d("BURGER", "ERROR IMAGE ATTACHMENT NOT FOUND");
             return;
         }
 
@@ -49,7 +49,7 @@ public class PostImageHolder extends PostItemHolder {
         }, new Consumer<Exception>() {
             @Override
             public void accept(Exception e) {
-                Log.d("BURGER", "FAILED TO LOAD POST IMAGE: "+e.getMessage() + " FOR LOCATION: "+attached );
+                //Log.d("BURGER", "FAILED TO LOAD POST IMAGE: "+e.getMessage() + " FOR LOCATION: "+attached );
             }
         });
     }

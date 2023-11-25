@@ -68,15 +68,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
         for(int i =0 ; i < comments.size(); i++){
             Comment comment = comments.get(i);
             int finalI = i;
-            Log.d("BURGER", "GETTING COMMENT ID: "+comment.getId());
+//            //Log.d("BURGER", "GETTING COMMENT ID: "+comment.getId());
             FirestoreHelper.getInstance().retrieveComment(comment.getId(), new Consumer<Comment>() {
                 @Override
                 public void accept(Comment updatedComment) {
                     if(updatedComment==null){
-                        Log.d("BURGER", "UNABLE TO LOAD COMMENT ID, MAY HAVE BEEN DELETED");
+//                        //Log.d("BURGER", "UNABLE TO LOAD COMMENT ID, MAY HAVE BEEN DELETED");
                         return;
                     }
-                    Log.d("BURGER", "UPDATED COMMENT: "+updatedComment  );
+//                    //Log.d("BURGER", "UPDATED COMMENT: "+updatedComment  );
                     comment.set(updatedComment);
                     notifyItemChanged(finalI);
                 }

@@ -110,7 +110,7 @@ public class    PostDetailsActivity extends AppCompatActivity implements Content
                     setResult(RESULT_OK,intent );
                 }
 
-                Log.d("BURGER", "BACK PRESSED:  "+post);
+//                //Log.d("BURGER", "BACK PRESSED:  "+post);
                 finish();
             }
         });
@@ -148,13 +148,13 @@ public class    PostDetailsActivity extends AppCompatActivity implements Content
                     dialog.show();
                     return;
                 }
-                Log.d("BURGER", "POST DETAILS: "+post);
+//                //Log.d("BURGER", "POST DETAILS: "+post);
                 loadStop();
                 PostDetailsActivity.this.post = post;
                 bind(postBinding, post);
                 prevVote = post.getUserVote();
 
-                Log.d("BURGER", "ADAPTER: "+adapter);
+//                //Log.d("BURGER", "ADAPTER: "+adapter);
                 adapter.setReplies(post.getComments());
                 adapter.retrieveComments();
 
@@ -216,7 +216,7 @@ public class    PostDetailsActivity extends AppCompatActivity implements Content
     protected void onDestroy() {
         super.onDestroy();
 
-        Log.d("Burger","POST DETAILS DESTORYED");
+//        //Log.d("Burger","POST DETAILS DESTORYED");
     }
 
     @Override

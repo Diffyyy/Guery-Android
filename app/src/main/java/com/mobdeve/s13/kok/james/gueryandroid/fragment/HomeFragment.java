@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         postModel = new ViewModelProvider(getActivity()).get(PostItemViewModel.class);
         if(!postModel.getFragmentData().isInitialized()){
             postModel.setFragmentData(new ArrayList<>());
-            Log.d("BURGER", "HEY NOT INITAILZIED");
+            //Log.d("BURGER", "HEY NOT INITAILZIED");
         }
         if(savedInstanceState!=null && savedInstanceState.getString("query")!=null){
             query = savedInstanceState.getString("query");
@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         refreshLayout = binding.refreshLayout;
         refreshLayout.setDistanceToTriggerSync(200);
         refreshLayout.setSlingshotDistance(100);
-        Log.d("BURGER","CREATING VIEW");
+        //Log.d("BURGER","CREATING VIEW");
         adapter = new PostItemAdapter(getData(), false, true);
         adapter.setLauncher(ResultLaunchers.postClicked(this, adapter, null));
 
@@ -82,17 +82,17 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                Log.d("BURGER", "SEARCH CLICKED");
+                //Log.d("BURGER", "SEARCH CLICKED");
                 search();
                 ((HomeActivity)getActivity()).hideFocus();
                 return true;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("BURGER","QUERY CHANGED?: "+newText);
+                //Log.d("BURGER","QUERY CHANGED?: "+newText);
                 query = newText;
                 if(query.isEmpty()){
-                    Log.d("BURGER", "SEARCHING AGAIN? ");
+                    //Log.d("BURGER", "SEARCHING AGAIN? ");
                     search();
                 }
                 return true;
@@ -132,7 +132,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 boolean added = false;
                 @Override
                 public void accept(Post post) {
-                    Log.d("BURGER", "GOT POST: "+post);
+                    //Log.d("BURGER", "GOT POST: "+post);
                     if (!added) {
                         refreshLayout.setRefreshing(false);
                         added = true;
@@ -168,7 +168,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     }
     public void search(){
-        Log.d("SEARCH", "GETTING CALLED");
+        //Log.d("SEARCH", "GETTING CALLED");
         final boolean[] added = {false};
         if(query!=null && !query.isEmpty()) {
             adapter.setPosts(new ArrayList<>());
@@ -248,7 +248,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("BURGER", "FRAGMENT HOME STARTED");
+        //Log.d("BURGER", "FRAGMENT HOME STARTED");
     }
 
     @Override

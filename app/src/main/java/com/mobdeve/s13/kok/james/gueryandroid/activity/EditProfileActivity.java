@@ -66,7 +66,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                             }
                         } catch(Exception exception){
-//                            Log.d("TAG",""+exception.getLocalizedMessage());
+//                            //Log.d("TAG",""+exception.getLocalizedMessage());
                         }
                     }
                 }
@@ -147,10 +147,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
                 resultIntent.putExtra("newPfp", imageUri==null?(user.getPfp()==null?null:user.getPfp()):imageUri.toString());
-                //Log.d("BURGER", "NEW PFP: "+imageUri);
+                ////Log.d("BURGER", "NEW PFP: "+imageUri);
                 setResult(Activity.RESULT_OK, resultIntent);
-                //Log.d("OLD PASSWORD: ", oldPassword);
-                //Log.d("NEW PASSWORD: ", newPassword);
+                ////Log.d("OLD PASSWORD: ", oldPassword);
+                ////Log.d("NEW PASSWORD: ", newPassword);
                 Consumer<Void> usernameExisting = new Consumer<Void>() {
                     @Override
                     public void accept(Void unused) {

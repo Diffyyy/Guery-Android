@@ -46,7 +46,7 @@ public class ImageLoaderHelper {
             }, new Consumer<Exception>() {
                 @Override
                 public void accept(Exception e) {
-                    Log.d("BURGER", "FAILED TO LOAD PROFILE IMAGE: "+e.getMessage());
+                    //Log.d("BURGER", "FAILED TO LOAD PROFILE IMAGE: "+e.getMessage());
                 }
             });
 
