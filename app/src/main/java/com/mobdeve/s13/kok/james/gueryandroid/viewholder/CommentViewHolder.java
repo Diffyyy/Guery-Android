@@ -117,4 +117,8 @@ public class CommentViewHolder extends RecyclerView.ViewHolder implements Conten
     public Content getContent() {
         return getComment();
     }
+
+    public CommentAdapter getAdapter() {
+        return adapter;
+    }
 }

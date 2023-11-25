@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCaller;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -23,12 +24,18 @@ import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.adapter.PostItemAdapter;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.ProfileLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.AuthHelper;
+import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.ResultLaunchers;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 import com.mobdeve.s13.kok.james.gueryandroid.model.PostItemViewModel;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Profile;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -41,6 +48,7 @@ public class ProfileFragment extends Fragment {
 
     private PostItemViewModel postModel;
     private ProfileLayoutBinding binding;
+    private HashMap<Integer, Integer> mapping;
     public ProfileFragment(){
 
     }
@@ -49,13 +57,15 @@ public class ProfileFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         postModel = new ViewModelProvider(getActivity()).get(PostItemViewModel.class);
+
         Log.d("BURGER", "POSTS IN PROFILE: "+String.valueOf(postModel.getFragmentData().getValue()));
         if(!postModel.getFragmentData().isInitialized()){
             postModel.setFragmentData(new ArrayList<>());
             //show the edit post and delete post button
         }
+
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -90,8 +100,8 @@ public class ProfileFragment extends Fragment {
                 AuthHelper.getInstance().signOut();
                 getActivity().finish();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
-                //startActivity(intent);
-                startActivityForResult(intent, 1);
+                startActivity(intent);
+//                startActivityForResult(intent, 1);
             }
         });
         binding.btnEditProfile.setOnClickListener(new View.OnClickListener() {
@@ -102,16 +112,40 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        ArrayList<Post> profilePosts = new ArrayList<>(postModel.getFragmentData().getValue().stream().filter(new Predicate<Post>() {
-            @Override
-            public boolean test(Post post) {
-                if(post.getProfile().getId().equals(AuthHelper.getInstance().getProfile().getId()))return true;
-                return false;
+
+        ArrayList<Post> profilePosts = new ArrayList<>();
+        mapping = new HashMap<>();
+        for(int i = 0; i < getData().size(); i++){
+            if(getData().get(i).getProfile().getId().equals(AuthHelper.getInstance().getProfile().getId())){
+                mapping.put(profilePosts.size(), i      );
+                profilePosts.add(getData().get(i));
+
             }
-        }).collect(Collectors.toList()));
+        }
         bindProfile(AuthHelper.getInstance().getProfile(), binding);
-        PostItemAdapter adapter = new PostItemAdapter(profilePosts);
-        adapter.setLauncher(ResultLaunchers.postClicked(this, adapter));
+        PostItemAdapter adapter = new PostItemAdapter(profilePosts, true);
+        adapter.setLauncher(ResultLaunchers.postClicked(this, adapter, new BiConsumer<Integer, Post>() {
+            @Override
+            public void accept(Integer index, Post post) {
+                //update home fragment data
+                getData().set(mapping.get(index),post    );
+            }
+        }));
+        adapter.setDeleteCallback(new BiConsumer<Integer, Post>() {
+            @Override
+            public void accept(Integer index, Post post) {
+                FirestoreHelper.getInstance().deletePost(post, new Consumer<Void>() {
+                    @Override
+                    public void accept(Void unused) {
+                        adapter.getPosts().set(index,null);
+                        adapter.notifyItemChanged(index);
+                        getData().set(mapping.get(index), null );
+                    }
+                });
+
+
+            }
+        });
 
         binding.profilePostsRv.setAdapter(adapter);
         binding.profilePostsRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -122,5 +156,8 @@ public class ProfileFragment extends Fragment {
         binding.profileUsernameTv.setText(profile.getUsername());
         binding.profileAboutTv.setText(profile.getAbout());
         binding.profileNumpostsTv.setText(String.valueOf(profile.getNumPosts()));
+    }
+    private ArrayList<Post> getData(){
+        return postModel.getFragmentData().getValue();
     }
 }

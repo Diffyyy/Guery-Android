@@ -37,7 +37,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
         CommentItemBinding binding = CommentItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent,false);
         CommentViewHolder commentViewHolder = new CommentViewHolder(binding.getRoot());
 
-        commentViewHolder.setReplyListener(new ReplyListener(commentViewHolder, this, 0     ));
+        commentViewHolder.setReplyListener(new ReplyListener(commentViewHolder, commentViewHolder.getAdapter(), 0     ));
         commentViewHolder.setProfileClickListener(new ProfileClickListener(commentViewHolder));
         return commentViewHolder;
     }

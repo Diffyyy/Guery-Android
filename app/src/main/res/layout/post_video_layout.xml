@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <androidx.media3.ui.PlayerView
-        android:id="@+id/video_vv"
+        android:id="@+id/vv_video"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_centerInParent="true"

@@ -92,6 +92,36 @@ public class FirestoreHelper {
         this.profiles = new HashMap<>();
     }
 
+    public void deletePost(Post post, Consumer<Void> callback){
+        db.collection(POSTS).document(post.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.accept(unused);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("BURGER", "FAILED TO DELETE POST: "+e.getMessage());
+                    }
+                });
+    }
+    public void editPost(Post post, Consumer<Void> callback){
+        Log.d("BURGER", "EDITING POST: "+post);
+        DocumentReference previousPost = db.collection(POSTS).document(post.getId());
+        String newAttachment = post.getType()==Post.PostType.TEXT.value?null:StorageHelper.POSTS_FOLDER+post.getId()    ;
+        Map<String, Object> map = convertPost(post);
+        map.put(POST_ATTACHED, newAttachment);
+        previousPost.update(convertPost(post))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.accept(unused);
+                    }
+                });
+    }
+
     public  void addPost(Post post, Consumer<String> callback){
         DocumentReference newPost = db.collection(POSTS).document();
         if(post.getType()!=Post.PostType.TEXT.value){
@@ -537,7 +567,7 @@ public class FirestoreHelper {
     }
 
 
-    public void editUser(Profile profile, String newUsername, String newAbout,InputStream inputStream,  Consumer<Void> callback){
+    public void editUser(Profile profile, String newUsername, String newAbout){
         Boolean updateSuccessful = false;
 
         db.collection(USERS).whereEqualTo(PROFILE_NAME, newUsername).get()

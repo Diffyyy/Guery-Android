@@ -13,12 +13,32 @@ import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
+import com.mobdeve.s13.kok.james.gueryandroid.model.Post;
 
 import java.time.LocalDateTime;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class DialogHelper {
+
+    public static AlertDialog.Builder deleteDialog(Context context, int index, Post post, BiConsumer<Integer, Post> callback){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete post");
+        builder.setMessage("Are you sure you want to delete this post?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                callback.accept(index, post);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        return builder;
+    }
 
     public static AlertDialog.Builder getNotLoggedInDialog(Context context, String message, Consumer<Void> cancel){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

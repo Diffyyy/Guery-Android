@@ -31,7 +31,7 @@ public class PostVideoHolder extends PostItemHolder {
     public PostVideoHolder(@NonNull View itemView) {
         super(itemView);
         PostItemVidBinding binding = PostItemVidBinding.bind(itemView);
-        videoView = binding.postVideoInclude.videoVv;
+        videoView = binding.postVideoInclude.vvVideo;
         player = new ExoPlayer.Builder(itemView.getContext()).build();
 
         videoView.setPlayer(player);
@@ -50,14 +50,20 @@ public class PostVideoHolder extends PostItemHolder {
         player.pause();
 
     }
-    public static void bind(Post post, PlayerView videoView, ExoPlayer player){
+    public static void bind(String attached, PlayerView videoView, ExoPlayer player){
+
         MediaItem mediaItem;
-        if(post.getAttached().contains("content")){
-            mediaItem = MediaItem.fromUri(post.getAttached());
+        if(attached == null){
+//            initializePlayer(player, MediaItem.EMPTY);
+            Log.d("BURGER", "ERRO ATTACHMENT VIDEO NOT FOUND");
+            return;
+        }
+        if(attached.contains("content")){
+            mediaItem = MediaItem.fromUri(attached);
             initializePlayer(player, mediaItem);
             return;
         }
-        StorageHelper.getInstance().retrieve(post.getAttached(), new Consumer<Uri>() {
+        StorageHelper.getInstance().retrieve(attached, new Consumer<Uri>() {
             @Override
             public void accept(Uri uri) {
                 Log.d("BURGER", "GOT VIDEO URI: "+uri.toString());
@@ -71,6 +77,10 @@ public class PostVideoHolder extends PostItemHolder {
                 Log.d("BURGER", "FAILED TO RETRIEVE VIDEO FRMOM FIREBASE");
             }
         });
+    }
+
+    public static void bind(Post post, PlayerView videoView, ExoPlayer player){
+        bind(post.getAttached(), videoView, player);
     }
 
     public Post getPost() {

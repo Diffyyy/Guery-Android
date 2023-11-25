@@ -42,7 +42,8 @@ public class Comment extends Content implements Parcelable {
 
         this.body = parcel.readString();
 //        Log.println(Log.ASSERT, "Burger", "CREATED AT: "+parcel.readString());
-        this.createdAt = LocalDateTime.parse(parcel.readString());
+        String dateString = parcel.readString();
+        this.createdAt = dateString==null?null:LocalDateTime.parse(dateString);
 
         parcel.readTypedList(replies, CREATOR);
         toPost = parcel.readInt();
