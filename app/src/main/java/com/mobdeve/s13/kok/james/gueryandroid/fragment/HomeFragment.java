@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
         if(getData().isEmpty())initializeData();
-        else if(!query.isEmpty())search();
+        else if(!(query == null) && !query.isEmpty())search();
         return binding.getRoot();
 
     }
@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }, new Consumer<Integer>() {
                 @Override
                 public void accept(Integer unused) {
-                    Log.d("BURGER", "SEARCHING NOW");
+
                     size[0] = unused;
                 }
             });
@@ -168,20 +168,27 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     }
     public void search(){
+        Log.d("SEARCH", "GETTING CALLED");
         final boolean[] added = {false};
         if(query!=null && !query.isEmpty()) {
             adapter.setPosts(new ArrayList<>());
             adapter.notifyDataSetChanged();
             refreshLayout.setRefreshing(true);
-            executor.submit(new Runnable() {
+            Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     for(Post post: getData()) {
-                        if (post.getTitle().toLowerCase().contains(query.toLowerCase())
+
+                        if (post == null || post.getTitle().toLowerCase().contains(query.toLowerCase())
                                 || post.getBody().toLowerCase().contains(query.toLowerCase())
                                 || post.getGame().toLowerCase().contains(query.toLowerCase())) {
                             if(!added[0]) {
-                                refreshLayout.setRefreshing(false);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        refreshLayout.setRefreshing(false);
+                                    }
+                                });
                                 added[0] = true;
                             }
 
@@ -203,6 +210,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     });
                 }
             });
+            thread.start();
+//            executor.submit(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                }
+//            });
         }else {
             adapter.setPosts(getData());
             adapter.notifyDataSetChanged();

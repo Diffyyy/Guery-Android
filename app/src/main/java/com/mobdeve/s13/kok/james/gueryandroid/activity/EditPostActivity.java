@@ -37,10 +37,8 @@ public class EditPostActivity extends AppCompatActivity {
     public void finishEdit(){
         Intent intent = new Intent();
         intent.putExtra(PostDetailsActivity.POST_INDEX, getIntent().getIntExtra(PostDetailsActivity.POST_INDEX, -10));
-        Log.d("BURGER", "FINISHED EDITING: "+editFragment.getArguments().getParcelable(CreatepostFragment.POST));
         Post newPost = editFragment.getArguments().getParcelable(CreatepostFragment.POST);
         intent.putExtra(CreatepostFragment.POST, newPost    );
-        Log.d("BURGER", "POST INDEX: "+intent.getIntExtra(PostDetailsActivity.POST_INDEX, -10));
         setResult(RESULT_OK, intent);
         finish();
 
