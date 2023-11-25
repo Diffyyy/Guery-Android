@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             postModel.setFragmentData(new ArrayList<>());
             Log.d("BURGER", "HEY NOT INITAILZIED");
         }
-        if(savedInstanceState.getString("query")!=null){
+        if(savedInstanceState!=null && savedInstanceState.getString("query")!=null){
             query = savedInstanceState.getString("query");
         }
     }
