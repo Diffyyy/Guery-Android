@@ -117,8 +117,7 @@ public class FirestoreHelper {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d("BURGER", "SUCCESFULLY UPDATED POST");
-                        Log.d("BURGER", (String) map.get(POST_ATTACHED));
+
                         callback.accept(unused);
                     }
                 });

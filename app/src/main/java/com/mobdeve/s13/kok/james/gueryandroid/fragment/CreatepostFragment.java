@@ -106,7 +106,10 @@ public class CreatepostFragment extends Fragment {
                 Log.d("BURGER", "ATTACHMENT SET TO NULL ON CLICK");
             }
         });
+
+
         ImageLoaderHelper.loadPfp(AuthHelper.getInstance().getProfile().getPfp(), viewBinding.ivCreatePfp);
+
 
         if(!isAdd()){
             Post post =getPost()    ;

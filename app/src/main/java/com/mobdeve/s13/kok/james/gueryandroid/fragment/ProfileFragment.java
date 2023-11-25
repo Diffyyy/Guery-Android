@@ -154,6 +154,7 @@ public class ProfileFragment extends Fragment {
                 profilePosts.add(getData().get(i));
 
             }
+
         }
 
         bindProfile(AuthHelper.getInstance().getProfile(), binding);
