@@ -46,11 +46,19 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         postModel = new ViewModelProvider(getActivity()).get(PostItemViewModel.class);
-
         if(!postModel.getFragmentData().isInitialized()){
             postModel.setFragmentData(new ArrayList<>());
             Log.d("BURGER", "HEY NOT INITAILZIED");
         }
+        if(savedInstanceState.getString("query")!=null){
+            query = savedInstanceState.getString("query");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("query", query);
     }
 
     @Nullable
@@ -91,6 +99,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
         if(getData().isEmpty())initializeData();
+        else if(!query.isEmpty())search();
         return binding.getRoot();
 
     }
