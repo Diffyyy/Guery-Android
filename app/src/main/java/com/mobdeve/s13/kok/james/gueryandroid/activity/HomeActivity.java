@@ -57,6 +57,10 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView = binding.navbar;
         bottomNavigationView.setOnItemSelectedListener(HomeActivity.this);
         createPost = new CreatepostFragment();
+        Bundle createPostBundle = new Bundle();
+        createPostBundle.putBoolean(CreatepostFragment.IS_ADD, true);
+        createPost.setArguments(createPostBundle);
+
         Log.d("BURGER", "HELLO HAS SIGNED IN: ?"+AuthHelper.getInstance().isSignedIn());
         AuthHelper.getInstance().updateProfile(new Consumer<Profile>() {
             @Override
@@ -75,10 +79,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onStart() {
         super.onStart();
-
-
-
-
     }
 
     @Override
@@ -135,6 +135,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     public void addPost(Post post){
+        Log.d("BURGER", "ADDED POST TO HOME: "+post);
         home.addPostFirst(post);
     }
     public void hideFocus(){

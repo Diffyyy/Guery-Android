@@ -37,6 +37,7 @@ public class EditProfileActivity extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
+
                     if (result.getResultCode() == Activity.RESULT_OK){
                         try {
                             if(result.getData() != null) {
@@ -85,6 +86,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent i = new Intent();
                 i.setType("image/*");
                 i.setAction(Intent.ACTION_OPEN_DOCUMENT);
+
                 res.launch(Intent.createChooser(i, "Select Picture"));
             }
         });

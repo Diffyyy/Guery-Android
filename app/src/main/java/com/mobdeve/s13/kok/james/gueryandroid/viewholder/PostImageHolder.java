@@ -28,16 +28,20 @@ public class PostImageHolder extends PostItemHolder {
         image = binding.postImageInclude.imageIv;
     }
 
-    public static void bind(Post post, ImageView imageView){
-        //        image.setImageURI(Uri.parse(post.getAttached()));
-//        image.setImageURI(Uri.parse(post.getAttached()));
-        if(post.getAttached().contains("content")){
-            imageView.setImageURI(Uri.parse(post.getAttached()));
+    public static void bind(String attached, ImageView imageView){
+        if(attached==null){
+            imageView.setImageResource(R.drawable.error_image);
+            Log.d("BURGER", "ERROR IMAGE ATTACHMENT NOT FOUND");
+            return;
+        }
+
+        if(attached.contains("content")){
+            imageView.setImageURI(Uri.parse(attached));
             return;
         }
 
 //        ImageLoaderHelper.placeHolderImage(image,1000);
-        StorageHelper.getInstance().retrieve(post.getAttached(), new Consumer<Uri>() {
+        StorageHelper.getInstance().retrieve(attached, new Consumer<Uri>() {
             @Override
             public void accept(Uri uri) {
                 ImageLoaderHelper.loadImage(uri, imageView);
@@ -45,10 +49,13 @@ public class PostImageHolder extends PostItemHolder {
         }, new Consumer<Exception>() {
             @Override
             public void accept(Exception e) {
-                Log.d("BURGER", "FAILED TO LOAD POST IMAGE: "+e.getMessage() + " FOR LOCATION: "+post.getAttached() );
+                Log.d("BURGER", "FAILED TO LOAD POST IMAGE: "+e.getMessage() + " FOR LOCATION: "+attached );
             }
         });
+    }
 
+    public static void bind(Post post, ImageView imageView){
+        bind(post.getAttached(), imageView);
     }
     public void bind(Post post){
         super.bind(post);

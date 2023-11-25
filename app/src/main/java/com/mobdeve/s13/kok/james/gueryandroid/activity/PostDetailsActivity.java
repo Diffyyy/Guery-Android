@@ -11,7 +11,6 @@ import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.animation.ObjectAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,13 +27,9 @@ import com.mobdeve.s13.kok.james.gueryandroid.databinding.ActivityPostDetailsBin
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostFooterLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostHeaderLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemVidBinding;
-import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostVideoLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.FirestoreHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.ProfileClickListener;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.ReplyListener;
-import com.mobdeve.s13.kok.james.gueryandroid.listener.SwipeUpListener;
 import com.mobdeve.s13.kok.james.gueryandroid.listener.VoteListener;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Comment;
 import com.mobdeve.s13.kok.james.gueryandroid.model.Content;
@@ -44,8 +39,6 @@ import com.mobdeve.s13.kok.james.gueryandroid.viewholder.ContentHolder;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostImageHolder;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostItemHolder;
 import com.mobdeve.s13.kok.james.gueryandroid.viewholder.PostVideoHolder;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -185,7 +178,7 @@ public class    PostDetailsActivity extends AppCompatActivity implements Content
         }else if(post.getType()==Post.PostType.VIDEO.value){
 
             View view = getLayoutInflater().inflate(R.layout.post_video_layout, postBinding.getRoot(),false );
-            PlayerView playerView = view.findViewById(R.id.video_vv);
+            PlayerView playerView = view.findViewById(R.id.vv_video);
             ExoPlayer player = new ExoPlayer.Builder(playerView.getContext()).build();
 
             playerView.setControllerShowTimeoutMs(1000);

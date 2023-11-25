@@ -190,4 +190,20 @@ public class Post extends Content implements Parcelable {
                 ", attachment=" +attachment+
                 '}';
     }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setGame(String game) {
+        this.game = game;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

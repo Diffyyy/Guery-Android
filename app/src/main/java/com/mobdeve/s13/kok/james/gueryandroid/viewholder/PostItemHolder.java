@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -21,11 +22,13 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.mobdeve.s13.kok.james.gueryandroid.R;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.EditPostActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.activity.LoginActivity;
+import com.mobdeve.s13.kok.james.gueryandroid.activity.PostDetailsActivity;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostEngagementBarBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostFooterLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostHeaderLayoutBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemBinding;
 import com.mobdeve.s13.kok.james.gueryandroid.databinding.PostItemImgBinding;
+import com.mobdeve.s13.kok.james.gueryandroid.fragment.CreatepostFragment;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.DateHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.ImageLoaderHelper;
 import com.mobdeve.s13.kok.james.gueryandroid.helper.StorageHelper;
@@ -54,9 +57,9 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
     private PostHeaderLayoutBinding headerBinding;
     private PostFooterLayoutBinding footerBinding;
     private PostEngagementBarBinding engagementBarBinding;
-    private ImageButton editBtn;
-    private ImageButton deleteBtn;
-
+    private ImageView editBtn;
+    private ImageView deleteBtn;
+    private ActivityResultLauncher<Intent> editLauncher;
     protected Post post;
     public PostItemHolder(@NonNull View itemView) {
         super(itemView);
@@ -76,16 +79,7 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
 
         editBtn = headerBinding.btnEditPost;
         deleteBtn = headerBinding.btnDeletePost;
-        editBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, EditPostActivity.class);
-                intent.putExtra("POST_ID", post.getId());
-                context.startActivity(intent);
 
-            }
-        });
 
 
         upvoteBtn = engagementBarBinding.postUpvoteBtn;
@@ -95,8 +89,8 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         upvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(), this, downvoteBtn, Vote.UP, upvotesTv));
         downvoteBtn.setOnClickListener(new VoteListener(itemView.getContext(),  this, upvoteBtn, Vote.DOWN, upvotesTv));
     }
-    public void bind(Post post){
 
+    public void bind(Post post){
         this.post = post;
         bind(post, binding, pfp.getContext());
     }
@@ -104,6 +98,11 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
 
 
     public static void bind(Post post, PostItemBinding binding, Context context){
+        if(post==null){
+            binding.getRoot().setVisibility(View.GONE);
+            return;
+        }
+        binding.getRoot().setVisibility(View.VISIBLE);
         binding.postFooterInclude.bodyTv.setText(post.getBody());
         Log.d("BURGER", "BINDING POST: "+post);
         ImageLoaderHelper.loadPfp(post.getProfile().getPfp(), binding.postHeaderInclude.pfpIv);
@@ -144,8 +143,19 @@ public class PostItemHolder extends RecyclerView.ViewHolder implements ContentHo
         return post;
     }
 
+    public void setEditListener(View.OnClickListener clickListener){
+        editBtn.setOnClickListener(clickListener);
+    }
+    public void setDeleteListener(View.OnClickListener clickListener){
+        deleteBtn.setOnClickListener(clickListener);
+    }
     @Override
     public Content getContent() {
         return getPost();
+    }
+
+    public void toggleEditVisiblity(){
+        editBtn.setVisibility(View.VISIBLE);
+        deleteBtn.setVisibility(View.VISIBLE);
     }
 }

@@ -133,6 +133,9 @@ public class Profile implements Parcelable {
     public void setAbout(String about) {
         this.about = about;
     }
+    public void incrementPosts(){
+        this.numPosts++;
+
 
     public void setUsername(String username) {
         this.username = username;
