@@ -13,7 +13,9 @@ public class DateHelper {
 
     public static String formatDate(LocalDateTime dateTime){
         Duration duration = Duration.between(dateTime, LocalDateTime.now());
+
         long seconds = duration.getSeconds();
+        if(seconds < 0) seconds = 0;
         if(seconds<60){
             return seconds + "s";
         }else if(seconds<3600){
