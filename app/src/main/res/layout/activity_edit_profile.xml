@@ -17,19 +17,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/done"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,11 +84,12 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src= "@drawable/edit"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/img_profile_picture"
             app:layout_constraintEnd_toEndOf="@+id/img_profile_picture" />
 

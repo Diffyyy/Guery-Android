@@ -112,7 +112,7 @@ public class CreatepostFragment extends Fragment {
             viewBinding.etCreatePosttitle.setText(post.getTitle());
             viewBinding.etCreateCommunity.setText(post.getGame());
             viewBinding.etCreateContent.setText(post.getBody());
-            viewBinding.btnCreatePost.setText("Save");
+            //viewBinding.btnCreatePost.setText("Save");
             if(post.getType()==Post.PostType.VIDEO.value){
                 toggleVideoView(post.getAttached());
                 attachment = ATTACHMENT_PLACEHOLDER;

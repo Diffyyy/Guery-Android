@@ -6,23 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_create_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Cancel"
+
+        android:background="@drawable/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_create_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:text="Post"
+        android:background="@drawable/done"
         app:layout_constraintBottom_toBottomOf="@+id/btn_create_cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
