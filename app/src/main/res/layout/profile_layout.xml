@@ -36,10 +36,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/kirby"
+                        android:src="@drawable/placeholder"
                         app:layout_constraintEnd_toEndOf="@+id/guideline11"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline11"

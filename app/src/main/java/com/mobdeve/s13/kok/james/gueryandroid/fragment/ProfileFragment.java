@@ -121,7 +121,8 @@ public class ProfileFragment extends Fragment {
         ArrayList<Post> profilePosts = new ArrayList<>();
         mapping = new HashMap<>();
         for(int i = 0; i < getData().size(); i++){
-            if(getData().get(i).getProfile().getId().equals(AuthHelper.getInstance().getProfile().getId())){
+            Post post = getData().get(i)    ;
+            if( post!=null && post.getProfile().getId().equals(AuthHelper.getInstance().getProfile().getId())){
                 mapping.put(profilePosts.size(), i      );
                 profilePosts.add(getData().get(i));
 
@@ -161,6 +162,9 @@ public class ProfileFragment extends Fragment {
         binding.profileUsernameTv.setText(profile.getUsername());
         binding.profileAboutTv.setText(profile.getAbout());
         binding.profileNumpostsTv.setText(String.valueOf(profile.getNumPosts()));
+
+        ImageLoaderHelper.loadPfp(profile.getPfp(), binding.profileDisplayImage);
+
     }
     private ArrayList<Post> getData(){
         return postModel.getFragmentData().getValue();

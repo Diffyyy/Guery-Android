@@ -29,7 +29,7 @@
                 android:adjustViewBounds="true"
                 android:maxWidth="50dp"
                 android:maxHeight="50dp"
-                android:src="@drawable/kirby" />
+                android:src="@drawable/placeholder" />
 
             <TextView
                 android:id="@+id/tv_notification_item_user"
