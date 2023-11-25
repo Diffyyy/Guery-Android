@@ -35,6 +35,7 @@ public class ImageLoaderHelper {
 
     public static void loadPfp(String pfp, ImageView imageView){
         if(pfp==null) imageView.setImageResource(R.drawable.placeholder);
+        else if(pfp.contains("content")) imageView.setImageURI(Uri.parse(pfp));
         else {
             StorageHelper.getInstance().retrieve(pfp, new Consumer<Uri>() {
                 @Override

@@ -27,12 +27,15 @@ import com.squareup.picasso.Picasso;
 import org.checkerframework.checker.units.qual.C;
 
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class EditProfileActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView tempImageV;
     private Uri imageUri;
+    private Uri initialUri;
+
     private TextView usernameTv;
     private TextView aboutTv;
     private String pfpUri;
@@ -70,6 +73,8 @@ public class EditProfileActivity extends AppCompatActivity {
         Profile user = intent.getParcelableExtra("profile");
         String username = user.getUsername().toString();
         String about = user.getAbout().toString();
+
+
         ImageLoaderHelper.loadPfp(user.getPfp(), binding.imgProfilePicture);
 
         binding.txtUsername.setText(username);
@@ -81,6 +86,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
 
         //allows user to edit picture
         binding.btnEdit.setOnClickListener(new View.OnClickListener(){
@@ -125,7 +131,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("newUsername", newUsername);
                 resultIntent.putExtra("newAbout", newAbout);
-                resultIntent.putExtra("newPfp", imageUri==null?null:imageUri.toString());
+                resultIntent.putExtra("newPfp", imageUri==null?(user.getPfp()==null?null:user.getPfp()):imageUri.toString());
                 Log.d("BURGER", "NEW PFP: "+imageUri);
                 setResult(Activity.RESULT_OK, resultIntent);
                 Log.d("OLD PASSWORD: ", oldPassword);
