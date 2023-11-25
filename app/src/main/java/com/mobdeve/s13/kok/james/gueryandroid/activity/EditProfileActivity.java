@@ -142,33 +142,50 @@ public class EditProfileActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Username already exists", Toast.LENGTH_SHORT).show();
                     }
                 };
+                Consumer<Void> finish = new Consumer<Void>() {
+                    @Override
+                    public void accept(Void unused) {
+                        finish();
+                    }
+                };
                 if(newPassword.isEmpty()&& oldPassword.isEmpty()){
-                    FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, inputStream, new Consumer<Void>() {
-                        @Override
-                        public void accept(Void unused) {
-                            Log.d("BURGER", "FINISHING EDIT PROFILE: "+AuthHelper.getInstance().getProfile());
-                            finish();
-                        }
-                    }, usernameExisting);
+                    FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, inputStream, finish, usernameExisting, true);
                 } else if(!newPassword.isEmpty() && !oldPassword.isEmpty() ){
                     //if both password values are not null or new password is not null
                         // Check if the old password matches the user's current password
                     InputStream finalInputStream = inputStream;
-                    AuthHelper.getInstance().updatePassword(oldPassword, newPassword,
-                            success -> {
-                                //finish the current activity
-                                FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, finalInputStream, new Consumer<Void>() {
-                                    @Override
-                                    public void accept(Void unused) {
-                                        finish();
+                    AuthHelper.getInstance().reauthenticate(oldPassword, new Consumer<Void>() {
+                        @Override
+                        public void accept(Void unused) {
+                            FirestoreHelper.getInstance().checkUsername(newUsername, new Consumer<Profile>() {
+                                @Override
+                                public void accept(Profile profile) {
+                                    if(profile==null){
+                                        AuthHelper.getInstance().updatePassword(newPassword, new Consumer<Void>() {
+                                            @Override
+                                            public void accept(Void unused) {
+                                                FirestoreHelper.getInstance().editUser(user, newUsername, newAbout, finalInputStream, finish, usernameExisting, false);
+                                            }
+                                        }, new Consumer<Exception>() {
+                                            @Override
+                                            public void accept(Exception e) {
+                                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
+                                            }
+                                        });
+                                    }else{
+                                        Toast.makeText(getApplicationContext(),"Username already exists", Toast.LENGTH_SHORT);
                                     }
-                                }, usernameExisting);
-                            },
-                            error -> {
-                                // Password update failed, show a toast and stay on the same activity
-                                Toast.makeText(EditProfileActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                }
                             });
 
+                        }
+                    }, new Consumer<Exception>() {
+                        @Override
+                        public void accept(Exception e) {
+                            Toast.makeText(getApplicationContext(), "Wrong old password", Toast.LENGTH_SHORT);
+                        }
+                    });
                 }else{
                     Toast.makeText(EditProfileActivity.this, "One password field is empty", Toast.LENGTH_SHORT).show();
                 }

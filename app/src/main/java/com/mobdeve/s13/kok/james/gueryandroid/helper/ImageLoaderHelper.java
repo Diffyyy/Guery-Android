@@ -39,6 +39,7 @@ public class ImageLoaderHelper {
         else {
             StorageHelper.getInstance().retrieve(pfp, new Consumer<Uri>() {
                 @Override
+
                 public void accept(Uri uri) {
                     ImageLoaderHelper.loadImage(uri, imageView);
                 }

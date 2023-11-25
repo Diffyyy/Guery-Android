@@ -115,36 +115,40 @@ public class AuthHelper {
             }
         });
     }
-
-    public void updatePassword(String oldPassword, String newPassword, Consumer<Void> callback, Consumer<Exception> wrongPassword ){
+    public void reauthenticate(String oldPassword, Consumer<Void> callback, Consumer<Exception> wrongPassword){
         FirebaseUser user = firebaseAuth.getCurrentUser();
-// Reauthenticate the user
         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPassword);
         user.reauthenticate(credential)
-                .addOnCompleteListener(reauthTask -> {
-                    if (reauthTask.isSuccessful()) {
-                        // User has been successfully reauthenticated, now update the password
-                        user.updatePassword(newPassword)
-                                .addOnSuccessListener(unused -> {
-                                    // Password update successful
-                                    // Show success message or perform any other necessary actions
-                                    callback.accept(null);
-
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        wrongPassword.accept(e);
-                                    }
-                                });
-                    } else {
-                        // Reauthentication failed, handle the error
-                        Exception exception = reauthTask.getException();
-                        wrongPassword.accept(exception);
-
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.accept(unused);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        wrongPassword.accept(e);
                     }
                 });
-
     }
+    public void updatePassword(String newPassword, Consumer<Void> callback, Consumer<Exception> updatePasswordError ){
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        // User has been successfully reauthenticated, now update the password
+        user.updatePassword(newPassword)
+            .addOnSuccessListener(unused -> {
+                // Password update successful
+                // Show success message or perform any other necessary actions
+                callback.accept(null);
+
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    updatePasswordError.accept(e);
+                }
+            });
+}
+
+
 
 
 
